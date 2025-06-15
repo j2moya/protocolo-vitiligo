@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda Inmediata - Protocolo Vitiligo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .option-header {
+            padding: 25px;
+            border-bottom: 3px solid;
+        }
+
+        .option1 .option-header {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #ff7675, #e17055);
+            color: white;
+        }
+
+        .option2 .option-header {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fdcb6e, #f39c12);
+            color: white;
+        }
+
+        .option3 .option-header {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #00b894, #27ae60);
+            color: white;
+        }
+
+        .option-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .option-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .option-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            padding: 30px;
+        }
+
+        @media (min-width: 768px) {
+            .option-content {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section {
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .info-section {
+                text-align: left;
+            }
+        }
+
+        .price-info {
+            margin-bottom: 20px;
+        }
+
+        .original-price {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            text-decoration: line-through;
+            margin-bottom: 5px;
+        }
+
+        .discount-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .savings {
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .whatsapp-button {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-button:hover {
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        .features {
+            margin-top: 20px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .urgency-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .contact-info h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .phone-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .message-preview {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+            color: #2c3e50;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 767px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .option-title {
+                font-size: 1.5rem;
+            }
+            
+            .discount-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Ayuda Inmediata</h1>
+            <p>Selecciona la opción que mejor se adapte a tu situación actual. Estamos aquí para ayudarte a comenzar tu tratamiento contra el vitiligo de inmediato.</p>
+        </div>
+
+        <div class="options-container">
+            <!-- Opción 1: Presupuesto Limitado -->
+            <div class="option-card option1">
+                <div class="option-header">
+                    <div class="option-title">💰 Opción Económica</div>
+                    <div class="option-subtitle">Si el presupuesto es una preocupación</div>
+                </div>
+                <div class="option-content">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <video controls preload="metadata" poster="">
+                                <source src="https://aahhoo.com/assets/videos/newvit_big_promo.mp4" type="video/mp4">
+                                Tu navegador no soporta el elemento de video.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <div class="urgency-badge">⚡ Oferta Especial</div>
+                        <h3>Crema NewVit - 15 gramos</h3>
+                        <div class="price-info">
+                            <div class="original-price">Precio regular: $99</div>
+                            <div class="discount-price">$75</div>
+                            <div class="savings">Ahorra $24</div>
+                        </div>
+                        <div class="features">
+                            <ul>
+                                <li>Prueba por 6 meses completos</li>
+                                <li>Fórmula concentrada</li>
+                                <li>Resultados visibles en 8-12 semanas</li>
+                                <li>Garantía de satisfacción</li>
+                            </ul>
+                        </div>
+                        <a href="#" class="cta-button">🛒 Obtener con Descuento</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opción 2: Presupuesto Medio -->
+            <div class="option-card option2">
+                <div class="option-header">
+                    <div class="option-title">⚖️ Opción Balanceada</div>
+                    <div class="option-subtitle">Inversión moderada, resultados superiores</div>
+                </div>
+                <div class="option-content">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <video controls preload="metadata" poster="">
+                                <source src="https://aahhoo.com/assets/videos/3-drmoya.vhx.tv.mp4" type="video/mp4">
+                                Tu navegador no soporta el elemento de video.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h3>Protocolo Dr. Moya - Nivel Intermedio</h3>
+                        <div class="price-info">
+                            <div class="discount-price">Desde $80</div>
+                        </div>
+                        <div class="features">
+                            <ul>
+                                <li>Protocolo completo personalizado</li>
+                                <li>Seguimiento profesional</li>
+                                <li>Materiales educativos incluidos</li>
+                                <li>Soporte por email</li>
+                                <li>Plan de tratamiento detallado</li>
+                            </ul>
+                        </div>
+                        <a href="#" class="cta-button">📋 Ver Detalles del Protocolo</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opción 3: Sin Limitaciones Presupuestarias -->
+            <div class="option-card option3">
+                <div class="option-header">
+                    <div class="option-title">🌟 Atención Premium</div>
+                    <div class="option-subtitle">Sin limitaciones de presupuesto - Resultados máximos</div>
+                </div>
+                <div class="option-content">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <video controls preload="metadata" poster="">
+                                <source src="https://aahhoo.com/assets/videos/dia1-drmoya.vhx.tv" type="video/mp4">
+                                Tu navegador no soporta el elemento de video.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h3>Consulta Directa - Dr. Moya</h3>
+                        <div class="features">
+                            <ul>
+                                <li>Atención personalizada inmediata</li>
+                                <li>Protocolo completamente customizado</li>
+                                <li>Seguimiento continuo</li>
+                                <li>Acceso prioritario</li>
+                                <li>Resultados optimizados</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="contact-info">
+                            <h4>📱 Contacto Directo por WhatsApp</h4>
+                            <div class="phone-number">+1 (786) 564-4249</div>
+                            <div class="message-preview">
+                                <strong>Mensaje sugerido:</strong><br>
+                                "Necesito ayuda de inmediato con el Vitiligo, la inversión no es un problema."
+                            </div>
+                        </div>
+                        
+                        <a href="https://wa.me/17865644249?text=Necesito%20ayuda%20de%20inmediato%20con%20el%20Vitiligo,%20la%20inversi%C3%B3n%20no%20es%20un%20problema" 
+                           target="_blank" class="cta-button whatsapp-button">
+                           💬 Contactar por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mejorar la experiencia de video
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('loadstart', function() {
+                this.style.backgroundColor = '#f8f9fa';
+            });
+            
+            video.addEventListener('error', function() {
+                this.parentElement.innerHTML = '<div style="background: #f8f9fa; display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">Video no disponible temporalmente</div>';
+            });
+        });
+
+        // Animación suave al hacer scroll
+        const cards = document.querySelectorAll('.option-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
