@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Fitzpatrick - Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .header h2 {
+            color: #3498db;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            width: 16.66%;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 5px;
+            margin: 0 2px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .step.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .fitzpatrick-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            text-align: center;
+        }
+
+        .method-selector {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .method-option {
+            padding: 15px 30px;
+            background: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .method-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .method-option.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .evaluation-method {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .evaluation-method.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fitzpatrick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .fitz-card {
+            background: white;
+            border: 3px solid #ecf0f1;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .fitz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+
+        .fitz-card.selected {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #d5f4e6, #ffffff);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(39,174,96,0.2);
+        }
+
+        .fitz-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .fitz-1 { background: linear-gradient(135deg, #fdbcb4, #f8a493); }
+        .fitz-2 { background: linear-gradient(135deg, #edb98a, #e6a96b); }
+        .fitz-3 { background: linear-gradient(135deg, #d1a380, #c4956d); }
+        .fitz-4 { background: linear-gradient(135deg, #a17a63, #8b6f4e); }
+        .fitz-5 { background: linear-gradient(135deg, #6d4d36, #5a3f2a); }
+        .fitz-6 { background: linear-gradient(135deg, #2d1810, #1a0f08); }
+
+        .fitz-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin: 0 auto 10px;
+        }
+
+        .fitz-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .fitz-description {
+            font-size: 0.95em;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+
+        .question-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+
+        .question {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .answers {
+            display: grid;
+            gap: 10px;
+        }
+
+        .answer-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .answer-option.selected {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .answer-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-type {
+            font-size: 3em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .result-name {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .characteristics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .characteristic-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .characteristic-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .characteristic-content {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+
+        .vitiligo-implications {
+            background: linear-gradient(135deg, #e8f6fd, #ffffff);
+            border: 2px solid #3498db;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .implications-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .treatment-recommendations {
+            background: linear-gradient(135deg, #d5f4e6, #ffffff);
+            border: 2px solid #27ae60;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .recommendations-title {
+            color: #27ae60;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .recommendation-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149,165,166,0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #d4edda;
+            border-color: #27ae60;
+            color: #155724;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #e8f6fd, #ffffff);
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .summary-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .fitzpatrick-container {
+                padding: 20px;
+            }
+            
+            .method-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .method-option {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .fitzpatrick-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            
+            .fitz-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .characteristics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Evaluación Escala Fitzpatrick</h1>
+            <h2>Protocolo de Vitiligo - Dr. José Moya</h2>
+            <p>La clasificación precisa de su fototipo es fundamental para determinar el protocolo de tratamiento más efectivo y seguro para su caso específico.</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="step-indicator">
+                <div class="step completed">Datos Básicos</div>
+                <div class="step active">Fitzpatrick</div>
+                <div class="step">Antecedentes</div>
+                <div class="step">Vitiligo Actual</div>
+                <div class="step">Capacidad Inversión</div>
+                <div class="step">Reporte</div>
+            </div>
+        </div>
+
+        <!-- Main Container -->
+        <div class="fitzpatrick-container">
+            <h2 class="section-title">Seleccione el Método de Evaluación</h2>
+            
+            <div class="alert alert-info">
+                <strong>Importante:</strong> Seleccione el fototipo que mejor describe su reacción natural al sol SIN protección solar. Base su decisión en su experiencia personal de exposición solar.
+            </div>
+            
+            <!-- Method Selector -->
+            <div class="method-selector">
+                <div class="method-option active" data-method="visual">
+                    <div>📸 Evaluación Visual</div>
+                    <small>Selección directa por características</small>
+                </div>
+                <div class="method-option" data-method="questionnaire">
+                    <div>📋 Cuestionario Detallado</div>
+                    <small>Evaluación por puntuación</small>
+                </div>
+            </div>
+
+            <!-- Visual Method -->
+            <div class="evaluation-method active" id="visual-method">
+                <div class="alert alert-warning">
+                    <div style="font-weight: 600; margin-bottom: 5px;">Importante:</div>
+                    Seleccione el fototipo que mejor describe su reacción natural al sol SIN protección solar. Base su decisión en su experiencia personal de exposición solar.
+                </div>
+
+                <div class="fitzpatrick-grid">
+                    <div class="fitz-card" data-type="1">
+                        <div class="fitz-number">I</div>
+                        <div class="fitz-circle fitz-1"></div>
+                        <div class="fitz-title">Tipo I</div>
+                        <div class="fitz-description">
+                            <strong>Piel muy clara</strong><br>
+                            • Siempre se quema<br>
+                            • Nunca se broncea<br>
+                            • Pecas abundantes<br>
+                            • Cabello rubio/rojizo<br>
+                            • Ojos azules/verdes
+                        </div>
+                    </div>
+
+                    <div class="fitz-card" data-type="2">
+                        <div class="fitz-number">II</div>
+                        <div class="fitz-circle fitz-2"></div>
+                        <div class="fitz-title">Tipo II</div>
+                        <div class="fitz-description">
+                            <strong>Piel clara</strong><br>
+                            • Generalmente se quema<br>
+                            • Se broncea mínimamente<br>
+                            • Algunas pecas<br>
+                            • Cabello rubio/castaño claro<br>
+                            • Ojos azules/verdes/avellana
+                        </div>
+                    </div>
+
+                    <div class="fitz-card" data-type="3">
+                        <div class="fitz-number">III</div>
+                        <div class="fitz-circle fitz-3"></div>
+                        <div class="fitz-title">Tipo III</div>
+                        <div class="fitz-description">
+                            <strong>Piel intermedia</strong><br>
+                            • Se quema moderadamente<br>
+                            • Se broncea gradualmente<br>
+                            • Pocas pecas<br>
+                            • Cabello castaño<br>
+                            • Ojos cualquier color
+                        </div>
+                    </div>
+
+                    <div class="fitz-card" data-type="4">
+                        <div class="fitz-number">IV</div>
+                        <div class="fitz-circle fitz-4"></div>
+                        <div class="fitz-title">Tipo IV</div>
+                        <div class="fitz-description">
+                            <strong>Piel morena clara</strong><br>
+                            • Se quema mínimamente<br>
+                            • Siempre se broncea bien<br>
+                            • Sin pecas<br>
+                            • Cabello castaño oscuro<br>
+                            • Ojos oscuros
+                        </div>
+                    </div>
+
+                    <div class="fitz-card" data-type="5">
+                        <div class="fitz-number">V</div>
+                        <div class="fitz-circle fitz-5"></div>
+                        <div class="fitz-title">Tipo V</div>
+                        <div class="fitz-description">
+                            <strong>Piel morena</strong><br>
+                            • Raramente se quema<br>
+                            • Se broncea profundamente<br>
+                            • Sin pecas<br>
+                            • Cabello negro<br>
+                            • Ojos muy oscuros
+                        </div>
+                    </div>
+
+                    <div class="fitz-card" data-type="6">
+                        <div class="fitz-number">VI</div>
+                        <div class="fitz-circle fitz-6"></div>
+                        <div class="fitz-title">Tipo VI</div>
+                        <div class="fitz-description">
+                            <strong>Piel negra</strong><br>
+                            • Nunca se quema<br>
+                            • Pigmentación muy oscura<br>
+                            • Sin pecas<br>
+                            • Cabello negro<br>
+                            • Ojos negros
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questionnaire Method -->
+            <div class="evaluation-method" id="questionnaire-method">
+                <div class="alert alert-warning">
+                    <div style="font-weight: 600; margin-bottom: 5px;">Instrucciones:</div>
+                    Responda cada pregunta basándose en su experiencia personal con la exposición solar sin protección. Su puntuación total determinará su fototipo.
+                </div>
+
+                <div class="question-container">
+                    <div class="question">1. ¿Cuál es el color natural de sus ojos?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q1" value="0">
+                            <span>Azul claro, gris claro, verde claro</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q1" value="1">
+                            <span>Azul, gris, verde</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q1" value="2">
+                            <span>Avellana, castaño claro</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q1" value="3">
+                            <span>Castaño oscuro</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q1" value="4">
+                            <span>Negro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">2. ¿Cuál es el color natural de su cabello?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q2" value="0">
+                            <span>Rojo, rubio claro</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q2" value="1">
+                            <span>Rubio</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q2" value="2">
+                            <span>Castaño claro</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q2" value="3">
+                            <span>Castaño oscuro</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q2" value="4">
+                            <span>Negro</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">3. ¿Cuál es el color natural de su piel (áreas no expuestas al sol)?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q3" value="0">
+                            <span>Marfil, muy pálida</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q3" value="1">
+                            <span>Clara</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q3" value="2">
+                            <span>Beige claro</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q3" value="3">
+                            <span>Beige oscuro, oliva clara</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q3" value="4">
+                            <span>Morena, negra</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">4. ¿Tiene pecas en áreas expuestas al sol?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q4" value="0">
+                            <span>Muchas</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q4" value="1">
+                            <span>Algunas</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q4" value="2">
+                            <span>Pocas</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q4" value="3">
+                            <span>Muy pocas</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q4" value="4">
+                            <span>Ninguna</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">5. ¿Qué le pasa cuando se expone al sol sin protección por primera vez en verano?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q5" value="0">
+                            <span>Siempre me quemo severamente, aparecen ampollas</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q5" value="1">
+                            <span>Me quemo moderadamente, luego se pela</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q5" value="2">
+                            <span>Me quemo ligeramente</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q5" value="3">
+                            <span>Raramente me quemo</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q5" value="4">
+                            <span>Nunca me quemo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question">6. ¿Hasta qué punto se broncea?</div>
+                    <div class="answers">
+                        <div class="answer-option" data-score="0">
+                            <input type="radio" name="q6" value="0">
+                            <span>Nunca, solo me quemo</span>
+                        </div>
+                        <div class="answer-option" data-score="1">
+                            <input type="radio" name="q6" value="1">
+                            <span>Muy poco</span>
+                        </div>
+                        <div class="answer-option" data-score="2">
+                            <input type="radio" name="q6" value="2">
+                            <span>Moderadamente</span>
+                        </div>
+                        <div class="answer-option" data-score="3">
+                            <input type="radio" name="q6" value="3">
+                            <span>Bien</span>
+                        </div>
+                        <div class="answer-option" data-score="4">
+                            <input type="radio" name="q6" value="4">
+                            <span>Muy profundamente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="score-display" id="scoreDisplay" style="display: none;">
+                    Puntuación actual: <span id="currentScore">0</span> / 24
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="calculateFitzpatrick()" id="calculateBtn" disabled>
+                        Calcular Mi Fototipo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="previousPage()">← Datos Básicos</button>
+                <button class="btn btn-success" onclick="saveProgress()" style="margin-right: 10px;">💾 Guardar</button>
+                <button class="btn btn-primary" onclick="nextPage()" id="nextBtn" disabled>Antecedentes →</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="result-header">
+                <div class="result-type" id="resultType">Tipo III</div>
+                <div class="result-name" id="resultName">Piel Intermedia</div>
+            </div>
+
+            <div class="characteristics-grid" id="characteristicsGrid">
+                <!-- Characteristics will be populated by JavaScript -->
+            </div>
+
+            <div class="vitiligo-implications">
+                <div class="implications-title">🔬 Implicaciones para el Vitiligo</div>
+                <div id="vitiligoImplications">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="treatment-recommendations">
+                <div class="recommendations-title">💡 Recomendaciones de Tratamiento UVB-NB</div>
+                <ul class="recommendation-list" id="treatmentRecommendations">
+                    <!-- Recommendations will be populated by JavaScript -->
+                </ul>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-title">✅ Evaluación Completada</div>
+                <p>Su fototipo ha sido determinado con precisión. Esta información será utilizada para personalizar su protocolo de tratamiento y asegurar la máxima efectividad y seguridad.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFitzpatrick = null;
+        let questionnaireScore = 0;
+        let fitzpatrickData = {};
+
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMethodSwitching();
+            initializeFitzpatrickSelection();
+            initializeQuestionnaire();
+            loadSavedData();
+        });
+
+        // Función para cambio de métodos
+        function initializeMethodSwitching() {
+            document.querySelectorAll('.method-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Update active method selector
+                    document.querySelectorAll('.method-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Show corresponding method
+                    const method = this.dataset.method;
+                    document.querySelectorAll('.evaluation-method').forEach(m => m.classList.remove('active'));
+                    document.getElementById(method + '-method').classList.add('active');
+
+                    // Reset any previous selection
+                    resetSelection();
+                });
+            });
+        }
+
+        // Función para selección visual de Fitzpatrick
+        function initializeFitzpatrickSelection() {
+            document.querySelectorAll('.fitz-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Remove previous selections
+                    document.querySelectorAll('.fitz-card').forEach(c => c.classList.remove('selected'));
+                    
+                    // Select current card
+                    this.classList.add('selected');
+                    selectedFitzpatrick = parseInt(this.dataset.type);
+                    
+                    // Save data and show results
+                    saveFitzpatrickData(selectedFitzpatrick, 'visual');
+                    showResults(selectedFitzpatrick);
+                    enableNavigation();
+                });
+            });
+        }
+
+        // Función para el cuestionario
+        function initializeQuestionnaire() {
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionName = this.querySelector('input').name;
+                    
+                    // Remove selection from other options in same question
+                    document.querySelectorAll(`input[name="${questionName}"]`).forEach(input => {
+                        input.closest('.answer-option').classList.remove('selected');
+                        input.checked = false;
+                    });
+                    
+                    // Select this option
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                    
+                    updateQuestionnaireScore();
+                });
+            });
+        }
+
+        // Actualizar puntuación del cuestionario
+        function updateQuestionnaireScore() {
+            let score = 0;
+            let answeredQuestions = 0;
+            
+            for (let i = 1; i <= 6; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    score += parseInt(selected.value);
+                    answeredQuestions++;
+                }
+            }
+            
+            questionnaireScore = score;
+            document.getElementById('currentScore').textContent = score;
+            document.getElementById('scoreDisplay').style.display = 'block';
+            
+            // Enable calculate button if all questions answered
+            const calculateBtn = document.getElementById('calculateBtn');
+            if (answeredQuestions === 6) {
+                calculateBtn.disabled = false;
+                calculateBtn.style.opacity = '1';
+            } else {
+                calculateBtn.disabled = true;
+                calculateBtn.style.opacity = '0.5';
+            }
+        }
+
+        // Calcular fototipo desde cuestionario
+        function calculateFitzpatrick() {
+            let fitzpatrickType;
+            
+            if (questionnaireScore <= 6) fitzpatrickType = 1;
+            else if (questionnaireScore <= 9) fitzpatrickType = 2;
+            else if (questionnaireScore <= 12) fitzpatrickType = 3;
+            else if (questionnaireScore <= 16) fitzpatrickType = 4;
+            else if (questionnaireScore <= 20) fitzpatrickType = 5;
+            else fitzpatrickType = 6;
+            
+            selectedFitzpatrick = fitzpatrickType;
+            
+            // Save data and show results
+            saveFitzpatrickData(fitzpatrickType, 'questionnaire', questionnaireScore);
+            showResults(fitzpatrickType);
+            enableNavigation();
+            
+            alert(`Su fototipo calculado es: Tipo ${fitzpatrickType}. Puede continuar al siguiente paso.`);
+        }
+
+        // Mostrar resultados
+        function showResults(type) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Update result header
+            document.getElementById('resultType').textContent = `Tipo ${type}`;
+            document.getElementById('resultName').textContent = getFitzpatrickName(type);
+            
+            // Update characteristics
+            populateCharacteristics(type);
+            
+            // Update vitiligo implications
+            populateVitiligoImplications(type);
+            
+            // Update treatment recommendations
+            populateTreatmentRecommendations(type);
+            
+            // Show results section
+            resultsSection.classList.add('show');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Obtener nombre del fototipo
+        function getFitzpatrickName(type) {
+            const names = {
+                1: 'Piel Muy Clara',
+                2: 'Piel Clara', 
+                3: 'Piel Intermedia',
+                4: 'Piel Morena Clara',
+                5: 'Piel Morena',
+                6: 'Piel Negra'
+            };
+            return names[type];
+        }
+
+        // Poblar características
+        function populateCharacteristics(type) {
+            const characteristics = {
+                1: {
+                    'Respuesta al Sol': 'Siempre se quema, nunca se broncea. Extremadamente sensible a la radiación UV.',
+                    'Características Físicas': 'Piel muy pálida, cabello rubio/rojizo, ojos azules/verdes, pecas abundantes.',
+                    'Riesgo de Cáncer': 'Muy alto riesgo de cáncer de piel. Requiere protección máxima.',
+                    'Origen Étnico': 'Principalmente caucásicos del norte de Europa, celtas.'
+                },
+                2: {
+                    'Respuesta al Sol': 'Generalmente se quema, bronceado mínimo. Muy sensible a la radiación UV.',
+                    'Características Físicas': 'Piel clara, cabello rubio/castaño claro, ojos claros, algunas pecas.',
+                    'Riesgo de Cáncer': 'Alto riesgo de cáncer de piel. Necesita protección alta.',
+                    'Origen Étnico': 'Caucásicos europeos, algunos mediterráneos.'
+                },
+                3: {
+                    'Respuesta al Sol': 'Se quema moderadamente, bronceado gradual. Sensibilidad moderada.',
+                    'Características Físicas': 'Piel beige, cabello castaño, ojos variables, pocas pecas.',
+                    'Riesgo de Cáncer': 'Riesgo moderado de cáncer de piel. Protección recomendada.',
+                    'Origen Étnico': 'Europeos mediterráneos, algunos latinos.'
+                },
+                4: {
+                    'Respuesta al Sol': 'Se quema mínimamente, siempre se broncea bien. Baja sensibilidad.',
+                    'Características Físicas': 'Piel oliva/morena clara, cabello oscuro, ojos oscuros, sin pecas.',
+                    'Riesgo de Cáncer': 'Bajo riesgo de cáncer de piel. Protección básica.',
+                    'Origen Étnico': 'Mediterráneos, latinos, algunos asiáticos.'
+                },
+                5: {
+                    'Respuesta al Sol': 'Raramente se quema, bronceado profundo. Muy baja sensibilidad.',
+                    'Características Físicas': 'Piel morena, cabello negro, ojos muy oscuros.',
+                    'Riesgo de Cáncer': 'Muy bajo riesgo de cáncer de piel.',
+                    'Origen Étnico': 'Asiáticos, hispanos, algunos africanos.'
+                },
+                6: {
+                    'Respuesta al Sol': 'Nunca se quema, pigmentación muy oscura. Mínima sensibilidad.',
+                    'Características Físicas': 'Piel negra, cabello negro, ojos negros.',
+                    'Riesgo de Cáncer': 'Riesgo mínimo de cáncer de piel.',
+                    'Origen Étnico': 'Africanos, afrodescendientes.'
+                }
+            };
+
+            const grid = document.getElementById('characteristicsGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(characteristics[type]).forEach(([title, content]) => {
+                const card = document.createElement('div');
+                card.className = 'characteristic-card';
+                card.innerHTML = `
+                    <div class="characteristic-title">${title}</div>
+                    <div class="characteristic-content">${content}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Poblar implicaciones para Vitiligo
+        function populateVitiligoImplications(type) {
+            const implications = {
+                1: `
+                    <p><strong>Mayor contraste visual:</strong> Las manchas de Vitiligo son más notorias en pieles muy claras, lo que puede impactar significativamente la autoestima.</p>
+                    <p><strong>Fotosensibilidad extrema:</strong> Las áreas despigmentadas son extremadamente vulnerables a quemaduras solares severas.</p>
+                    <p><strong>Respuesta rápida:</strong> Generalmente responde bien a tratamientos de repigmentación debido al contraste de melanina.</p>
+                `,
+                2: `
+                    <p><strong>Contraste moderado-alto:</strong> Las lesiones son claramente visibles, especialmente en verano.</p>
+                    <p><strong>Alta fotosensibilidad:</strong> Riesgo elevado de quemaduras en áreas despigmentadas.</p>
+                    <p><strong>Buena respuesta:</strong> Respuesta favorable a fototerapia con precauciones.</p>
+                `,
+                3: `
+                    <p><strong>Contraste variable:</strong> La visibilidad de las lesiones depende del grado de bronceado de la piel sana.</p>
+                    <p><strong>Fotosensibilidad moderada:</strong> Riesgo moderado pero manejable con protección adecuada.</p>
+                    <p><strong>Respuesta equilibrada:</strong> Excelente candidato para múltiples modalidades de tratamiento.</p>
+                `,
+                4: `
+                    <p><strong>Contraste moderado:</strong> Las lesiones son visibles pero menos llamativas que en pieles más claras.</p>
+                    <p><strong>Menor fotosensibilidad:</strong> Mejor tolerancia a tratamientos con luz UV.</p>
+                    <p><strong>Respuesta variable:</strong> Puede requerir tratamientos más intensivos para resultados óptimos.</p>
+                `,
+                5: `
+                    <p><strong>Contraste alto:</strong> Las manchas blancas resaltan significativamente en piel morena.</p>
+                    <p><strong>Baja fotosensibilidad:</strong> Buena tolerancia a fototerapias intensivas.</p>
+                    <p><strong>Desafío terapéutico:</strong> Requiere protocolos específicos y más tiempo para repigmentación.</p>
+                `,
+                6: `
+                    <p><strong>Contraste máximo:</strong> El mayor impacto visual y psicológico por el contraste extremo.</p>
+                    <p><strong>Excelente tolerancia UV:</strong> Mínimo riesgo de quemaduras en tratamientos.</p>
+                    <p><strong>Mayor complejidad:</strong> Requiere protocolos especializados y expectativas realistas de tiempo.</p>
+                `
+            };
+
+            document.getElementById('vitiligoImplications').innerHTML = implications[type];
+        }
+
+        // Poblar recomendaciones de tratamiento
+        function populateTreatmentRecommendations(type) {
+            const recommendations = {
+                1: [
+                    'Dosis inicial UVB-NB: 280-300 mJ/cm² con incrementos de 10%',
+                    'Protección solar SPF 50+ obligatoria en áreas tratadas',
+                    'Sesiones 3 veces por semana máximo para evitar sobreexposición',
+                    'Hidratación intensiva pre y post tratamiento',
+                    'Monitoreo estricto por eritema y quemaduras',
+                    'Considerar tratamientos tópicos como primera línea',
+                    'Evaluaciones semanales durante primeras 4 semanas'
+                ],
+                2: [
+                    'Dosis inicial UVB-NB: 300-350 mJ/cm² con incrementos de 15%',
+                    'Protección solar SPF 30-50+ en áreas expuestas',
+                    'Frecuencia 3 veces por semana con monitoreo',
+                    'Combinación con inhibidores de calcineurina efectiva',
+                    'Hidratación con productos específicos para Vitiligo',
+                    'Control quincenal durante fase inicial',
+                    'Expectativa de respuesta en 8-12 semanas'
+                ],
+                3: [
+                    'Dosis inicial UVB-NB: 440-500 mJ/cm² con incrementos de 15-20%',
+                    'Protección solar moderada SPF 30+ fuera de tratamiento',
+                    'Candidato ideal para terapias combinadas',
+                    'Excelente respuesta a corticoides tópicos moderados',
+                    'Puede tolerar sesiones más frecuentes (3-4/semana)',
+                    'Seguimiento mensual después de estabilización',
+                    'Pronóstico favorable para repigmentación completa'
+                ],
+                4: [
+                    'Dosis inicial UVB-NB: 500-600 mJ/cm² con incrementos de 20%',
+                    'Menor riesgo de fotosensibilidad, protección básica',
+                    'Puede requerir tratamientos más intensivos',
+                    'Excelente candidato para terapias sistémicas',
+                    'Considerar combinación con medicamentos orales',
+                    'Evaluaciones mensuales suficientes',
+                    'Tiempo de respuesta puede ser más prolongado'
+                ],
+                5: [
+                    'Dosis inicial UVB-NB: 650-800 mJ/cm² con incrementos de 20-25%',
+                    'Mínimo riesgo de eritema, puede tolerar dosis altas',
+                    'Protocolo intensivo con múltiples modalidades',
+                    'Considerar láser excimer para lesiones localizadas',
+                    'Suplementación con antioxidantes beneficiosa',
+                    'Control cada 6-8 semanas inicialmente',
+                    'Expectativas realistas: 6-12 meses para resultados'
+                ],
+                6: [
+                    'Dosis inicial UVB-NB: 800-1000 mJ/cm² con incrementos de 25%',
+                    'Excelente tolerancia a tratamientos intensivos',
+                    'Protocolo multimodal agresivo recomendado',
+                    'Candidato para tratamientos experimentales',
+                    'Terapia sistémica como complemento esencial',
+                    'Seguimiento cada 2 meses después de estabilización',
+                    'Proceso de repigmentación puede tomar 12-18 meses'
+                ]
+            };
+
+            const list = document.getElementById('treatmentRecommendations');
+            list.innerHTML = '';
+            
+            recommendations[type].forEach(rec => {
+                const li = document.createElement('li');
+                li.textContent = rec;
+                list.appendChild(li);
+            });
+        }
+
+        // Guardar datos de Fitzpatrick
+        function saveFitzpatrickData(type, method, score = null) {
+            fitzpatrickData = {
+                fitzpatrickType: type,
+                evaluationMethod: method,
+                questionnaireScore: score,
+                timestamp: new Date().toISOString(),
+                name: getFitzpatrickName(type)
+            };
+            
+            localStorage.setItem('fitzpatrickData', JSON.stringify(fitzpatrickData));
+        }
+
+        // Guardar progreso
+        function saveProgress() {
+            if (selectedFitzpatrick) {
+                alert('✅ Su evaluación Fitzpatrick ha sido guardada exitosamente.');
+            } else {
+                alert('⚠️ Por favor complete la evaluación de fototipo antes de guardar.');
+            }
+        }
+
+        // Cargar datos guardados
+        function loadSavedData() {
+            const savedData = localStorage.getItem('fitzpatrickData');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    selectedFitzpatrick = data.fitzpatrickType;
+                    
+                    if (data.evaluationMethod === 'visual') {
+                        // Restaurar selección visual
+                        const card = document.querySelector(`[data-type="${data.fitzpatrickType}"]`);
+                        if (card) {
+                            card.classList.add('selected');
+                            showResults(data.fitzpatrickType);
+                            enableNavigation();
+                        }
+                    } else if (data.evaluationMethod === 'questionnaire' && data.questionnaireScore !== null) {
+                        // Cambiar a método cuestionario
+                        document.querySelector('[data-method="questionnaire"]').click();
+                        
+                        // Restaurar puntuación
+                        questionnaireScore = data.questionnaireScore;
+                        document.getElementById('currentScore').textContent = data.questionnaireScore;
+                        document.getElementById('scoreDisplay').style.display = 'block';
+                        document.getElementById('calculateBtn').disabled = false;
+                        document.getElementById('calculateBtn').style.opacity = '1';
+                        
+                        showResults(data.fitzpatrickType);
+                        enableNavigation();
+                    }
+                    
+                    console.log('Datos Fitzpatrick cargados exitosamente');
+                } catch (e) {
+                    console.error('Error cargando datos Fitzpatrick:', e);
+                }
+            }
+        }
+
+        // Resetear selección
+        function resetSelection() {
+            selectedFitzpatrick = null;
+            questionnaireScore = 0;
+            
+            // Reset visual method
+            document.querySelectorAll('.fitz-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Reset questionnaire method
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+                option.querySelector('input').checked = false;
+            });
+            
+            // Reset score display
+            document.getElementById('scoreDisplay').style.display = 'none';
+            document.getElementById('calculateBtn').disabled = true;
+            document.getElementById('calculateBtn').style.opacity = '0.5';
+            
+            // Hide results
+            document.getElementById('resultsSection').classList.remove('show');
+            
+            // Disable navigation
+            disableNavigation();
+        }
+
+        // Habilitar navegación
+        function enableNavigation() {
+            document.getElementById('nextBtn').disabled = false;
+            document.getElementById('nextBtn').style.opacity = '1';
+        }
+
+        // Deshabilitar navegación
+        function disableNavigation() {
+            document.getElementById('nextBtn').disabled = true;
+            document.getElementById('nextBtn').style.opacity = '0.5';
+        }
+
+        // Función para ir a página anterior
+        function previousPage() {
+            saveProgress();
+            window.location.href = 'index.html';
+        }
+
+        // Función para ir a página siguiente
+        function nextPage() {
+            if (!selectedFitzpatrick) {
+                alert('Por favor complete la evaluación de fototipo antes de continuar.');
+                return;
+            }
+            
+            // Guardar datos y continuar
+            saveProgress();
+            window.location.href = 'antecedentes.html';
+        }
+    </script>
+</body>
+</html>
