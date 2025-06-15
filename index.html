@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Vitíligo - Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 5px;
+            margin: 0 2px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .step.completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-item:hover {
+            background: #e9ecef;
+        }
+
+        .radio-item input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .fitzpatrick-scale {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .fitzpatrick-item {
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .fitzpatrick-item:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .fitzpatrick-item.selected {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .fitzpatrick-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+        }
+
+        .fitz-1 { background: #fdbcb4; }
+        .fitz-2 { background: #edb98a; }
+        .fitz-3 { background: #d1a380; }
+        .fitz-4 { background: #a17a63; }
+        .fitz-5 { background: #6d4d36; }
+        .fitz-6 { background: #2d1810; }
+
+        .report-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .investment-level {
+            border-left: 5px solid;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .level-1 {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .level-2 {
+            border-color: #f39c12;
+            background: #fef9f2;
+        }
+
+        .level-3 {
+            border-color: #27ae60;
+            background: #f2f8f4;
+        }
+
+        .contact-info {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .severity-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .low-risk { background: #d5f4e6; color: #27ae60; }
+        .medium-risk { background: #fff3cd; color: #856404; }
+        .high-risk { background: #f8d7da; color: #721c24; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .step {
+                font-size: 0.8em;
+                padding: 8px 3px;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Evaluación Integral de Vitíligo</h1>
+            <p>Dr. José Moya - Protocolo de Evaluación a Distancia</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-indicator">
+                <div class="step active" data-step="1">Datos Básicos</div>
+                <div class="step" data-step="2">Fitzpatrick</div>
+                <div class="step" data-step="3">Antecedentes</div>
+                <div class="step" data-step="4">Vitíligo Actual</div>
+                <div class="step" data-step="5">Capacidad Inversión</div>
+                <div class="step" data-step="6">Reporte</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Datos Básicos -->
+        <div class="form-section active" data-step="1">
+            <h2>Información Básica del Paciente</h2>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre Completo *</label>
+                <input type="text" id="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edad">Edad *</label>
+                <input type="number" id="edad" min="1" max="120" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sexo">Sexo *</label>
+                <select id="sexo" required>
+                    <option value="">Seleccione...</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pais">País de Residencia *</label>
+                <input type="text" id="pais" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email de Contacto *</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono con WhatsApp</label>
+                <input type="tel" id="telefono">
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" disabled>Anterior</button>
+                <button class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Escala Fitzpatrick -->
+        <div class="form-section" data-step="2">
+            <h2>Evaluación de Fototipo (Escala Fitzpatrick)</h2>
+            
+            <div class="alert alert-info">
+                <strong>Importante:</strong> Seleccione el fototipo que mejor describe su respuesta natural al sol sin protección.
+            </div>
+
+            <div class="fitzpatrick-scale">
+                <div class="fitzpatrick-item" data-value="1">
+                    <div class="fitzpatrick-circle fitz-1"></div>
+                    <strong>Tipo I</strong>
+                    <p>Siempre se quema, nunca se broncea</p>
+                </div>
+                <div class="fitzpatrick-item" data-value="2">
+                    <div class="fitzpatrick-circle fitz-2"></div>
+                    <strong>Tipo II</strong>
+                    <p>Generalmente se quema, se broncea mínimamente</p>
+                </div>
+                <div class="fitzpatrick-item" data-value="3">
+                    <div class="fitzpatrick-circle fitz-3"></div>
+                    <strong>Tipo III</strong>
+                    <p>Se quema moderadamente, se broncea gradualmente</p>
+                </div>
+                <div class="fitzpatrick-item" data-value="4">
+                    <div class="fitzpatrick-circle fitz-4"></div>
+                    <strong>Tipo IV</strong>
+                    <p>Se quema mínimamente, siempre se broncea bien</p>
+                </div>
+                <div class="fitzpatrick-item" data-value="5">
+                    <div class="fitzpatrick-circle fitz-5"></div>
+                    <strong>Tipo V</strong>
+                    <p>Raramente se quema, se broncea profundamente</p>
+                </div>
+                <div class="fitzpatrick-item" data-value="6">
+                    <div class="fitzpatrick-circle fitz-6"></div>
+                    <strong>Tipo VI</strong>
+                    <p>Nunca se quema, pigmentación muy oscura</p>
+                </div>
+            </div>
+
+            <input type="hidden" id="fitzpatrick" value="">
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Antecedentes -->
+        <div class="form-section" data-step="3">
+            <h2>Antecedentes Médicos y Familiares</h2>
+
+            <h3>Antecedentes Personales</h3>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="infecciones_recurrentes" value="infecciones_recurrentes">
+                    <label for="infecciones_recurrentes">Infecciones recurrentes</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="manos_sudorosas" value="manos_sudorosas">
+                    <label for="manos_sudorosas">Manos sudorosas (hiperhidrosis)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="ansiedad" value="ansiedad">
+                    <label for="ansiedad">Ansiedad/miedo escénico</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="alergias" value="alergias">
+                    <label for="alergias">Alergias conocidas</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="hipotiroidismo" value="hipotiroidismo">
+                    <label for="hipotiroidismo">Hipotiroidismo</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="diabetes" value="diabetes">
+                    <label for="diabetes">Diabetes</label>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Antecedentes Familiares</h3>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fam_vitiligo" value="fam_vitiligo">
+                    <label for="fam_vitiligo">Vitíligo en familia</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fam_hipotiroidismo" value="fam_hipotiroidismo">
+                    <label for="fam_hipotiroidismo">Hipotiroidismo familiar</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fam_canas" value="fam_canas">
+                    <label for="fam_canas">Canas prematuras en familia</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fam_autoinmune" value="fam_autoinmune">
+                    <label for="fam_autoinmune">Enfermedades autoinmunes familiares</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="fam_alopecia" value="fam_alopecia">
+                    <label for="fam_alopecia">Alopecia areata familiar</label>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Vitíligo Actual -->
+        <div class="form-section" data-step="4">
+            <h2>Evaluación del Vitíligo Actual</h2>
+
+            <div class="form-group">
+                <label for="tiempo_vitiligo">¿Hace cuánto tiempo notó las primeras manchas? *</label>
+                <select id="tiempo_vitiligo" required>
+                    <option value="">Seleccione...</option>
+                    <option value="menos_6m">Menos de 6 meses</option>
+                    <option value="6m_1a">6 meses a 1 año</option>
+                    <option value="1a_3a">1 a 3 años</option>
+                    <option value="3a_5a">3 a 5 años</option>
+                    <option value="mas_5a">Más de 5 años</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>¿Cómo ha sido la progresión? *</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="estable" name="progresion" value="estable">
+                        <label for="estable">Estable (no ha crecido)</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="lenta" name="progresion" value="lenta">
+                        <label for="lenta">Progresión lenta</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="rapida" name="progresion" value="rapida">
+                        <label for="rapida">Progresión rápida</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>¿Dónde están localizadas las manchas? (Seleccione todas las que apliquen)</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cara" value="cara">
+                        <label for="cara">Cara</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cuello" value="cuello">
+                        <label for="cuello">Cuello</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="manos" value="manos">
+                        <label for="manos">Manos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pies" value="pies">
+                        <label for="pies">Pies</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="tronco" value="tronco">
+                        <label for="tronco">Tronco</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="genitales" value="genitales">
+                        <label for="genitales">Área genital</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="superficie_afectada">¿Qué porcentaje aproximado de su cuerpo está afectado? *</label>
+                <select id="superficie_afectada" required>
+                    <option value="">Seleccione...</option>
+                    <option value="menor_1">Menos del 1%</option>
+                    <option value="1_5">1% - 5%</option>
+                    <option value="5_10">5% - 10%</option>
+                    <option value="10_25">10% - 25%</option>
+                    <option value="mayor_25">Más del 25%</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>¿Ha recibido algún tratamiento anteriormente?</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="corticoides" value="corticoides">
+                        <label for="corticoides">Corticoides tópicos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="fototerapia" value="fototerapia">
+                        <label for="fototerapia">Fototerapia</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="inmunosupresores" value="inmunosupresores">
+                        <label for="inmunosupresores">Inmunosupresores</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ninguno" value="ninguno">
+                        <label for="ninguno">Ningún tratamiento</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn btn-primary" onclick="nextStep()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Step 5: Capacidad de Inversión -->
+        <div class="form-section" data-step="5">
+            <h2>Evaluación de Capacidad de Inversión</h2>
+
+            <div class="alert alert-info">
+                <strong>Información confidencial:</strong> Esta información nos ayuda a recomendar las mejores opciones según su situación particular. Toda información es estrictamente confidencial.
+            </div>
+
+            <div class="form-group">
+                <label for="ingresos">¿Cuál es su rango de ingresos mensuales? *</label>
+                <select id="ingresos" required>
+                    <option value="">Seleccione...</option>
+                    <option value="muy_bajo">Menos de $500 USD</option>
+                    <option value="bajo">$500 - $1,500 USD</option>
+                    <option value="medio">$1,500 - $3,000 USD</option>
+                    <option value="medio_alto">$3,000 - $5,000 USD</option>
+                    <option value="alto">$5,000 - $10,000 USD</option>
+                    <option value="muy_alto">Más de $10,000 USD</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="inversion_salud">¿Cuánto puede destinar mensualmente para tratamiento de salud? *</label>
+                <select id="inversion_salud" required>
+                    <option value="">Seleccione...</option>
+                    <option value="limitado">$0 - $200 USD</option>
+                    <option value="moderado">$200 - $500 USD</option>
+                    <option value="considerable">$500 - $1,000 USD</option>
+                    <option value="amplio">$1,000 - $2,500 USD</option>
+                    <option value="ilimitado">Más de $2,500 USD</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="prioridad">¿Qué tan prioritario es resolver su condición de vitíligo? *</label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="baja_prioridad" name="prioridad" value="baja">
+                        <label for="baja_prioridad">Baja prioridad</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="media_prioridad" name="prioridad" value="media">
+                        <label for="media_prioridad">Prioridad media</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="alta_prioridad" name="prioridad" value="alta">
+                        <label for="alta_prioridad">Alta prioridad</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="maxima_prioridad" name="prioridad" value="maxima">
+                        <label for="maxima_prioridad">Máxima prioridad</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>¿Qué recursos tiene disponibles? (Seleccione todos los que apliquen)</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="seguro_salud" value="seguro_salud">
+                        <label for="seguro_salud">Seguro de salud</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ahorros" value="ahorros">
+                        <label for="ahorros">Ahorros destinados para salud</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="apoyo_familiar" value="apoyo_familiar">
+                        <label for="apoyo_familiar">Apoyo familiar financiero</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="credito" value="credito">
+                        <label for="credito">Acceso a crédito/financiamiento</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn btn-primary" onclick="generateReport()">Generar Reporte</button>
+            </div>
+        </div>
+
+        <!-- Step 6: Reporte -->
+        <div class="form-section" data-step="6">
+            <div class="report-section">
+                <h2>Reporte de Evaluación Personalizado</h2>
+                
+                <div id="patientSummary"></div>
+                
+                <div id="riskAssessment"></div>
+                
+                <div id="recommendationsByLevel"></div>
+                
+                <div class="contact-info">
+                    <h3>¿Listo para comenzar su tratamiento?</h3>
+                    <p><strong>Dr. José Moya</strong></p>
+                    <p>📧 Email: info@drmoya.com</p>
+                    <p>📱 WhatsApp: +1 (305) 555-0123</p>
+                    <p>🌐 Consultas virtuales disponibles</p>
+                    <br>
+                    <button class="btn btn-primary" onclick="sendReport()">Enviar Reporte por Email</button>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevStep()">Anterior</button>
+                <button class="btn btn-primary" onclick="startOver()">Nueva Evaluación</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 6;
+        const formData = {};
+
+        // Navigation functions
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateProgress();
+                    showStep(currentStep);
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateProgress();
+                showStep(currentStep);
+            }
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((stepEl, index) => {
+                stepEl.classList.remove('active', 'completed');
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                }
+            });
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function validateCurrentStep() {
+            const currentSection = document.querySelector(`[data-step="${currentStep}"]`);
+            const requiredFields = currentSection.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#ecf0f1';
+                }
+            });
+
+            // Special validation for Fitzpatrick scale
+            if (currentStep === 2) {
+                const fitzpatrick = document.getElementById('fitzpatrick').value;
+                if (!fitzpatrick) {
+                    alert('Por favor seleccione su fototipo de piel.');
+                    return false;
+                }
+            }
+
+            // Special validation for progression radio buttons
+            if (currentStep === 4) {
+                const progresion = document.querySelector('input[name="progresion"]:checked');
+                if (!progresion) {
+                    alert('Por favor seleccione cómo ha sido la progresión.');
+                    return false;
+                }
+            }
+
+            // Special validation for priority radio buttons
+            if (currentStep === 5) {
+                const prioridad = document.querySelector('input[name="prioridad"]:checked');
+                if (!prioridad) {
+                    alert('Por favor indique la prioridad del tratamiento.');
+                    return false;
+                }
+            }
+
+            if (!isValid) {
+                alert('Por favor complete todos los campos requeridos.');
+            }
+
+            return isValid;
+        }
+
+        // Fitzpatrick scale selection
+        document.querySelectorAll('.fitzpatrick-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.fitzpatrick-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('fitzpatrick').value = this.dataset.value;
+            });
+        });
+
+        // Data collection functions
+        function collectFormData() {
+            // Basic data
+            formData.nombre = document.getElementById('nombre').value;
+            formData.edad = document.getElementById('edad').value;
+            formData.sexo = document.getElementById('sexo').value;
+            formData.pais = document.getElementById('pais').value;
+            formData.email = document.getElementById('email').value;
+            formData.telefono = document.getElementById('telefono').value;
+            
+            // Fitzpatrick
+            formData.fitzpatrick = document.getElementById('fitzpatrick').value;
+            
+            // Medical history
+            formData.antecedentes = [];
+            document.querySelectorAll('[data-step="3"] input[type="checkbox"]:checked').forEach(cb => {
+                formData.antecedentes.push(cb.value);
+            });
+            
+            // Current vitiligo
+            formData.tiempo_vitiligo = document.getElementById('tiempo_vitiligo').value;
+            formData.progresion = document.querySelector('input[name="progresion"]:checked')?.value;
+            formData.superficie_afectada = document.getElementById('superficie_afectada').value;
+            
+            formData.localizacion = [];
+            document.querySelectorAll('[data-step="4"] input[type="checkbox"]:checked').forEach(cb => {
+                if (cb.id !== 'ninguno') {
+                    formData.localizacion.push(cb.value);
+                }
+            });
+            
+            // Investment capacity
+            formData.ingresos = document.getElementById('ingresos').value;
+            formData.inversion_salud = document.getElementById('inversion_salud').value;
+            formData.prioridad = document.querySelector('input[name="prioridad"]:checked')?.value;
+            
+            formData.recursos = [];
+            document.querySelectorAll('[data-step="5"] input[type="checkbox"]:checked').forEach(cb => {
+                formData.recursos.push(cb.value);
+            });
+        }
+
+        function calculateRiskLevel() {
+            let riskScore = 0;
+            
+            // Age factor
+            if (formData.edad < 20) riskScore += 2;
+            else if (formData.edad < 30) riskScore += 1;
+            
+            // Family history
+            if (formData.antecedentes.includes('fam_vitiligo')) riskScore += 3;
+            if (formData.antecedentes.includes('fam_hipotiroidismo')) riskScore += 2;
+            if (formData.antecedentes.includes('fam_canas')) riskScore += 1;
+            if (formData.antecedentes.includes('fam_autoinmune')) riskScore += 2;
+            
+            // Current progression
+            if (formData.progresion === 'rapida') riskScore += 3;
+            else if (formData.progresion === 'lenta') riskScore += 2;
+            
+            // Surface area
+            if (formData.superficie_afectada === 'mayor_25') riskScore += 3;
+            else if (formData.superficie_afectada === '10_25') riskScore += 2;
+            else if (formData.superficie_afectada === '5_10') riskScore += 1;
+            
+            // Visible areas
+            if (formData.localizacion.includes('cara')) riskScore += 2;
+            if (formData.localizacion.includes('manos')) riskScore += 2;
+            
+            if (riskScore <= 3) return 'low';
+            else if (riskScore <= 7) return 'medium';
+            else return 'high';
+        }
+
+        function getInvestmentLevel() {
+            const ingresos = formData.ingresos;
+            const inversion = formData.inversion_salud;
+            const prioridad = formData.prioridad;
+            
+            let score = 0;
+            
+            // Income level
+            if (ingresos === 'muy_alto' || ingresos === 'alto') score += 3;
+            else if (ingresos === 'medio_alto' || ingresos === 'medio') score += 2;
+            else score += 1;
+            
+            // Investment capacity
+            if (inversion === 'ilimitado' || inversion === 'amplio') score += 3;
+            else if (inversion === 'considerable') score += 2;
+            else score += 1;
+            
+            // Priority
+            if (prioridad === 'maxima') score += 2;
+            else if (prioridad === 'alta') score += 1;
+            
+            if (score >= 7) return 3; // No problem
+            else if (score >= 4) return 2; // Not much problem
+            else return 1; // Real problem
+        }
+
+        function generateReport() {
+            if (!validateCurrentStep()) return;
+            
+            collectFormData();
+            
+            const riskLevel = calculateRiskLevel();
+            const investmentLevel = getInvestmentLevel();
+            
+            displayReport(riskLevel, investmentLevel);
+            
+            currentStep = 6;
+            updateProgress();
+            showStep(6);
+        }
+
+        function displayReport(riskLevel, investmentLevel) {
+            // Patient Summary
+            const summaryHtml = `
+                <h3>Resumen del Paciente</h3>
+                <p><strong>Nombre:</strong> ${formData.nombre}</p>
+                <p><strong>Edad:</strong> ${formData.edad} años</p>
+                <p><strong>Fototipo:</strong> Fitzpatrick ${formData.fitzpatrick}</p>
+                <p><strong>Tiempo con vitíligo:</strong> ${getTimeDescription(formData.tiempo_vitiligo)}</p>
+                <p><strong>Progresión:</strong> ${formData.progresion}</p>
+                <p><strong>Superficie afectada:</strong> ${getSurfaceDescription(formData.superficie_afectada)}</p>
+            `;
+            
+            // Risk Assessment
+            const riskColor = riskLevel === 'high' ? 'high-risk' : riskLevel === 'medium' ? 'medium-risk' : 'low-risk';
+            const riskText = riskLevel === 'high' ? 'Alto Riesgo' : riskLevel === 'medium' ? 'Riesgo Moderado' : 'Bajo Riesgo';
+            
+            const riskHtml = `
+                <h3>Evaluación de Riesgo <span class="severity-indicator ${riskColor}">${riskText}</span></h3>
+                <p>${getRiskDescription(riskLevel)}</p>
+            `;
+            
+            // Recommendations by Investment Level
+            const recommendationsHtml = getRecommendationsByLevel(investmentLevel);
+            
+            document.getElementById('patientSummary').innerHTML = summaryHtml;
+            document.getElementById('riskAssessment').innerHTML = riskHtml;
+            document.getElementById('recommendationsByLevel').innerHTML = recommendationsHtml;
+        }
+
+        function getTimeDescription(time) {
+            const descriptions = {
+                'menos_6m': 'Menos de 6 meses',
+                '6m_1a': '6 meses a 1 año',
+                '1a_3a': '1 a 3 años',
+                '3a_5a': '3 a 5 años',
+                'mas_5a': 'Más de 5 años'
+            };
+            return descriptions[time] || 'No especificado';
+        }
+
+        function getSurfaceDescription(surface) {
+            const descriptions = {
+                'menor_1': 'Menos del 1%',
+                '1_5': '1% - 5%',
+                '5_10': '5% - 10%',
+                '10_25': '10% - 25%',
+                'mayor_25': 'Más del 25%'
+            };
+            return descriptions[surface] || 'No especificado';
+        }
+
+        function getRiskDescription(riskLevel) {
+            if (riskLevel === 'high') {
+                return 'Su perfil indica un riesgo alto de progresión. Se recomienda intervención inmediata y seguimiento estrecho. La afectación de áreas visibles y la progresión rápida requieren atención especializada urgente.';
+            } else if (riskLevel === 'medium') {
+                return 'Su perfil muestra un riesgo moderado. Es importante iniciar tratamiento preventivo y realizar seguimiento regular para evitar progresión a formas más severas.';
+            } else {
+                return 'Su perfil indica un riesgo bajo de complicaciones. Con manejo adecuado y seguimiento regular, se pueden esperar resultados favorables.';
+            }
+        }
+
+        function getRecommendationsByLevel(level) {
+            let html = '<h3>Recomendaciones Personalizadas</h3>';
+            
+            if (level === 1) {
+                html += `
+                    <div class="investment-level level-1">
+                        <h4>🔴 Plan Esencial - Inversión Limitada</h4>
+                        <p><strong>Costo estimado:</strong> $200-500 USD mensuales</p>
+                        <ul>
+                            <li><strong>Consulta virtual inicial</strong> con evaluación completa ($150)</li>
+                            <li><strong>Protocolo básico</strong> con suplementos esenciales ($100-200/mes)</li>
+                            <li><strong>Fototerapia casera</strong> con lámpara UVB-NB ($300 inicial + $50/mes mantenimiento)</li>
+                            <li><strong>Seguimiento mensual virtual</strong> ($100/mes)</li>
+                            <li><strong>Manual digital</strong> con protocolos de autocuidado (incluido)</li>
+                        </ul>
+                        <p><strong>Financiamiento disponible:</strong> Plan de pagos en 6 cuotas sin intereses</p>
+                        <p><strong>Garantía:</strong> Si no ve mejoras en 3 meses, reembolso del 50% de consultas</p>
+                    </div>
+                `;
+            } else if (level === 2) {
+                html += `
+                    <div class="investment-level level-2">
+                        <h4>🟡 Plan Integral - Inversión Moderada</h4>
+                        <p><strong>Costo estimado:</strong> $500-1,200 USD mensuales</p>
+                        <ul>
+                            <li><strong>Consulta presencial o virtual</strong> con análisis genético completo ($400)</li>
+                            <li><strong>Protocolo avanzado</strong> con medicamentos especializados ($300-600/mes)</li>
+                            <li><strong>Fototerapia profesional</strong> supervisada (virtual) ($200/mes)</li>
+                            <li><strong>Laboratorios especializados</strong> cada 3 meses ($150/vez)</li>
+                            <li><strong>Seguimiento quincenal</strong> con ajustes de protocolo ($150/mes)</li>
+                            <li><strong>Kit completo</strong> de suplementos y tratamientos tópicos ($200/mes)</li>
+                        </ul>
+                        <p><strong>Beneficios adicionales:</strong> Acceso a grupo VIP de WhatsApp para consultas rápidas</p>
+                        <p><strong>Garantía:</strong> Resultados visibles en 6 meses o ajuste gratuito del protocolo</p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="investment-level level-3">
+                        <h4>🟢 Plan Premium - Inversión Completa</h4>
+                        <p><strong>Costo estimado:</strong> $1,200-3,000 USD mensuales</p>
+                        <ul>
+                            <li><strong>Consulta presencial</strong> en Miami o virtual premium ($600)</li>
+                            <li><strong>Protocolo completo personalizado</strong> con análisis genético avanzado ($800-1,500/mes)</li>
+                            <li><strong>Fototerapia de última generación</strong> con equipo profesional ($400/mes)</li>
+                            <li><strong>Tratamientos biológicos</strong> cuando sean necesarios ($1,000-2,000/mes)</li>
+                            <li><strong>Seguimiento semanal</strong> con equipo multidisciplinario ($300/mes)</li>
+                            <li><strong>Laboratorios completos</strong> mensuales con seguimiento personalizado ($200/mes)</li>
+                            <li><strong>Acceso directo 24/7</strong> al Dr. Moya para emergencias</li>
+                        </ul>
+                        <p><strong>Beneficios VIP:</strong></p>
+                        <ul>
+                            <li>Acceso a tratamientos experimentales aprobados</li>
+                            <li>Coordinación con especialistas internacionales</li>
+                            <li>Plan familiar preventivo incluido</li>
+                            <li>Seguimiento de por vida con descuentos especiales</li>
+                        </ul>
+                        <p><strong>Garantía Premium:</strong> Resultados garantizados en 4 meses o protocolo alternativo sin costo adicional</p>
+                    </div>
+                `;
+            }
+            
+            html += `
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <h4>🎯 Próximos Pasos Recomendados</h4>
+                    <ol>
+                        <li><strong>Contacto inmediato:</strong> Agende su consulta inicial dentro de los próximos 7 días</li>
+                        <li><strong>Preparación:</strong> Tome fotografías de alta calidad de las áreas afectadas</li>
+                        <li><strong>Documentación:</strong> Reúna todos sus estudios médicos previos</li>
+                        <li><strong>Análisis familiar:</strong> Documente antecedentes familiares detallados</li>
+                        <li><strong>Expectativas:</strong> Prepare lista de preguntas y objetivos de tratamiento</li>
+                    </ol>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        function sendReport() {
+            // Simulate sending report
+            alert('Su reporte ha sido enviado a ' + formData.email + '. Recibirá una copia detallada en los próximos minutos junto con instrucciones para agendar su consulta.');
+        }
+
+        function startOver() {
+            currentStep = 1;
+            Object.keys(formData).forEach(key => delete formData[key]);
+            document.querySelectorAll('input, select, textarea').forEach(field => {
+                if (field.type === 'checkbox' || field.type === 'radio') {
+                    field.checked = false;
+                } else {
+                    field.value = '';
+                }
+            });
+            document.querySelectorAll('.fitzpatrick-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            updateProgress();
+            showStep(1);
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
