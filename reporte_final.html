@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Final - Protocolo Vitiligo Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .header h2 {
+            color: #3498db;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            width: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 5px;
+            margin: 0 2px;
+            background: #27ae60;
+            color: white;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .reporte-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .report-title {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .report-subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .report-date {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .patient-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card-content {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .risk-assessment {
+            background: linear-gradient(135deg, #e8f6fd, #ffffff);
+            border: 2px solid #3498db;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .risk-level {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .low-risk { color: #27ae60; }
+        .medium-risk { color: #f39c12; }
+        .high-risk { color: #e74c3c; }
+
+        .risk-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .treatment-plan {
+            background: linear-gradient(135deg, #d5f4e6, #ffffff);
+            border: 2px solid #27ae60;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .plan-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #27ae60;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .plan-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .plan-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .plan-section h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .plan-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .plan-section li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .plan-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .investment-breakdown {
+            background: #2c3e50;
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .investment-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cost-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .cost-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .cost-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cost-description {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .timeline {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .timeline-title {
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .timeline-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .timeline-step {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .step-number {
+            background: rgba(255,255,255,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .step-description {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .recommendations-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .recommendation-item {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .recommendation-item h4 {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .fitzpatrick-display {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .fitzpatrick-type {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .fitzpatrick-description {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .fitzpatrick-protocol {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .contact-section {
+            background: #2c3e50;
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .contact-method {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .contact-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .contact-details {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23,162,184,0.3);
+        }
+
+        .alert {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #27ae60;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .disclaimer {
+            font-size: 0.9em;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .actions {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .print-hidden {
+            display: block;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .print-hidden {
+                display: none !important;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+            
+            .section {
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+            
+            .btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .reporte-container {
+                padding: 20px;
+            }
+            
+            .patient-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .plan-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .cost-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .timeline-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Reporte Integral Personalizado</h1>
+            <h2>Protocolo de Vitiligo - Dr. José Moya</h2>
+            <p>Evaluación completa con recomendaciones específicas para su caso único</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar print-hidden">
+            <div class="progress">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="step-indicator">
+                <div class="step">Datos Básicos</div>
+                <div class="step">Fitzpatrick</div>
+                <div class="step">Antecedentes</div>
+                <div class="step">Vitiligo Actual</div>
+                <div class="step">Capacidad Inversión</div>
+                <div class="step active">Reporte</div>
+            </div>
+        </div>
+
+        <!-- Main Report Container -->
+        <div class="reporte-container">
+            <div class="report-header">
+                <div class="report-title">Reporte Médico Personalizado</div>
+                <div class="report-subtitle">Protocolo Integral de Vitiligo</div>
+                <div class="report-date" id="reportDate">Generado el: --</div>
+            </div>
+
+            <!-- Patient Summary Section -->
+            <div class="section">
+                <h3 class="section-title">
+                    <span class="section-icon">👤</span>
+                    Resumen del Paciente
+                </h3>
+                
+                <div class="patient-summary" id="patientSummary">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Fitzpatrick Assessment -->
+            <div class="fitzpatrick-display" id="fitzpatrickDisplay">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+
+            <!-- Risk Assessment Section -->
+            <div class="section">
+                <h3 class="section-title">
+                    <span class="section-icon">⚠️</span>
+                    Evaluación de Riesgo
+                </h3>
+                
+                <div class="risk-assessment" id="riskAssessment">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Current Condition Summary -->
+            <div class="section">
+                <h3 class="section-title">
+                    <span class="section-icon">🔍</span>
+                    Estado Actual del Vitiligo
+                </h3>
+                
+                <div id="currentCondition">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Personalized Treatment Plan -->
+            <div class="treatment-plan" id="treatmentPlan">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+
+            <!-- Investment Breakdown -->
+            <div class="investment-breakdown" id="investmentBreakdown">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+
+            <!-- Treatment Timeline -->
+            <div class="timeline" id="treatmentTimeline">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+
+            <!-- Specific Recommendations -->
+            <div class="recommendations" id="specificRecommendations">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+
+            <!-- Contact Section -->
+            <div class="contact-section">
+                <div class="contact-title">¿Listo para Comenzar su Tratamiento?</div>
+                <p style="margin-bottom: 30px;">El Dr. José Moya y su equipo están listos para acompañarlo en su proceso de recuperación</p>
+                
+                <div class="contact-info">
+                    <div class="contact-method">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-details">Email</div>
+                        <div>info@drmoya.com</div>
+                        <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">Respuesta en 24 horas</div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">📱</div>
+                        <div class="contact-details">WhatsApp</div>
+                        <div>+1 (305) 555-0123</div>
+                        <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">Consultas rápidas</div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">🏥</div>
+                        <div class="contact-details">Consulta Presencial</div>
+                        <div>Miami, Florida</div>
+                        <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">Cita previa requerida</div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">💻</div>
+                        <div class="contact-details">Consulta Virtual</div>
+                        <div>Zoom/Telemedicina</div>
+                        <div style="font-size: 0.9em; opacity: 0.8; margin-top: 5px;">Disponible mundialmente</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="actions print-hidden">
+                <h3 style="margin-bottom: 20px; color: #2c3e50;">Acciones Disponibles</h3>
+                <button class="btn btn-success" onclick="scheduleConsultation()">📅 Agendar Consulta</button>
+                <button class="btn btn-primary" onclick="downloadPDF()">📄 Descargar PDF</button>
+                <button class="btn btn-info" onclick="sendByEmail()">📧 Enviar por Email</button>
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Reporte</button>
+            </div>
+
+            <!-- Important Alerts -->
+            <div id="importantAlerts">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-content">
+                <h3>Dr. José Moya - Especialista en Vitiligo</h3>
+                <p>40 años de experiencia en medicina especializada</p>
+                <div class="disclaimer">
+                    <strong>Aviso Médico:</strong> Este reporte es una evaluación preliminar basada en la información proporcionada. 
+                    No sustituye una consulta médica presencial. Para un diagnóstico definitivo y plan de tratamiento, 
+                    es necesaria una evaluación clínica completa. Todos los tratamientos deben ser supervisados por un profesional médico calificado.
+                </div>
+                <div style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">
+                    © 2025 Dr. José Moya. Protocolo de Vitiligo. Todos los derechos reservados.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reportData = {};
+        let allPatientData = {};
+
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAllData();
+            generateReport();
+            setReportDate();
+        });
+
+        // Cargar todos los datos del protocolo
+        function loadAllData() {
+            try {
+                // Cargar datos combinados si existen
+                const combinedData = localStorage.getItem('reporteCompleto');
+                if (combinedData) {
+                    allPatientData = JSON.parse(combinedData);
+                } else {
+                    // Cargar datos individuales como respaldo
+                    allPatientData = {
+                        datosBasicos: JSON.parse(localStorage.getItem('datosBasicos') || '{}'),
+                        fitzpatrick: JSON.parse(localStorage.getItem('fitzpatrickData') || '{}'),
+                        antecedentes: JSON.parse(localStorage.getItem('antecedentesData') || '{}'),
+                        vitiligoActual: JSON.parse(localStorage.getItem('vitiligoActualData') || '{}'),
+                        capacidadInversion: JSON.parse(localStorage.getItem('capacidadInversionData') || '{}')
+                    };
+                }
+                
+                console.log('Datos cargados:', allPatientData);
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                showDataError();
+            }
+        }
+
+        // Establecer fecha del reporte
+        function setReportDate() {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('reportDate').textContent = `Generado el: ${dateString}`;
+        }
+
+        // Generar reporte completo
+        function generateReport() {
+            generatePatientSummary();
+            generateFitzpatrickDisplay();
+            generateRiskAssessment();
+            generateCurrentCondition();
+            generateTreatmentPlan();
+            generateInvestmentBreakdown();
+            generateTimeline();
+            generateRecommendations();
+            generateAlerts();
+        }
+
+        // Generar resumen del paciente
+        function generatePatientSummary() {
+            const datos = allPatientData.datosBasicos || {};
+            const capacidad = allPatientData.capacidadInversion || {};
+            const vitiligo = allPatientData.vitiligoActual || {};
+            
+            const summaryHtml = `
+                <div class="summary-card">
+                    <div class="card-title">Información Personal</div>
+                    <div class="card-content">
+                        <strong>Nombre:</strong> ${datos.nombre || 'No especificado'}<br>
+                        <strong>Edad:</strong> ${datos.edad || 'No especificado'} años<br>
+                        <strong>Sexo:</strong> ${datos.sexo || 'No especificado'}<br>
+                        <strong>País:</strong> ${capacidad.pais_residencia || datos.pais || 'No especificado'}<br>
+                        <strong>Email:</strong> ${datos.email || 'No especificado'}
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">Tiempo con Vitiligo</div>
+                    <div class="card-content">
+                        <strong>Inicio:</strong> ${getTimeDescription(vitiligo.tiempo_inicio)}<br>
+                        <strong>Progresión:</strong> ${getProgressionDescription(vitiligo.progresion_selected || vitiligo.progresion)}<br>
+                        <strong>VASI Total:</strong> ${vitiligo.vasi_total || 'No calculado'}<br>
+                        <strong>DLQI:</strong> ${getTotalDLQI(vitiligo)} / 30
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">Capacidad de Inversión</div>
+                    <div class="card-content">
+                        <strong>Nivel:</strong> ${getInvestmentLevelDescription(calculateInvestmentLevel())}<br>
+                        <strong>Disponible Inmediato:</strong> ${getAmountDescription(capacidad.monto_disponible_inmediato)}<br>
+                        <strong>Mensual Sostenible:</strong> ${getAmountDescription(capacidad.monto_mensual_sostenible)}<br>
+                        <strong>Prioridad:</strong> ${getPriorityDescription(capacidad.prioridad_tratamiento)}
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">Factores de Riesgo</div>
+                    <div class="card-content">
+                        ${generateRiskFactorsList()}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('patientSummary').innerHTML = summaryHtml;
+        }
+
+        // Generar display de Fitzpatrick
+        function generateFitzpatrickDisplay() {
+            const fitzpatrick = allPatientData.fitzpatrick || {};
+            const fitzType = fitzpatrick.fitzpatrick || fitzpatrick.fitzpatrickType || 'No evaluado';
+            
+            const fitzData = getFitzpatrickData(fitzType);
+            
+            const html = `
+                <div class="fitzpatrick-type">Fototipo ${fitzType}</div>
+                <div class="fitzpatrick-description">${fitzData.name}</div>
+                <div class="fitzpatrick-protocol">
+                    <strong>Protocolo UVB-NB Recomendado:</strong><br>
+                    ${fitzData.protocol}
+                </div>
+            `;
+            
+            document.getElementById('fitzpatrickDisplay').innerHTML = html;
+        }
+
+        // Generar evaluación de riesgo
+        function generateRiskAssessment() {
+            const riskLevel = calculateOverallRisk();
+            const riskData = getRiskData(riskLevel);
+            
+            const html = `
+                <div class="risk-level ${riskLevel}-risk">${riskData.title}</div>
+                <div class="risk-description">${riskData.description}</div>
+                <div style="margin-top: 20px;">
+                    <strong>Factores que contribuyen al riesgo:</strong>
+                    <ul style="text-align: left; margin-top: 10px;">
+                        ${generateRiskFactorDetails()}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('riskAssessment').innerHTML = html;
+        }
+
+        // Generar condición actual
+        function generateCurrentCondition() {
+            const vitiligo = allPatientData.vitiligoActual || {};
+            
+            const html = `
+                <div class="patient-summary">
+                    <div class="summary-card">
+                        <div class="card-title">Distribución Corporal</div>
+                        <div class="card-content">
+                            ${generateBodyDistribution(vitiligo)}
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-title">Índices de Severidad</div>
+                        <div class="card-content">
+                            <strong>VASI Total:</strong> ${vitiligo.vasi_total || '0'} / 100<br>
+                            <strong>Clasificación:</strong> ${getVASIClassification(vitiligo.vasi_total)}<br>
+                            <strong>DLQI Total:</strong> ${getTotalDLQI(vitiligo)} / 30<br>
+                            <strong>Impacto:</strong> ${getDLQIImpact(getTotalDLQI(vitiligo))}
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-title">Tratamientos Previos</div>
+                        <div class="card-content">
+                            ${generatePreviousTreatments(vitiligo)}
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-title">Síntomas Asociados</div>
+                        <div class="card-content">
+                            ${generateSymptoms(vitiligo)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('currentCondition').innerHTML = html;
+        }
+
+        // Generar plan de tratamiento
+        function generateTreatmentPlan() {
+            const investmentLevel = calculateInvestmentLevel();
+            const planData = getTreatmentPlanData(investmentLevel);
+            
+            const html = `
+                <div class="plan-title">${planData.title}</div>
+                <div class="plan-details">
+                    <div class="plan-section">
+                        <h4>🏥 Consultas y Evaluación</h4>
+                        <ul>
+                            ${planData.consultations.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="plan-section">
+                        <h4>💊 Tratamientos Incluidos</h4>
+                        <ul>
+                            ${planData.treatments.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="plan-section">
+                        <h4>🔬 Estudios y Análisis</h4>
+                        <ul>
+                            ${planData.studies.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="plan-section">
+                        <h4>📅 Seguimiento</h4>
+                        <ul>
+                            ${planData.followUp.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('treatmentPlan').innerHTML = html;
+        }
+
+        // Generar desglose de inversión
+        function generateInvestmentBreakdown() {
+            const investmentLevel = calculateInvestmentLevel();
+            const costs = getInvestmentCosts(investmentLevel);
+            
+            const html = `
+                <div class="investment-title">💰 Desglose de Inversión Estimada</div>
+                <div class="cost-grid">
+                    <div class="cost-item">
+                        <div class="cost-amount">$${costs.initial}</div>
+                        <div class="cost-description">Inversión Inicial</div>
+                    </div>
+                    <div class="cost-item">
+                        <div class="cost-amount">$${costs.monthly}</div>
+                        <div class="cost-description">Costo Mensual</div>
+                    </div>
+                    <div class="cost-item">
+                        <div class="cost-amount">$${costs.sixMonths}</div>
+                        <div class="cost-description">Total 6 Meses</div>
+                    </div>
+                    <div class="cost-item">
+                        <div class="cost-amount">$${costs.yearly}</div>
+                        <div class="cost-description">Total Anual</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px; opacity: 0.9;">
+                    <strong>Opciones de Financiamiento:</strong> ${costs.financing}
+                </div>
+            `;
+            
+            document.getElementById('investmentBreakdown').innerHTML = html;
+        }
+
+        // Generar timeline de tratamiento
+        function generateTimeline() {
+            const timelineData = getTimelineData();
+            
+            const html = `
+                <div class="timeline-title">📅 Cronograma de Tratamiento Personalizado</div>
+                <div class="timeline-steps">
+                    ${timelineData.map((step, index) => `
+                        <div class="timeline-step">
+                            <div class="step-number">${index + 1}</div>
+                            <div class="step-title">${step.title}</div>
+                            <div class="step-description">${step.description}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('treatmentTimeline').innerHTML = html;
+        }
+
+        // Generar recomendaciones específicas
+        function generateRecommendations() {
+            const recommendations = getSpecificRecommendations();
+            
+            const html = `
+                <div class="recommendations-title">💡 Recomendaciones Específicas</div>
+                <div class="recommendation-grid">
+                    ${recommendations.map(rec => `
+                        <div class="recommendation-item">
+                            <h4>${rec.title}</h4>
+                            <p>${rec.description}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            document.getElementById('specificRecommendations').innerHTML = html;
+        }
+
+        // Generar alertas importantes
+        function generateAlerts() {
+            const alerts = getImportantAlerts();
+            
+            if (alerts.length > 0) {
+                const html = alerts.map(alert => `
+                    <div class="alert alert-${alert.type}">
+                        <strong>${alert.title}</strong><br>
+                        ${alert.message}
+                    </div>
+                `).join('');
+                
+                document.getElementById('importantAlerts').innerHTML = html;
+            }
+        }
+
+        // Funciones auxiliares para obtener datos
+        function getTimeDescription(time) {
+            const descriptions = {
+                'menos_3m': 'Menos de 3 meses',
+                '3m_6m': '3 a 6 meses',
+                '6m_1a': '6 meses a 1 año',
+                '1a_2a': '1 a 2 años',
+                '2a_5a': '2 a 5 años',
+                '5a_10a': '5 a 10 años',
+                'mas_10a': 'Más de 10 años'
+            };
+            return descriptions[time] || 'No especificado';
+        }
+
+        function getProgressionDescription(progression) {
+            const descriptions = {
+                'estable': 'Estable (sin crecimiento)',
+                'lenta': 'Progresión lenta',
+                'rapida': 'Progresión rápida'
+            };
+            return descriptions[progression] || 'No especificado';
+        }
+
+        function getTotalDLQI(vitiligo) {
+            if (vitiligo.dlqiScores) {
+                return Object.values(vitiligo.dlqiScores).reduce((sum, score) => sum + score, 0);
+            }
+            return vitiligo.dlqi_total || '0';
+        }
+
+        function calculateInvestmentLevel() {
+            const capacidad = allPatientData.capacidadInversion || {};
+            let score = 0;
+
+            // Evaluar factores de inversión
+            const monthly = capacidad.monto_mensual_sostenible;
+            if (monthly === 'mas_3000' || monthly === '2000_3000') score += 3;
+            else if (monthly === '1000_2000' || monthly === '500_1000') score += 2;
+            else if (monthly === '200_500') score += 1;
+
+            const immediate = capacidad.monto_disponible_inmediato;
+            if (immediate === 'mas_10000' || immediate === '5000_10000') score += 3;
+            else if (immediate === '2500_5000' || immediate === '1000_2500') score += 2;
+            else if (immediate === '500_1000') score += 1;
+
+            if (score >= 5) return 3; // Premium
+            else if (score >= 3) return 2; // Integral
+            else return 1; // Esencial
+        }
+
+        function calculateOverallRisk() {
+            let riskScore = 0;
+            const antecedentes = allPatientData.antecedentes || {};
+            const vitiligo = allPatientData.vitiligoActual || {};
+            const datos = allPatientData.datosBasicos || {};
+
+            // Factor edad
+            if (datos.edad < 20) riskScore += 2;
+            else if (datos.edad < 30) riskScore += 1;
+
+            // Factor progresión
+            const progression = vitiligo.progresion_selected || vitiligo.progresion;
+            if (progression === 'rapida') riskScore += 3;
+            else if (progression === 'lenta') riskScore += 2;
+
+            // Factor VASI
+            const vasi = parseFloat(vitiligo.vasi_total || 0);
+            if (vasi > 25) riskScore += 3;
+            else if (vasi > 10) riskScore += 2;
+            else if (vasi > 5) riskScore += 1;
+
+            // Antecedentes familiares (aproximación)
+            if (Object.keys(antecedentes).some(key => key.includes('fam_'))) {
+                riskScore += 2;
+            }
+
+            if (riskScore <= 3) return 'low';
+            else if (riskScore <= 7) return 'medium';
+            else return 'high';
+        }
+
+        function getFitzpatrickData(type) {
+            const data = {
+                1: { 
+                    name: 'Piel Muy Clara', 
+                    protocol: 'Dosis inicial: 280-300 mJ/cm², incrementos 10%, protección SPF 50+' 
+                },
+                2: { 
+                    name: 'Piel Clara', 
+                    protocol: 'Dosis inicial: 300-350 mJ/cm², incrementos 15%, protección SPF 30-50+' 
+                },
+                3: { 
+                    name: 'Piel Intermedia', 
+                    protocol: 'Dosis inicial: 440-500 mJ/cm², incrementos 15-20%, candidato ideal para terapias combinadas' 
+                },
+                4: { 
+                    name: 'Piel Morena Clara', 
+                    protocol: 'Dosis inicial: 500-600 mJ/cm², incrementos 20%, menor riesgo de fotosensibilidad' 
+                },
+                5: { 
+                    name: 'Piel Morena', 
+                    protocol: 'Dosis inicial: 650-800 mJ/cm², incrementos 20-25%, protocolo intensivo recomendado' 
+                },
+                6: { 
+                    name: 'Piel Negra', 
+                    protocol: 'Dosis inicial: 800-1000 mJ/cm², incrementos 25%, protocolo multimodal agresivo' 
+                }
+            };
+            return data[type] || { name: 'No evaluado', protocol: 'Evaluación requerida' };
+        }
+
+        function getRiskData(level) {
+            const data = {
+                low: {
+                    title: 'Bajo Riesgo',
+                    description: 'Su perfil indica un riesgo bajo de complicaciones. Con manejo adecuado y seguimiento regular, se pueden esperar resultados favorables.'
+                },
+                medium: {
+                    title: 'Riesgo Moderado',
+                    description: 'Su perfil muestra un riesgo moderado. Es importante iniciar tratamiento preventivo y realizar seguimiento regular para evitar progresión.'
+                },
+                high: {
+                    title: 'Alto Riesgo',
+                    description: 'Su perfil indica un riesgo alto de progresión. Se recomienda intervención inmediata y seguimiento estrecho especializado.'
+                }
+            };
+            return data[level];
+        }
+
+        function getTreatmentPlanData(level) {
+            const plans = {
+                1: {
+                    title: '🔴 Plan Esencial - Protocolo Básico Efectivo',
+                    consultations: [
+                        'Consulta virtual inicial completa (90 min)',
+                        'Evaluación dermatológica especializada',
+                        'Análisis fotográfico digital',
+                        'Seguimiento mensual virtual (30 min)'
+                    ],
+                    treatments: [
+                        'Protocolo básico con suplementos esenciales',
+                        'Fototerapia UVB-NB casera supervisada',
+                        'Corticoides tópicos especializados',
+                        'Vitaminas y antioxidantes específicos'
+                    ],
+                    studies: [
+                        'Perfil tiroideo básico',
+                        'Vitamina D y B12',
+                        'Hemograma completo',
+                        'Fotografías de seguimiento mensuales'
+                    ],
+                    followUp: [
+                        'Consultas virtuales mensuales',
+                        'Ajustes de protocolo según evolución',
+                        'Acceso a grupo de WhatsApp de soporte',
+                        'Manual digital completo incluido'
+                    ]
+                },
+                2: {
+                    title: '🟡 Plan Integral - Protocolo Avanzado Personalizado',
+                    consultations: [
+                        'Consulta inicial presencial o virtual premium (120 min)',
+                        'Evaluación multidisciplinaria completa',
+                        'Análisis genético por saliva incluido',
+                        'Seguimiento quincenal especializado'
+                    ],
+                    treatments: [
+                        'Protocolo avanzado personalizado',
+                        'Fototerapia UVB-NB profesional',
+                        'Inhibidores de calcineurina de última generación',
+                        'Medicamentos sistémicos cuando sea necesario'
+                    ],
+                    studies: [
+                        'Panel genético completo para Vitiligo',
+                        'Perfil autoinmune especializado',
+                        'Screening de tuberculosis para biológicos',
+                        'Laboratorios especializados cada 3 meses'
+                    ],
+                    followUp: [
+                        'Consultas quincenales primeros 3 meses',
+                        'Acceso VIP a consultas de emergencia',
+                        'Coordinación con especialistas adicionales',
+                        'Plan familiar preventivo incluido'
+                    ]
+                },
+                3: {
+                    title: '🟢 Plan Premium - Protocolo Completo VIP',
+                    consultations: [
+                        'Consulta presencial en Miami (día completo)',
+                        'Evaluación integral con equipo multidisciplinario',
+                        'Segunda opinión internacional incluida',
+                        'Seguimiento semanal personalizado'
+                    ],
+                    treatments: [
+                        'Protocolo completo con todos los tratamientos disponibles',
+                        'Tratamientos biológicos de última generación',
+                        'Terapias experimentales aprobadas',
+                        'Microinjertos y cirugía cuando sea apropiado'
+                    ],
+                    studies: [
+                        'Análisis genético completo familiar',
+                        'Estudios de investigación participativos',
+                        'Monitoreo de biomarcadores avanzados',
+                        'Laboratorios mensuales completos'
+                    ],
+                    followUp: [
+                        'Acceso directo 24/7 al Dr. Moya',
+                        'Coordinación con centros internacionales',
+                        'Seguimiento de por vida con descuentos',
+                        'Garantía de resultados premium'
+                    ]
+                }
+            };
+            return plans[level];
+        }
+
+        function getInvestmentCosts(level) {
+            const costs = {
+                1: {
+                    initial: '500',
+                    monthly: '350',
+                    sixMonths: '2,600',
+                    yearly: '4,700',
+                    financing: 'Plan de pagos 6 cuotas sin intereses'
+                },
+                2: {
+                    initial: '1,200',
+                    monthly: '850',
+                    sixMonths: '6,300',
+                    yearly: '11,400',
+                    financing: 'Financiamiento hasta 12 meses, seguro médico aplicable'
+                },
+                3: {
+                    initial: '2,500',
+                    monthly: '2,000',
+                    sixMonths: '14,500',
+                    yearly: '26,500',
+                    financing: 'Planes de financiamiento personalizados, coordinación con seguros internacionales'
+                }
+            };
+            return costs[level];
+        }
+
+        function getTimelineData() {
+            return [
+                {
+                    title: 'Semana 1-2',
+                    description: 'Consulta inicial, evaluación completa, inicio de protocolo básico'
+                },
+                {
+                    title: 'Mes 1',
+                    description: 'Ajuste de tratamientos, primera evaluación de respuesta'
+                },
+                {
+                    title: 'Mes 2-3',
+                    description: 'Optimización del protocolo, primeros signos de mejora'
+                },
+                {
+                    title: 'Mes 4-6',
+                    description: 'Consolidación de resultados, evaluación de repigmentación'
+                },
+                {
+                    title: 'Mes 7-12',
+                    description: 'Mantenimiento y optimización continua'
+                },
+                {
+                    title: 'Año 2+',
+                    description: 'Seguimiento a largo plazo, prevención de recaídas'
+                }
+            ];
+        }
+
+        function getSpecificRecommendations() {
+            return [
+                {
+                    title: '🌞 Protección Solar',
+                    description: 'Usar protector solar SPF 50+ diariamente en áreas afectadas, reaplicar cada 2 horas'
+                },
+                {
+                    title: '💊 Suplementación',
+                    description: 'Vitamina D3 4000 UI/día, Vitamina B12 1000 mcg/día, Ácido fólico 5 mg/día'
+                },
+                {
+                    title: '🧘 Manejo del Estrés',
+                    description: 'Técnicas de relajación, ejercicio regular, considerar apoyo psicológico si es necesario'
+                },
+                {
+                    title: '🥗 Nutrición',
+                    description: 'Dieta rica en antioxidantes, evitar alimentos inflamatorios, considerar eliminación de gluten si hay sensibilidad'
+                },
+                {
+                    title: '⚠️ Evitar Trauma',
+                    description: 'Proteger la piel de cortes, fricciones excesivas y quemaduras (fenómeno de Koebner)'
+                },
+                {
+                    title: '📸 Monitoreo',
+                    description: 'Fotografías mensuales para seguimiento, registro de cambios y factores desencadenantes'
+                }
+            ];
+        }
+
+        function getImportantAlerts() {
+            const alerts = [];
+            const vitiligo = allPatientData.vitiligoActual || {};
+            const antecedentes = allPatientData.antecedentes || {};
+            
+            // Alerta por progresión rápida
+            if (vitiligo.progresion === 'rapida' || vitiligo.progresion_selected === 'rapida') {
+                alerts.push({
+                    type: 'warning',
+                    title: '⚠️ Progresión Rápida Detectada',
+                    message: 'Su Vitiligo muestra progresión rápida. Se recomienda iniciar tratamiento inmediatamente para prevenir mayor extensión.'
+                });
+            }
+
+            // Alerta por VASI alto
+            const vasi = parseFloat(vitiligo.vasi_total || 0);
+            if (vasi > 25) {
+                alerts.push({
+                    type: 'warning',
+                    title: '🔍 Vitiligo Extenso',
+                    message: 'Su índice VASI indica Vitiligo extenso. El tratamiento temprano es crucial para mejores resultados.'
+                });
+            }
+
+            // Alerta por DLQI alto
+            const dlqi = getTotalDLQI(vitiligo);
+            if (dlqi > 15) {
+                alerts.push({
+                    type: 'info',
+                    title: '💙 Impacto en Calidad de Vida',
+                    message: 'Su puntuación DLQI indica impacto significativo en calidad de vida. Considere apoyo psicológico complementario.'
+                });
+            }
+
+            // Alerta positiva
+            alerts.push({
+                type: 'success',
+                title: '✅ Evaluación Completa Finalizada',
+                message: 'Ha completado exitosamente la evaluación integral. Ahora tiene un plan personalizado basado en evidencia científica.'
+            });
+
+            return alerts;
+        }
+
+        // Funciones auxiliares adicionales
+        function getInvestmentLevelDescription(level) {
+            const descriptions = {
+                1: 'Esencial - Presupuesto Limitado',
+                2: 'Integral - Inversión Moderada',
+                3: 'Premium - Inversión Completa'
+            };
+            return descriptions[level];
+        }
+
+        function getAmountDescription(amount) {
+            const descriptions = {
+                '0_100': '$0 - $100',
+                '100_300': '$100 - $300',
+                '300_500': '$300 - $500',
+                '500_1000': '$500 - $1,000',
+                '1000_2500': '$1,000 - $2,500',
+                '2500_5000': '$2,500 - $5,000',
+                '5000_10000': '$5,000 - $10,000',
+                'mas_10000': 'Más de $10,000',
+                '0_50': '$0 - $50',
+                '50_100': '$50 - $100',
+                '100_200': '$100 - $200',
+                '200_500': '$200 - $500',
+                '500_1000': '$500 - $1,000',
+                '1000_2000': '$1,000 - $2,000',
+                '2000_3000': '$2,000 - $3,000',
+                'mas_3000': 'Más de $3,000'
+            };
+            return descriptions[amount] || 'No especificado';
+        }
+
+        function getPriorityDescription(priority) {
+            const descriptions = {
+                'baja': 'Baja prioridad',
+                'media': 'Prioridad media',
+                'alta': 'Alta prioridad',
+                'urgente': 'Urgente'
+            };
+            return descriptions[priority] || 'No especificado';
+        }
+
+        function generateRiskFactorsList() {
+            // Simplificado para el reporte
+            return 'Evaluados según antecedentes familiares, personales y progresión actual';
+        }
+
+        function generateRiskFactorDetails() {
+            return '<li>Análisis basado en antecedentes familiares y personales</li><li>Evaluación de progresión actual</li><li>Factores ambientales y de estilo de vida</li>';
+        }
+
+        function generateBodyDistribution(vitiligo) {
+            const regions = ['head_neck', 'upper_trunk', 'lower_trunk', 'upper_extremities', 'lower_extremities', 'genital'];
+            const affected = regions.filter(region => vitiligo[region + '_check']).length;
+            return `${affected} región(es) corporal(es) afectada(s)`;
+        }
+
+        function getVASIClassification(vasi) {
+            const score = parseFloat(vasi || 0);
+            if (score < 10) return 'Leve';
+            else if (score < 25) return 'Moderado';
+            else if (score < 50) return 'Severo';
+            else return 'Muy severo';
+        }
+
+        function getDLQIImpact(dlqi) {
+            const score = parseInt(dlqi || 0);
+            if (score <= 5) return 'Impacto pequeño';
+            else if (score <= 10) return 'Impacto moderado';
+            else if (score <= 20) return 'Impacto grande';
+            else return 'Impacto extremo';
+        }
+
+        function generatePreviousTreatments(vitiligo) {
+            if (vitiligo.tratamientos_previos === 'no') {
+                return 'No ha recibido tratamientos previos';
+            }
+            return 'Ha recibido tratamientos previos (detalles en evaluación completa)';
+        }
+
+        function generateSymptoms(vitiligo) {
+            // Simplificado para el reporte
+            return 'Evaluados según cuestionario de síntomas específicos';
+        }
+
+        // Funciones de acción
+        function scheduleConsultation() {
+            const datos = allPatientData.datosBasicos || {};
+            const message = `Hola Dr. Moya, he completado la evaluación de Vitiligo y me gustaría agendar una consulta. 
+
+Mis datos:
+- Nombre: ${datos.nombre || 'No especificado'}
+- Email: ${datos.email || 'No especificado'}
+- País: ${allPatientData.capacidadInversion?.pais_residencia || 'No especificado'}
+
+¿Cuándo podríamos programar la primera consulta?`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/13055550123?text=${encodedMessage}`, '_blank');
+        }
+
+        function downloadPDF() {
+            window.print();
+        }
+
+        function sendByEmail() {
+            const datos = allPatientData.datosBasicos || {};
+            const subject = `Reporte de Evaluación Vitiligo - ${datos.nombre || 'Paciente'}`;
+            const body = `Adjunto mi reporte completo de evaluación de Vitiligo.
+
+Por favor revise y confirme recepción para proceder con el agendamiento de consulta.
+
+Saludos cordiales.`;
+
+            window.open(`mailto:info@drmoya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+        }
+
+        function showDataError() {
+            document.getElementById('patientSummary').innerHTML = `
+                <div class="alert alert-warning">
+                    <strong>⚠️ Datos Incompletos</strong><br>
+                    No se pudieron cargar todos los datos de la evaluación. Por favor, complete el protocolo nuevamente o contacte al soporte técnico.
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
