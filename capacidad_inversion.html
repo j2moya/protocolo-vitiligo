@@ -140,6 +140,7 @@
 
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
 
         .form-group label {
@@ -166,6 +167,85 @@
             outline: none;
             border-color: #3498db;
             box-shadow: 0 0 10px rgba(52,152,219,0.1);
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #e74c3c;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .field-error {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3) !important;
+        }
+
+        .field-success {
+            border-color: #27ae60 !important;
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.3) !important;
+        }
+
+        .validation-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+
+        .validation-icon.success {
+            color: #27ae60;
+        }
+
+        .validation-icon.error {
+            color: #e74c3c;
+        }
+
+        .error-summary {
+            background: #f8d7da;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .error-summary h4 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+
+        .error-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .error-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e74c3c;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .error-list li:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            color: #155724;
+            display: none;
         }
 
         .income-calculator {
@@ -264,53 +344,6 @@
             background: linear-gradient(135deg, #d5f4e6, #ffffff);
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(39,174,96,0.2);
-        }
-
-        .level-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .level-title {
-            font-size: 1.4em;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        .level-price {
-            font-size: 1.1em;
-            color: #e67e22;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .level-description {
-            color: #7f8c8d;
-            font-size: 0.95em;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-
-        .level-features {
-            text-align: left;
-            list-style: none;
-            padding: 0;
-        }
-
-        .level-features li {
-            padding: 5px 0;
-            border-bottom: 1px solid #ecf0f1;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .level-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #27ae60;
-            font-weight: bold;
         }
 
         .radio-group {
@@ -993,7 +1026,7 @@
                 <h3 style="color: white; margin-bottom: 20px;">🏥 Evaluación de Cobertura de Seguros</h3>
                 
                 <div class="form-group">
-                    <label style="color: white;">¿Tiene seguro de salud?</label>
+                    <label style="color: white;">¿Tiene seguro de salud? *</label>
                     <div class="radio-group">
                         <div class="radio-item">
                             <input type="radio" name="tiene_seguro" value="si_privado" id="seguro_si_privado">
@@ -1250,10 +1283,10 @@
 
             <!-- Navigation -->
             <div class="navigation">
-                <button class="btn btn-secondary" onclick="window.location.href='vitiligo_actual.html'">← Vitiligo Actual</button>
+                <button class="btn btn-secondary" onclick="previousPage()">← Vitiligo Actual</button>
                 <div>
                     <button class="btn btn-success" onclick="saveProgress()" style="margin-right: 15px;">💾 Guardar Progreso</button>
-                    <button class="btn btn-primary" onclick="window.location.href='reporte_final.html'">Generar Reporte Final →</button>
+                    <button class="btn btn-primary" onclick="generateFinalReport()">Generar Reporte Final →</button>
                 </div>
             </div>
         </div>
@@ -1264,33 +1297,469 @@
         let inversionData = {};
         let calculationResults = {};
 
-        // Inicializar cuando se carga la página
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeCalculators();
-            initializePrioritySelection();
-            initializeTimelineSelection();
-            initializeInsuranceToggles();
-            initializeTravelToggles();
-            initializeResourceToggles();
-            loadSavedData();
-            setupRealTimeUpdates();
-        });
+        // Función mejorada para validación completa
+        function validateForm() {
+            const errors = [];
+            let isValid = true;
 
-        // Configurar actualizaciones en tiempo real
-        function setupRealTimeUpdates() {
-            // Calculadora de ingresos y gastos
-            const incomeInputs = document.querySelectorAll('#ingreso_trabajo, #ingreso_secundario, #ingreso_inversiones, #ingreso_pension, #ingreso_otros, #ingreso_conyuge');
-            const expenseInputs = document.querySelectorAll('#gasto_vivienda, #gasto_alimentacion, #gasto_transporte, #gasto_servicios, #gasto_seguros, #gasto_deudas, #gasto_educacion, #gasto_salud_actual, #gasto_otros');
+            // Limpiar errores previos
+            clearValidationErrors();
 
-            [...incomeInputs, ...expenseInputs].forEach(input => {
-                input.addEventListener('input', calculateFinancialSummary);
+            // Definir campos requeridos con sus mensajes personalizados
+            const requiredFields = [
+                {
+                    id: 'pais_residencia',
+                    message: 'Por favor seleccione su país de residencia'
+                },
+                {
+                    id: 'moneda_local',
+                    message: 'Por favor indique la moneda de sus ingresos'
+                },
+                {
+                    id: 'monto_disponible_inmediato',
+                    message: 'Por favor indique cuánto puede destinar inmediatamente'
+                },
+                {
+                    id: 'monto_mensual_sostenible',
+                    message: 'Por favor indique cuánto puede destinar mensualmente'
+                }
+            ];
+
+            // Validar campos select requeridos
+            requiredFields.forEach(fieldData => {
+                const field = document.getElementById(fieldData.id);
+                if (!field || !field.value || field.value === '') {
+                    showFieldError(field, fieldData.message);
+                    errors.push(fieldData.message);
+                    isValid = false;
+                } else {
+                    showFieldSuccess(field);
+                }
             });
 
-            // Actualización de recomendaciones
-            const allInputs = document.querySelectorAll('input, select');
-            allInputs.forEach(input => {
-                input.addEventListener('change', updateRecommendationPreview);
+            // Validar radio buttons requeridos
+            const requiredRadios = [
+                {
+                    name: 'estabilidad_ingresos',
+                    message: 'Por favor indique qué tan estables son sus ingresos'
+                },
+                {
+                    name: 'tiene_seguro',
+                    message: 'Por favor indique si tiene seguro de salud'
+                },
+                {
+                    name: 'dispuesto_viajar',
+                    message: 'Por favor indique si está dispuesto/a a viajar por tratamiento'
+                }
+            ];
+
+            requiredRadios.forEach(radioData => {
+                const checked = document.querySelector(`input[name="${radioData.name}"]:checked`);
+                if (!checked) {
+                    errors.push(radioData.message);
+                    highlightRadioGroupError(radioData.name);
+                    isValid = false;
+                } else {
+                    clearRadioGroupError(radioData.name);
+                }
             });
+
+            // Validar selecciones especiales
+            const prioridadElement = document.querySelector('.priority-level.selected');
+            if (!prioridadElement) {
+                errors.push('Por favor seleccione la prioridad del tratamiento');
+                isValid = false;
+            }
+
+            const timelineElement = document.querySelector('.timeline-option.selected');
+            if (!timelineElement) {
+                errors.push('Por favor seleccione el plazo para ver resultados');
+                isValid = false;
+            }
+
+            // Validación de datos financieros
+            const totalIngresos = calculationResults.totalIngresos || 0;
+            const totalGastos = calculationResults.totalGastos || 0;
+            
+            if (totalIngresos === 0) {
+                errors.push('Por favor ingrese al menos un tipo de ingreso');
+                isValid = false;
+            }
+
+            if (totalGastos > totalIngresos * 1.2) {
+                errors.push('Sus gastos exceden significativamente sus ingresos. Esto podría afectar las opciones de tratamiento disponibles.');
+            }
+
+            // Mostrar resumen de errores
+            if (!isValid) {
+                showErrorSummary(errors);
+                scrollToFirstError();
+            } else {
+                hideErrorSummary();
+            }
+
+            return isValid;
+        }
+
+        // Función para mostrar error en campo específico
+        function showFieldError(field, message) {
+            if (!field) return;
+            
+            field.classList.add('field-error');
+            field.classList.remove('field-success');
+            
+            // Crear o actualizar mensaje de error
+            let errorDiv = field.parentNode.querySelector('.error-message');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                field.parentNode.appendChild(errorDiv);
+            }
+            
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+
+            // Agregar icono de error
+            addValidationIcon(field, 'error');
+        }
+
+        // Función para mostrar éxito en campo
+        function showFieldSuccess(field) {
+            if (!field) return;
+            
+            field.classList.add('field-success');
+            field.classList.remove('field-error');
+            
+            // Ocultar mensaje de error
+            const errorDiv = field.parentNode.querySelector('.error-message');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+
+            // Agregar icono de éxito
+            addValidationIcon(field, 'success');
+        }
+
+        // Función para agregar iconos de validación
+        function addValidationIcon(field, type) {
+            // Remover icono existente
+            const existingIcon = field.parentNode.querySelector('.validation-icon');
+            if (existingIcon) {
+                existingIcon.remove();
+            }
+
+            // Agregar nuevo icono
+            const icon = document.createElement('span');
+            icon.className = `validation-icon ${type}`;
+            icon.textContent = type === 'success' ? '✓' : '✗';
+            field.parentNode.appendChild(icon);
+        }
+
+        // Función para limpiar errores de validación
+        function clearValidationErrors() {
+            document.querySelectorAll('.field-error').forEach(field => {
+                field.classList.remove('field-error');
+            });
+            
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.validation-icon').forEach(icon => {
+                icon.remove();
+            });
+
+            hideErrorSummary();
+        }
+
+        // Función para resaltar error en grupo de radio buttons
+        function highlightRadioGroupError(radioName) {
+            const radioContainer = document.querySelector(`input[name="${radioName}"]`).closest('.subsection');
+            if (radioContainer) {
+                radioContainer.style.borderLeft = '5px solid #e74c3c';
+                radioContainer.style.backgroundColor = '#fdf2f2';
+            }
+        }
+
+        // Función para limpiar error en grupo de radio buttons
+        function clearRadioGroupError(radioName) {
+            const radioContainer = document.querySelector(`input[name="${radioName}"]`).closest('.subsection');
+            if (radioContainer) {
+                radioContainer.style.borderLeft = '5px solid #3498db';
+                radioContainer.style.backgroundColor = '#f8f9fa';
+            }
+        }
+
+        // Función para mostrar resumen de errores
+        function showErrorSummary(errors) {
+            let errorSummary = document.getElementById('errorSummary');
+            
+            if (!errorSummary) {
+                errorSummary = document.createElement('div');
+                errorSummary.id = 'errorSummary';
+                errorSummary.className = 'error-summary';
+                
+                const container = document.querySelector('.inversion-container');
+                container.insertBefore(errorSummary, container.firstChild);
+            }
+
+            errorSummary.innerHTML = `
+                <h4>⚠️ Por favor corrija los siguientes errores:</h4>
+                <ul class="error-list">
+                    ${errors.map(error => `<li>${error}</li>`).join('')}
+                </ul>
+            `;
+            
+            errorSummary.style.display = 'block';
+        }
+
+        // Función para ocultar resumen de errores
+        function hideErrorSummary() {
+            const errorSummary = document.getElementById('errorSummary');
+            if (errorSummary) {
+                errorSummary.style.display = 'none';
+            }
+        }
+
+        // Función para hacer scroll al primer error
+        function scrollToFirstError() {
+            const firstError = document.querySelector('.field-error, .error-summary');
+            if (firstError) {
+                firstError.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+
+        // Función para mostrar mensaje de éxito
+        function showSuccessMessage(message) {
+            let successDiv = document.getElementById('successMessage');
+            
+            if (!successDiv) {
+                successDiv = document.createElement('div');
+                successDiv.id = 'successMessage';
+                successDiv.className = 'success-message';
+                
+                const container = document.querySelector('.inversion-container');
+                container.insertBefore(successDiv, container.firstChild);
+            }
+
+            successDiv.innerHTML = `✅ ${message}`;
+            successDiv.style.display = 'block';
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Función para mostrar mensaje de advertencia
+        function showWarningMessage(message) {
+            let warningDiv = document.getElementById('warningMessage');
+            
+            if (!warningDiv) {
+                warningDiv = document.createElement('div');
+                warningDiv.id = 'warningMessage';
+                warningDiv.className = 'alert alert-warning';
+                warningDiv.style.margin = '20px 0';
+                
+                const container = document.querySelector('.inversion-container');
+                container.insertBefore(warningDiv, container.firstChild);
+            }
+
+            warningDiv.innerHTML = `⚠️ ${message}`;
+            warningDiv.style.display = 'block';
+
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                warningDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Función mejorada para guardar progreso
+        function saveProgress() {
+            try {
+                inversionData = collectAllData();
+                localStorage.setItem('capacidadInversionData', JSON.stringify(inversionData));
+                
+                // Marcar paso como completado
+                localStorage.setItem('capacidadInversionCompleted', 'true');
+                
+                // Mostrar confirmación visual
+                showSuccessMessage('Progreso guardado exitosamente. Sus datos financieros están seguros y encriptados.');
+                
+                // Actualizar barra de progreso
+                updateProgressBar();
+                
+                console.log('✅ Capacidad de inversión guardada exitosamente');
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error guardando progreso:', error);
+                alert('Error al guardar el progreso. Por favor intente nuevamente.');
+                return false;
+            }
+        }
+
+        // Función para actualizar barra de progreso
+        function updateProgressBar() {
+            const progressFill = document.querySelector('.progress-fill');
+            const currentStep = document.querySelector('.step.active');
+            
+            if (progressFill) {
+                progressFill.style.width = '100%'; // Paso completado
+            }
+            
+            if (currentStep) {
+                currentStep.classList.remove('active');
+                currentStep.classList.add('completed');
+            }
+        }
+
+        // Función mejorada para cargar datos guardados
+        function loadSavedData() {
+            try {
+                const savedData = localStorage.getItem('capacidadInversionData');
+                if (savedData) {
+                    inversionData = JSON.parse(savedData);
+                    
+                    // Restaurar campos de formulario
+                    restoreFormFields(inversionData);
+                    
+                    // Restaurar selecciones especiales
+                    restoreSpecialSelections(inversionData);
+                    
+                    // Recalcular después de cargar
+                    setTimeout(() => {
+                        calculateFinancialSummary();
+                        updateRecommendationPreview();
+                    }, 100);
+
+                    console.log('✅ Datos de capacidad de inversión cargados exitosamente');
+                    return true;
+                }
+                return false;
+                
+            } catch (error) {
+                console.error('❌ Error cargando datos guardados:', error);
+                return false;
+            }
+        }
+
+        // Función para restaurar campos de formulario
+        function restoreFormFields(data) {
+            Object.keys(data).forEach(key => {
+                const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+                if (element && data[key] !== undefined && data[key] !== null) {
+                    if (element.type === 'checkbox') {
+                        element.checked = true;
+                        element.closest('.checkbox-item')?.classList.add('checked');
+                    } else if (element.type === 'radio' && element.value === data[key]) {
+                        element.checked = true;
+                        element.closest('.radio-item')?.classList.add('selected');
+                    } else if (element.type !== 'radio') {
+                        element.value = data[key];
+                    }
+                    
+                    // Disparar eventos para actualizar validaciones
+                    element.dispatchEvent(new Event('input', { bubbles: true }));
+                    element.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+
+            // Restaurar recursos seleccionados
+            if (data.recursos && Array.isArray(data.recursos)) {
+                data.recursos.forEach(recursoId => {
+                    const recurso = document.getElementById(recursoId);
+                    if (recurso) {
+                        recurso.checked = true;
+                        recurso.closest('.checkbox-item')?.classList.add('checked');
+                    }
+                });
+            }
+        }
+
+        // Función para restaurar selecciones especiales
+        function restoreSpecialSelections(data) {
+            // Restaurar prioridad
+            if (data.prioridad_tratamiento) {
+                const priorityElement = document.querySelector(`[data-value="${data.prioridad_tratamiento}"]`);
+                if (priorityElement && priorityElement.classList.contains('priority-level')) {
+                    document.querySelectorAll('.priority-level').forEach(el => el.classList.remove('selected'));
+                    priorityElement.classList.add('selected');
+                    document.getElementById('prioridad_tratamiento').value = data.prioridad_tratamiento;
+                }
+            }
+
+            // Restaurar timeline
+            if (data.timeline_resultados) {
+                const timelineElement = document.querySelector(`[data-value="${data.timeline_resultados}"]`);
+                if (timelineElement && timelineElement.classList.contains('timeline-option')) {
+                    document.querySelectorAll('.timeline-option').forEach(el => el.classList.remove('selected'));
+                    timelineElement.classList.add('selected');
+                    document.getElementById('timeline_resultados').value = data.timeline_resultados;
+                }
+            }
+        }
+
+        // Función mejorada para ir a página anterior
+        function previousPage() {
+            // Guardar progreso antes de salir
+            const saved = saveProgress();
+            
+            if (saved) {
+                setTimeout(() => {
+                    window.location.href = 'vitiligo_actual.html';
+                }, 500); // Pequeño delay para que se vea el mensaje de éxito
+            }
+        }
+
+        // Función para generar reporte final
+        function generateFinalReport() {
+            // Validar formulario
+            if (!validateForm()) {
+                return;
+            }
+
+            // Mostrar indicador de carga
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ Generando reporte...';
+            button.disabled = true;
+
+            try {
+                // Guardar datos finales
+                saveProgress();
+                
+                // Combinar todos los datos de pasos anteriores
+                const allData = {
+                    capacidadInversion: collectAllData(),
+                    datosBasicos: JSON.parse(localStorage.getItem('datosBasicos') || '{}'),
+                    fitzpatrick: JSON.parse(localStorage.getItem('fitzpatrickData') || '{}'),
+                    antecedentes: JSON.parse(localStorage.getItem('antecedentesData') || '{}'),
+                    vitiligoActual: JSON.parse(localStorage.getItem('vitiligoActualData') || '{}')
+                };
+
+                // Guardar datos completos
+                localStorage.setItem('reporteCompleto', JSON.stringify(allData));
+                
+                // Mostrar éxito
+                showSuccessMessage('Datos guardados exitosamente. Generando su reporte personalizado...');
+                
+                // Redireccionar al reporte final después de un breve delay
+                setTimeout(() => {
+                    window.location.href = 'reporte_final.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error al guardar datos:', error);
+                alert('❌ Error al procesar sus datos. Por favor intente nuevamente.');
+                
+                // Restaurar botón
+                button.textContent = originalText;
+                button.disabled = false;
+            }
         }
 
         // Calcular resumen financiero
@@ -1472,6 +1941,111 @@
             });
         }
 
+        // Validación mejorada en tiempo real
+        function setupRealTimeValidation() {
+            // Configurar validación para campos requeridos
+            const requiredSelects = ['pais_residencia', 'moneda_local', 'monto_disponible_inmediato', 'monto_mensual_sostenible'];
+            
+            requiredSelects.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('change', function() {
+                        if (this.value && this.value !== '') {
+                            showFieldSuccess(this);
+                        } else {
+                            showFieldError(this, `Este campo es requerido`);
+                        }
+                        updateRecommendationPreview();
+                    });
+                    
+                    field.addEventListener('blur', function() {
+                        if (!this.value || this.value === '') {
+                            showFieldError(this, `Por favor seleccione una opción`);
+                        }
+                    });
+                }
+            });
+
+            // Configurar validación para radio buttons
+            const radioGroups = ['estabilidad_ingresos', 'tiene_seguro', 'dispuesto_viajar'];
+            
+            radioGroups.forEach(groupName => {
+                const radios = document.querySelectorAll(`input[name="${groupName}"]`);
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        clearRadioGroupError(groupName);
+                        updateRecommendationPreview();
+                    });
+                });
+            });
+
+            // Configurar validación para campos numéricos
+            const numericInputs = document.querySelectorAll('input[type="number"]');
+            numericInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    // Validar que sea un número válido
+                    const value = parseFloat(this.value);
+                    if (this.value !== '' && (isNaN(value) || value < 0)) {
+                        showFieldError(this, 'Por favor ingrese un número válido mayor o igual a 0');
+                    } else if (this.value !== '') {
+                        showFieldSuccess(this);
+                    }
+                });
+
+                input.addEventListener('blur', function() {
+                    // Formatear el número al perder el foco
+                    if (this.value && !isNaN(this.value)) {
+                        this.value = parseFloat(this.value).toFixed(0);
+                    }
+                });
+            });
+
+            // Configurar validación para checkboxes de recursos
+            const resourceCheckboxes = document.querySelectorAll('.checkbox-item input[type="checkbox"]');
+            resourceCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Verificar que al menos uno esté seleccionado
+                    const anySelected = Array.from(resourceCheckboxes).some(cb => cb.checked);
+                    if (!anySelected) {
+                        // Mostrar advertencia si no hay recursos seleccionados
+                        setTimeout(() => {
+                            if (!Array.from(resourceCheckboxes).some(cb => cb.checked)) {
+                                showWarningMessage('Se recomienda seleccionar al menos un recurso disponible para obtener mejores recomendaciones.');
+                            }
+                        }, 100);
+                    }
+                    updateRecommendationPreview();
+                });
+            });
+        }
+
+        // Configurar actualizaciones en tiempo real mejoradas
+        function setupRealTimeUpdates() {
+            // Calculadora de ingresos y gastos
+            const incomeInputs = document.querySelectorAll('#ingreso_trabajo, #ingreso_secundario, #ingreso_inversiones, #ingreso_pension, #ingreso_otros, #ingreso_conyuge');
+            const expenseInputs = document.querySelectorAll('#gasto_vivienda, #gasto_alimentacion, #gasto_transporte, #gasto_servicios, #gasto_seguros, #gasto_deudas, #gasto_educacion, #gasto_salud_actual, #gasto_otros');
+
+            [...incomeInputs, ...expenseInputs].forEach(input => {
+                input.addEventListener('input', function() {
+                    calculateFinancialSummary();
+                    
+                    // Validación contextual
+                    const value = parseFloat(this.value) || 0;
+                    const isIncome = incomeInputs.includes(this);
+                    
+                    if (isIncome && value > 50000) {
+                        showWarningMessage('Ingreso alto detectado. Esto podría abrir opciones de tratamiento premium.');
+                    }
+                    
+                    // Actualizar recomendaciones después de cambios financieros
+                    setTimeout(updateRecommendationPreview, 300);
+                });
+            });
+
+            // Configurar validación en tiempo real
+            setupRealTimeValidation();
+        }
+
         // Función para actualizar preview de recomendaciones
         function updateRecommendationPreview() {
             const data = collectAllData();
@@ -1625,140 +2199,93 @@
             return data;
         }
 
-        // Función para guardar progreso
-        function saveProgress() {
-            inversionData = collectAllData();
-            localStorage.setItem('capacidadInversionData', JSON.stringify(inversionData));
-            
-            // Mostrar confirmación
-            alert('✅ Progreso guardado exitosamente. Sus datos financieros están seguros y encriptados.');
-        }
-
-        // Función para cargar datos guardados
-        function loadSavedData() {
-            const savedData = localStorage.getItem('capacidadInversionData');
-            if (savedData) {
-                try {
-                    inversionData = JSON.parse(savedData);
-                    
-                    // Restaurar inputs
-                    Object.keys(inversionData).forEach(key => {
-                        const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
-                        if (element) {
-                            if (element.type === 'checkbox') {
-                                element.checked = true;
-                                element.dispatchEvent(new Event('change'));
-                            } else if (element.type === 'radio') {
-                                element.checked = true;
-                                element.dispatchEvent(new Event('change'));
-                            } else {
-                                element.value = inversionData[key];
-                                element.dispatchEvent(new Event('input'));
-                            }
-                        }
-                    });
-
-                    // Restaurar selecciones especiales
-                    if (inversionData.prioridad_tratamiento) {
-                        const priorityElement = document.querySelector(`[data-value="${inversionData.prioridad_tratamiento}"]`);
-                        if (priorityElement) {
-                            priorityElement.click();
-                        }
-                    }
-
-                    if (inversionData.timeline_resultados) {
-                        const timelineElement = document.querySelector(`[data-value="${inversionData.timeline_resultados}"]`);
-                        if (timelineElement) {
-                            timelineElement.click();
-                        }
-                    }
-
-                    // Recalcular después de cargar
-                    setTimeout(() => {
-                        calculateFinancialSummary();
-                        updateRecommendationPreview();
-                    }, 100);
-
-                    console.log('Datos de capacidad de inversión cargados exitosamente');
-                } catch (e) {
-                    console.error('Error cargando datos guardados:', e);
+        // Configuración de atajos de teclado
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + S para guardar
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    saveProgress();
                 }
-            }
-        }
-
-        // Función para ir a página anterior
-        function previousPage() {
-            saveProgress();
-            window.location.href = 'vitiligo_actual.html';
-        }
-
-        // Función para generar reporte final
-        function generateFinalReport() {
-            // Validar campos requeridos
-            const requiredFields = [
-                'pais_residencia', 'moneda_local', 'monto_disponible_inmediato', 
-                'monto_mensual_sostenible', 'prioridad_tratamiento', 'timeline_resultados'
-            ];
-            
-            let isValid = true;
-
-            requiredFields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (!field || !field.value) {
-                    if (field) field.style.borderColor = '#e74c3c';
-                    isValid = false;
-                } else {
-                    field.style.borderColor = '#ecf0f1';
+                
+                // Escape para limpiar errores
+                if (e.key === 'Escape') {
+                    clearValidationErrors();
                 }
             });
-
-            // Validar radio buttons requeridos
-            const requiredRadios = ['estabilidad_ingresos', 'tiene_seguro', 'dispuesto_viajar'];
-            requiredRadios.forEach(radioName => {
-                const checked = document.querySelector(`input[name="${radioName}"]:checked`);
-                if (!checked) {
-                    isValid = false;
-                    alert(`Por favor seleccione una opción para: ${radioName.replace(/_/g, ' ')}`);
-                }
-            });
-
-            if (!isValid) {
-                alert('Por favor complete todos los campos requeridos (marcados con *).');
-                return;
-            }
-
-            // Guardar datos finales y continuar
-            saveProgress();
-            
-            // Combinar todos los datos de pasos anteriores
-            const allData = {
-                capacidadInversion: collectAllData(),
-                datosBasicos: JSON.parse(localStorage.getItem('datosBasicos') || '{}'),
-                fitzpatrick: JSON.parse(localStorage.getItem('fitzpatrickData') || '{}'),
-                antecedentes: JSON.parse(localStorage.getItem('antecedentesData') || '{}'),
-                vitiligoActual: JSON.parse(localStorage.getItem('vitiligoActualData') || '{}')
-            };
-
-            // Guardar datos completos
-            localStorage.setItem('reporteCompleto', JSON.stringify(allData));
-            
-            // Redireccionar al reporte final
-            window.location.href = 'reporte_final.html';
         }
 
-        // Validación en tiempo real
+        // Configurar auto-guardado
+        function setupAutoSave() {
+            let autoSaveTimer;
+            
+            function triggerAutoSave() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    saveProgress();
+                }, 30000); // Auto-guardar cada 30 segundos
+            }
+
+            // Configurar auto-guardado en cambios
+            document.addEventListener('input', triggerAutoSave);
+            document.addEventListener('change', triggerAutoSave);
+        }
+
+        // Prevenir pérdida de datos
+        function setupBeforeUnload() {
+            window.addEventListener('beforeunload', function(e) {
+                const hasUnsavedChanges = checkForUnsavedChanges();
+                if (hasUnsavedChanges) {
+                    const message = 'Tiene cambios sin guardar. ¿Está seguro que desea salir?';
+                    e.returnValue = message;
+                    return message;
+                }
+            });
+        }
+
+        // Verificar cambios sin guardar
+        function checkForUnsavedChanges() {
+            const currentData = collectAllData();
+            const savedData = JSON.parse(localStorage.getItem('capacidadInversionData') || '{}');
+            
+            return JSON.stringify(currentData) !== JSON.stringify(savedData);
+        }
+
+        // Configuración mejorada de inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            const requiredFields = document.querySelectorAll('[required]');
+            console.log('🚀 Inicializando Capacidad de Inversión...');
             
-            requiredFields.forEach(field => {
-                field.addEventListener('blur', function() {
-                    if (this.value.trim()) {
-                        this.style.borderColor = '#27ae60';
-                    } else {
-                        this.style.borderColor = '#e74c3c';
-                    }
-                });
-            });
+            try {
+                // Inicializar componentes principales
+                initializeCalculators();
+                initializePrioritySelection();
+                initializeTimelineSelection();
+                initializeInsuranceToggles();
+                initializeTravelToggles();
+                initializeResourceToggles();
+                
+                // Configurar actualizaciones y validaciones
+                setupRealTimeUpdates();
+                setupKeyboardShortcuts();
+                setupAutoSave();
+                setupBeforeUnload();
+                
+                // Cargar datos guardados
+                const dataLoaded = loadSavedData();
+                
+                // Mostrar mensaje de bienvenida
+                if (dataLoaded) {
+                    showSuccessMessage('Datos previos cargados exitosamente. Puede continuar donde lo dejó.');
+                } else {
+                    console.log('📋 Iniciando evaluación de capacidad de inversión...');
+                }
+                
+                console.log('✅ Inicialización completada exitosamente');
+                
+            } catch (error) {
+                console.error('❌ Error durante la inicialización:', error);
+                alert('Error al cargar la página. Por favor recargue el navegador.');
+            }
         });
     </script>
 </body>
