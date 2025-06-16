@@ -939,8 +939,9 @@
         updateProgress();
 
 
-        function validarYRedirigir() {
-  const campos = document.querySelectorAll('[required]');
+function validarYRedirigir() {
+  const pasoVisible = document.querySelector('.step.active'); // solo el paso visible
+  const campos = pasoVisible.querySelectorAll('[required]');
   let valido = true;
 
   campos.forEach(campo => {
@@ -957,9 +958,9 @@
     return;
   }
 
-  // Si todo está bien, redirige
   window.location.href = 'fitzpatrick.html';
 }
+
 
     </script>
 </body>
