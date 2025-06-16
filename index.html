@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protocolo Vitiligo - Dr. José Moya | Evaluación Médica Especializada</title>
+    <meta name="description" content="Evaluación médica integral para vitiligo con Dr. José Moya. 40+ años de experiencia en tratamientos avanzados. Protocolo personalizado y científicamente validado.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+
+        .header-subtitle {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .header-description {
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 35px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 8px 25px rgba(52,152,219,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(52,152,219,0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Secciones */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 60px;
+            font-weight: 300;
+        }
+
+        /* Doctor Info */
+        .doctor-section {
+            background: #f8f9fa;
+        }
+
+        .doctor-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .doctor-image {
+            text-align: center;
+        }
+
+        .doctor-photo {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8em;
+            color: white;
+            margin: 0 auto;
+        }
+
+        .doctor-info h3 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .doctor-info p {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .credentials {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .credentials li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+            color: #555;
+        }
+
+        .credentials li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Proceso */
+        .proceso-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .step h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* CTA Final */
+        .cta-final {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-final h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .cta-final p {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .footer p {
+            opacity: 0.8;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 2.5em;
+            }
+
+            .doctor-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .proceso-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                display: block;
+                margin: 10px auto;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Principal -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>🏥 Protocolo Vitiligo</h1>
+                <p class="header-subtitle">Dr. José Moya - Especialista en Vitiligo</p>
+                <p class="header-description">
+                    Evaluación médica integral personalizada para diagnóstico y tratamiento 
+                    del vitiligo con más de 40 años de experiencia médica especializada.
+                </p>
+                
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary" onclick="comenzarEvaluacion()">
+                        📋 Comenzar Evaluación Médica
+                    </a>
+                    <a href="#sobre-protocolo" class="btn btn-secondary">
+                        📖 Conocer Más
+                    </a>
+                </div>
+
+                <div class="loading" id="loadingEvaluacion">
+                    <div class="spinner"></div>
+                    <p>Verificando acceso...</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Doctor -->
+    <section class="section doctor-section" id="sobre-protocolo">
+        <div class="container">
+            <h2 class="section-title">Su Médico Especialista</h2>
+            <div class="doctor-content">
+                <div class="doctor-image">
+                    <div class="doctor-photo">👨‍⚕️</div>
+                </div>
+                <div class="doctor-info">
+                    <h3>Dr. José Moya</h3>
+                    <p>
+                        Médico especialista en dermatología con más de 40 años de experiencia 
+                        en el diagnóstico y tratamiento del vitiligo. Pionero en protocolos 
+                        de evaluación integral para casos complejos de vitiligo.
+                    </p>
+                    <p>
+                        Su enfoque combina la medicina tradicional con las últimas 
+                        investigaciones científicas para ofrecer tratamientos 
+                        personalizados y efectivos.
+                    </p>
+                    
+                    <ul class="credentials">
+                        <li>40+ años de experiencia en dermatología</li>
+                        <li>Especialista certificado en vitiligo</li>
+                        <li>Protocolos de tratamiento avanzados</li>
+                        <li>Consultas presenciales y virtuales</li>
+                        <li>Seguimiento personalizado continuo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características del Protocolo -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">¿Qué Incluye el Protocolo?</h2>
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">📋</span>
+                    <h3>Evaluación Completa</h3>
+                    <p>Análisis detallado de su historial médico, síntomas actuales y factores de riesgo específicos para su caso.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">🔬</span>
+                    <h3>Diagnóstico Preciso</h3>
+                    <p>Protocolo científicamente validado para determinar el tipo, extensión y progresión de su vitiligo.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">💊</span>
+                    <h3>Plan Personalizado</h3>
+                    <p>Recomendaciones específicas de tratamiento adaptadas a su situación, presupuesto y objetivos.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">📊</span>
+                    <h3>Reporte Médico</h3>
+                    <p>Documento completo con diagnóstico, recomendaciones y plan de seguimiento detallado.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">🌍</span>
+                    <h3>Acceso Global</h3>
+                    <p>Evaluación disponible desde cualquier lugar del mundo con consultas virtuales especializadas.</p>
+                </div>
+                
+                <div class="feature">
+                    <span class="feature-icon">🔒</span>
+                    <h3>100% Confidencial</h3>
+                    <p>Sus datos médicos están protegidos con los más altos estándares de seguridad y privacidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proceso de Evaluación -->
+    <section class="section" style="background: #f8f9fa;">
+        <div class="container">
+            <h2 class="section-title">Proceso de Evaluación</h2>
+            <div class="proceso-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Datos Básicos</h4>
+                    <p>Información personal y de contacto</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Clasificación Fitzpatrick</h4>
+                    <p>Determinación de su tipo de piel</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Antecedentes</h4>
+                    <p>Historial médico y familiar</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Vitiligo Actual</h4>
+                    <p>Estado actual de la condición</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h4>Capacidad de Inversión</h4>
+                    <p>Opciones de tratamiento disponibles</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <h4>Reporte Final</h4>
+                    <p>Diagnóstico y recomendaciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Final -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>Comience Su Evaluación Médica Hoy</h2>
+            <p>
+                Obtenga un diagnóstico profesional y un plan de tratamiento 
+                personalizado para su vitiligo
+            </p>
+            <a href="#" class="btn btn-primary" onclick="comenzarEvaluacion()">
+                🚀 Iniciar Protocolo Médico
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Protocolo Vitiligo - Dr. José Moya. Todos los derechos reservados.</p>
+            <p>Evaluación médica profesional | Consultas virtuales disponibles</p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuración
+        const API_BASE = '/pidasalud/protocolo-vitiligo/api.php';
+
+        // Función principal para comenzar evaluación
+        async function comenzarEvaluacion() {
+            const loadingElement = document.getElementById('loadingEvaluacion');
+            
+            try {
+                // Mostrar loading
+                loadingElement.style.display = 'block';
+                
+                // Verificar si ya hay sesión activa
+                const sesionActiva = await verificarSesionActiva();
+                
+                if (sesionActiva) {
+                    // Ya tiene sesión, verificar progreso
+                    const progreso = localStorage.getItem('evaluacionEnProgreso');
+                    
+                    if (progreso) {
+                        // Continuar evaluación en progreso
+                        mostrarMensajeContinuar();
+                    } else {
+                        // Ir directo a la evaluación
+                        window.location.href = 'datos_basicos.html';
+                    }
+                } else {
+                    // No hay sesión, ir a login
+                    window.location.href = 'login.html';
+                }
+                
+            } catch (error) {
+                console.error('Error al verificar sesión:', error);
+                // En caso de error, ir a login por seguridad
+                window.location.href = 'login.html';
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        }
+
+        // Verificar si hay sesión activa
+        async function verificarSesionActiva() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/status`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    return result.authenticated === true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Error verificando sesión:', error);
+                return false;
+            }
+        }
+
+        // Mostrar mensaje para continuar evaluación
+        function mostrarMensajeContinuar() {
+            const continuar = confirm(
+                'Tienes una evaluación en progreso.\n\n' +
+                '✅ Continuar evaluación\n' +
+                '❌ Comenzar nueva evaluación'
+            );
+            
+            if (continuar) {
+                // Continuar donde se quedó
+                const paginaProgreso = localStorage.getItem('evaluacionEnProgreso');
+                if (paginaProgreso && paginaProgreso !== 'index.html') {
+                    window.location.href = paginaProgreso;
+                } else {
+                    window.location.href = 'datos_basicos.html';
+                }
+            } else {
+                // Comenzar nueva evaluación
+                localStorage.removeItem('evaluacionEnProgreso');
+                localStorage.removeItem('datosBasicos');
+                localStorage.removeItem('fitzpatrick');
+                localStorage.removeItem('antecedentes');
+                localStorage.removeItem('vitiligoActual');
+                localStorage.removeItem('capacidadInversion');
+                
+                window.location.href = 'datos_basicos.html';
+            }
+        }
+
+        // Smooth scroll para navegación interna
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Verificar sesión al cargar la página (opcional)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Si viene de un logout, limpiar datos
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'success') {
+                // Mostrar mensaje de logout exitoso
+                setTimeout(() => {
+                    alert('Sesión cerrada exitosamente. ¡Gracias por usar nuestro protocolo!');
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

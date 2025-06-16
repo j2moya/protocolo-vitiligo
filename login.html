@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Protocolo Vitiligo Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .login-left {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-right {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 2.2em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            text-align: left;
+            max-width: 300px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .feature-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .form-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 15px rgba(52,152,219,0.1);
+        }
+
+        .form-group input.error {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .form-group input.success {
+            border-color: #27ae60;
+            background: #f2fdf2;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 8px;
+            width: auto;
+        }
+
+        .forgot-password {
+            color: #3498db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #2980b9;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52,152,219,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-google:hover {
+            border-color: #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .google-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: #666;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ecf0f1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 20px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            color: #2980b9;
+        }
+
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .login-left {
+                padding: 40px 30px;
+            }
+
+            .login-right {
+                padding: 40px 30px;
+            }
+
+            .welcome-title {
+                font-size: 1.8em;
+            }
+
+            .features {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Lado Izquierdo - Información -->
+        <div class="login-left">
+            <div class="logo">🏥</div>
+            <h1 class="welcome-title">Protocolo Vitiligo</h1>
+            <p class="welcome-subtitle">
+                Evaluación médica especializada con Dr. José Moya. 
+                40 años de experiencia en tratamientos avanzados.
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">✅</span>
+                    <span>Evaluación completa personalizada</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📊</span>
+                    <span>Reportes médicos detallados</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🔒</span>
+                    <span>Datos 100% confidenciales</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">💬</span>
+                    <span>Consultas virtuales y presenciales</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🌍</span>
+                    <span>Atención internacional</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lado Derecho - Formulario -->
+        <div class="login-right">
+            <h2 class="form-title">Iniciar Sesión</h2>
+            <p class="form-subtitle">Acceda a su evaluación médica personalizada</p>
+
+            <!-- Alerta de mensajes -->
+            <div id="alertMessage" class="alert">
+                <span id="alertText"></span>
+            </div>
+
+            <!-- Formulario de Login -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError">Por favor ingrese un email válido</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                    </div>
+                    <div class="error-message" id="passwordError">La contraseña es requerida</div>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        Recordarme
+                    </label>
+                    <a href="#" class="forgot-password" onclick="forgotPassword()">¿Olvidó su contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="loginBtnText">Iniciar Sesión</span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <button class="btn btn-google" onclick="googleLogin()">
+                <span class="google-icon">🔍</span>
+                Continuar con Google
+            </button>
+
+            <div class="register-link">
+                ¿No tiene cuenta? <a href="registro.html">Regístrese aquí</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración
+        const API_BASE = '/pidasalud/protocolo-vitiligo/api.php';
+        
+        // Referencias a elementos
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const loginBtnText = document.getElementById('loginBtnText');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertText = document.getElementById('alertText');
+
+        // Validación en tiempo real
+        emailInput.addEventListener('blur', validateEmail);
+        passwordInput.addEventListener('blur', validatePassword);
+        emailInput.addEventListener('input', clearEmailError);
+        passwordInput.addEventListener('input', clearPasswordError);
+
+        // Envío del formulario
+        loginForm.addEventListener('submit', handleLogin);
+
+        // Funciones de validación
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                showFieldError('email', 'El email es requerido');
+                return false;
+            } else if (!emailRegex.test(email)) {
+                showFieldError('email', 'Por favor ingrese un email válido');
+                return false;
+            } else {
+                showFieldSuccess('email');
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            
+            if (!password) {
+                showFieldError('password', 'La contraseña es requerida');
+                return false;
+            } else if (password.length < 6) {
+                showFieldError('password', 'La contraseña debe tener al menos 6 caracteres');
+                return false;
+            } else {
+                showFieldSuccess('password');
+                return true;
+            }
+        }
+
+        function showFieldError(field, message) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            
+            input.classList.add('error');
+            input.classList.remove('success');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showFieldSuccess(field) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            
+            input.classList.add('success');
+            input.classList.remove('error');
+            errorDiv.style.display = 'none';
+        }
+
+        function clearEmailError() {
+            const input = emailInput;
+            const errorDiv = document.getElementById('emailError');
+            
+            if (input.classList.contains('error')) {
+                input.classList.remove('error');
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        function clearPasswordError() {
+            const input = passwordInput;
+            const errorDiv = document.getElementById('passwordError');
+            
+            if (input.classList.contains('error')) {
+                input.classList.remove('error');
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        // Manejo del login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            // Validar formulario
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            
+            if (!isEmailValid || !isPasswordValid) {
+                showAlert('Por favor corrija los errores en el formulario', 'error');
+                return;
+            }
+
+            // Mostrar loading
+            setLoading(true);
+            hideAlert();
+
+            try {
+                const formData = new FormData(loginForm);
+                const loginData = {
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    remember: formData.get('remember') ? true : false
+                };
+
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(loginData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert('¡Bienvenido! Redirigiendo...', 'success');
+                    
+                    // Guardar datos de usuario
+                    if (result.usuario_id) {
+                        localStorage.setItem('usuario_id', result.usuario_id);
+                        localStorage.setItem('usuario_nombre', result.nombre || '');
+                        localStorage.setItem('login_time', new Date().toISOString());
+                    }
+
+                    // Redirigir después de 1.5 segundos
+                    setTimeout(() => {
+                        // Verificar si venía de una página específica
+                        const paginaDestino = localStorage.getItem('paginaDestino');
+                        if (paginaDestino && paginaDestino !== '/') {
+                            localStorage.removeItem('paginaDestino');
+                            window.location.href = paginaDestino;
+                        } else {
+                            // Verificar si hay evaluación en progreso
+                            const evaluacionEnProgreso = localStorage.getItem('evaluacionEnProgreso');
+                            if (evaluacionEnProgreso && evaluacionEnProgreso !== 'index.html') {
+                                window.location.href = evaluacionEnProgreso;
+                            } else {
+                                window.location.href = 'datos_basicos.html'; // Tu primera página del protocolo
+                            }
+                        }
+                    }, 1500);
+
+                } else {
+                    showAlert(result.error || 'Error al iniciar sesión', 'error');
+                }
+
+        // Funciones auxiliares
+        function setLoading(loading) {
+            if (loading) {
+                loginBtn.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
+                loginBtnText.textContent = 'Iniciando sesión...';
+            } else {
+                loginBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+                loginBtnText.textContent = 'Iniciar Sesión';
+            }
+        }
+
+        function showAlert(message, type) {
+            alertText.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+        }
+
+        function hideAlert() {
+            alertMessage.style.display = 'none';
+        }
+
+        function togglePassword() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const toggle = document.querySelector('.password-toggle');
+            toggle.textContent = type === 'password' ? '👁️' : '🙈';
+        }
+
+        function forgotPassword() {
+            const email = emailInput.value.trim();
+            if (email) {
+                showAlert('Se ha enviado un enlace de recuperación a su email', 'success');
+                // Aquí implementarías la lógica de recuperación de contraseña
+            } else {
+                showAlert('Por favor ingrese su email primero', 'error');
+                emailInput.focus();
+            }
+        }
+
+        function googleLogin() {
+            showAlert('Función de Google Login próximamente disponible', 'info');
+            // Aquí implementarías la autenticación con Google
+        }
+
+        // Verificar si ya hay sesión activa
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si hay una sesión activa
+            checkActiveSession();
+            
+            // Auto-rellenar email si se recuerda
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                emailInput.value = rememberedEmail;
+                document.getElementById('remember').checked = true;
+            }
+        });
+
+        async function checkActiveSession() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/status`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.authenticated) {
+                        // Ya hay sesión activa, redirigir
+                        window.location.href = 'datos_basicos.html';
+                    }
+                }
+            } catch (error) {
+                // No hay sesión activa, continuar normalmente
+                console.log('No hay sesión activa');
+            }
+        }
+
+        // Manejar "Recordarme"
+        loginForm.addEventListener('submit', function() {
+            const remember = document.getElementById('remember').checked;
+            const email = emailInput.value.trim();
+            
+            if (remember && email) {
+                localStorage.setItem('rememberedEmail', email);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+        });
+    </script>
+</body>
+</html>

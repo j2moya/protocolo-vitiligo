@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Protocolo Vitiligo Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+        }
+
+        .register-left {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .register-right {
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 2.2em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .features {
+            text-align: left;
+            max-width: 300px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+
+        .feature-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .form-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 15px rgba(52,152,219,0.1);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .form-group input.success,
+        .form-group select.success {
+            border-color: #27ae60;
+            background: #f2fdf2;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .strength-bar {
+            width: 100%;
+            height: 4px;
+            background: #ecf0f1;
+            border-radius: 2px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #e74c3c; width: 25%; }
+        .strength-fair { background: #f39c12; width: 50%; }
+        .strength-good { background: #f1c40f; width: 75%; }
+        .strength-strong { background: #27ae60; width: 100%; }
+
+        .terms-group {
+            margin: 25px 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input {
+            margin-right: 10px;
+            width: auto;
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9em;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+
+        .checkbox-group a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52,152,219,0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-google:hover {
+            border-color: #3498db;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .google-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #666;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ecf0f1;
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 20px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            color: #2980b9;
+        }
+
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        @media (max-width: 768px) {
+            .register-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .register-left {
+                padding: 30px 20px;
+            }
+
+            .register-right {
+                padding: 30px 20px;
+            }
+
+            .welcome-title {
+                font-size: 1.8em;
+            }
+
+            .features {
+                display: none;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Lado Izquierdo - Información -->
+        <div class="register-left">
+            <div class="logo">🏥</div>
+            <h1 class="welcome-title">Únase al Protocolo Vitiligo</h1>
+            <p class="welcome-subtitle">
+                Inicie su evaluación médica especializada con Dr. José Moya. 
+                Más de 40 años de experiencia en tratamientos avanzados.
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <span class="feature-icon">📋</span>
+                    <span>Evaluación médica personalizada</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🔬</span>
+                    <span>Protocolos de tratamiento avanzados</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🔒</span>
+                    <span>Confidencialidad médica garantizada</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">📱</span>
+                    <span>Seguimiento digital continuo</span>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🌍</span>
+                    <span>Acceso desde cualquier lugar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lado Derecho - Formulario -->
+        <div class="register-right">
+            <h2 class="form-title">Crear Cuenta</h2>
+            <p class="form-subtitle">Complete el formulario para iniciar su evaluación médica</p>
+
+            <!-- Alerta de mensajes -->
+            <div id="alertMessage" class="alert">
+                <span id="alertText"></span>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre *</label>
+                        <input type="text" id="nombre" name="nombre" required>
+                        <div class="error-message" id="nombreError">El nombre es requerido</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido">Apellido *</label>
+                        <input type="text" id="apellido" name="apellido" required>
+                        <div class="error-message" id="apellidoError">El apellido es requerido</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico *</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError">Por favor ingrese un email válido</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefono">Teléfono *</label>
+                        <input type="tel" id="telefono" name="telefono" required>
+                        <div class="error-message" id="telefonoError">El teléfono es requerido</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edad">Edad *</label>
+                        <input type="number" id="edad" name="edad" min="1" max="120" required>
+                        <div class="error-message" id="edadError">La edad debe ser válida</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pais">País *</label>
+                        <select id="pais" name="pais" required>
+                            <option value="">Seleccione su país</option>
+                            <option value="AR">Argentina</option>
+                            <option value="BO">Bolivia</option>
+                            <option value="BR">Brasil</option>
+                            <option value="CL">Chile</option>
+                            <option value="CO">Colombia</option>
+                            <option value="CR">Costa Rica</option>
+                            <option value="CU">Cuba</option>
+                            <option value="EC">Ecuador</option>
+                            <option value="SV">El Salvador</option>
+                            <option value="ES">España</option>
+                            <option value="US">Estados Unidos</option>
+                            <option value="GT">Guatemala</option>
+                            <option value="HN">Honduras</option>
+                            <option value="MX">México</option>
+                            <option value="NI">Nicaragua</option>
+                            <option value="PA">Panamá</option>
+                            <option value="PY">Paraguay</option>
+                            <option value="PE">Perú</option>
+                            <option value="PR">Puerto Rico</option>
+                            <option value="DO">República Dominicana</option>
+                            <option value="UY">Uruguay</option>
+                            <option value="VE">Venezuela</option>
+                            <option value="OTHER">Otro</option>
+                        </select>
+                        <div class="error-message" id="paisError">Seleccione su país</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genero">Género *</label>
+                        <select id="genero" name="genero" required>
+                            <option value="">Seleccione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="O">Otro</option>
+                            <option value="P">Prefiero no decir</option>
+                        </select>
+                        <div class="error-message" id="generoError">Seleccione su género</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña *</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <span class="password-toggle" onclick="togglePassword('password')">👁️</span>
+                    </div>
+                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span id="strengthText">Ingrese una contraseña</span>
+                    </div>
+                    <div class="error-message" id="passwordError">La contraseña debe tener al menos 8 caracteres</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña *</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">Las contraseñas no coinciden</div>
+                </div>
+
+                <div class="terms-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            Acepto los <a href="#" onclick="showTerms()">términos y condiciones</a> 
+                            y la <a href="#" onclick="showPrivacy()">política de privacidad</a> *
+                        </label>
+                    </div>
+                    <div class="error-message" id="termsError" style="margin-left: 0;">Debe aceptar los términos y condiciones</div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="newsletter" name="newsletter">
+                        <label for="newsletter">
+                            Deseo recibir información médica y novedades sobre tratamientos de vitiligo
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="marketing" name="marketing">
+                        <label for="marketing">
+                            Autorizo el uso de mis datos para comunicaciones promocionales
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="registerBtn">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    <span id="registerBtnText">Crear Cuenta</span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>o</span>
+            </div>
+
+            <button class="btn btn-google" onclick="googleRegister()">
+                <span class="google-icon">🔍</span>
+                Registrarse con Google
+            </button>
+
+            <div class="login-link">
+                ¿Ya tiene cuenta? <a href="login.html">Inicie sesión aquí</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración
+        const API_BASE = '/pidasalud/protocolo-vitiligo/api.php';
+        
+        // Referencias a elementos
+        const registerForm = document.getElementById('registerForm');
+        const registerBtn = document.getElementById('registerBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const registerBtnText = document.getElementById('registerBtnText');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertText = document.getElementById('alertText');
+
+        // Campos del formulario
+        const fields = ['nombre', 'apellido', 'email', 'telefono', 'edad', 'pais', 'genero', 'password', 'confirmPassword'];
+        
+        // Event listeners para validación en tiempo real
+        fields.forEach(field => {
+            const element = document.getElementById(field);
+            if (element) {
+                element.addEventListener('blur', () => validateField(field));
+                element.addEventListener('input', () => clearFieldError(field));
+            }
+        });
+
+        // Event listeners especiales
+        document.getElementById('password').addEventListener('input', checkPasswordStrength);
+        document.getElementById('confirmPassword').addEventListener('input', validatePasswordMatch);
+        document.getElementById('terms').addEventListener('change', validateTerms);
+
+        // Envío del formulario
+        registerForm.addEventListener('submit', handleRegister);
+
+        // Funciones de validación
+        function validateField(fieldName) {
+            const field = document.getElementById(fieldName);
+            const value = field.value.trim();
+
+            switch (fieldName) {
+                case 'nombre':
+                case 'apellido':
+                    return validateName(fieldName, value);
+                case 'email':
+                    return validateEmail(value);
+                case 'telefono':
+                    return validatePhone(value);
+                case 'edad':
+                    return validateAge(value);
+                case 'pais':
+                case 'genero':
+                    return validateSelect(fieldName, value);
+                case 'password':
+                    return validatePassword(value);
+                case 'confirmPassword':
+                    return validatePasswordMatch();
+                default:
+                    return true;
+            }
+        }
+
+        function validateName(fieldName, value) {
+            if (!value) {
+                showFieldError(fieldName, `${fieldName === 'nombre' ? 'El nombre' : 'El apellido'} es requerido`);
+                return false;
+            } else if (value.length < 2) {
+                showFieldError(fieldName, `${fieldName === 'nombre' ? 'El nombre' : 'El apellido'} debe tener al menos 2 caracteres`);
+                return false;
+            } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+                showFieldError(fieldName, 'Solo se permiten letras y espacios');
+                return false;
+            } else {
+                showFieldSuccess(fieldName);
+                return true;
+            }
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!email) {
+                showFieldError('email', 'El email es requerido');
+                return false;
+            } else if (!emailRegex.test(email)) {
+                showFieldError('email', 'Por favor ingrese un email válido');
+                return false;
+            } else {
+                showFieldSuccess('email');
+                return true;
+            }
+        }
+
+        function validatePhone(phone) {
+            const phoneRegex = /^[\+]?[0-9\s\-\(\)]{8,}$/;
+            
+            if (!phone) {
+                showFieldError('telefono', 'El teléfono es requerido');
+                return false;
+            } else if (!phoneRegex.test(phone)) {
+                showFieldError('telefono', 'Por favor ingrese un teléfono válido');
+                return false;
+            } else {
+                showFieldSuccess('telefono');
+                return true;
+            }
+        }
+
+        function validateAge(age) {
+            const ageNum = parseInt(age);
+            
+            if (!age) {
+                showFieldError('edad', 'La edad es requerida');
+                return false;
+            } else if (ageNum < 1 || ageNum > 120) {
+                showFieldError('edad', 'La edad debe estar entre 1 y 120 años');
+                return false;
+            } else {
+                showFieldSuccess('edad');
+                return true;
+            }
+        }
+
+        function validateSelect(fieldName, value) {
+            if (!value) {
+                const fieldLabel = fieldName === 'pais' ? 'país' : 'género';
+                showFieldError(fieldName, `Seleccione su ${fieldLabel}`);
+                return false;
+            } else {
+                showFieldSuccess(fieldName);
+                return true;
+            }
+        }
+
+        function validatePassword(password) {
+            if (!password) {
+                showFieldError('password', 'La contraseña es requerida');
+                return false;
+            } else if (password.length < 8) {
+                showFieldError('password', 'La contraseña debe tener al menos 8 caracteres');
+                return false;
+            } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+                showFieldError('password', 'La contraseña debe contener al menos una mayúscula, una minúscula y un número');
+                return false;
+            } else {
+                showFieldSuccess('password');
+                return true;
+            }
+        }
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!confirmPassword) {
+                showFieldError('confirmPassword', 'Confirme su contraseña');
+                return false;
+            } else if (password !== confirmPassword) {
+                showFieldError('confirmPassword', 'Las contraseñas no coinciden');
+                return false;
+            } else {
+                showFieldSuccess('confirmPassword');
+                return true;
+            }
+        }
+
+        function validateTerms() {
+            const terms = document.getElementById('terms').checked;
+            
+            if (!terms) {
+                showFieldError('terms', 'Debe aceptar los términos y condiciones');
+                return false;
+            } else {
+                clearFieldError('terms');
+                return true;
+            }
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+
+            if (!password) {
+                strengthDiv.style.display = 'none';
+                return;
+            }
+
+            strengthDiv.style.display = 'block';
+            
+            let strength = 0;
+            let text = '';
+            
+            // Criterios de fortaleza
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            // Determinar clase y texto
+            strengthFill.className = 'strength-fill';
+            
+            switch (strength) {
+                case 0:
+                case 1:
+                    strengthFill.classList.add('strength-weak');
+                    text = 'Muy débil';
+                    break;
+                case 2:
+                    strengthFill.classList.add('strength-fair');
+                    text = 'Débil';
+                    break;
+                case 3:
+                    strengthFill.classList.add('strength-good');
+                    text = 'Buena';
+                    break;
+                case 4:
+                case 5:
+                    strengthFill.classList.add('strength-strong');
+                    text = 'Fuerte';
+                    break;
+            }
+
+            strengthText.textContent = text;
+        }
+
+        // Funciones auxiliares
+        function showFieldError(field, message) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            
+            if (input && errorDiv) {
+                input.classList.add('error');
+                input.classList.remove('success');
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        function showFieldSuccess(field) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            
+            if (input && errorDiv) {
+                input.classList.add('success');
+                input.classList.remove('error');
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        function clearFieldError(field) {
+            const input = document.getElementById(field);
+            const errorDiv = document.getElementById(field + 'Error');
+            
+            if (input && errorDiv && input.classList.contains('error')) {
+                input.classList.remove('error');
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        // Manejo del registro
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            // Validar todos los campos
+            let isValid = true;
+            fields.forEach(field => {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+
+            // Validar términos
+            if (!validateTerms()) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showAlert('Por favor corrija los errores en el formulario', 'error');
+                return;
+            }
+
+            // Mostrar loading
+            setLoading(true);
+            hideAlert();
+
+            try {
+                const formData = new FormData(registerForm);
+                const registerData = {
+                    nombre: formData.get('nombre'),
+                    apellido: formData.get('apellido'),
+                    email: formData.get('email'),
+                    telefono: formData.get('telefono'),
+                    edad: parseInt(formData.get('edad')),
+                    pais: formData.get('pais'),
+                    genero: formData.get('genero'),
+                    password: formData.get('password'),
+                    newsletter: formData.get('newsletter') ? true : false,
+                    marketing: formData.get('marketing') ? true : false
+                };
+
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(registerData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+    showAlert('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
+    
+    // Guardar datos de usuario
+    if (result.usuario_id) {
+        localStorage.setItem('usuario_id', result.usuario_id);
+        localStorage.setItem('usuario_nombre', registerData.nombre + ' ' + registerData.apellido);
+        localStorage.setItem('login_time', new Date().toISOString());
+    }
+
+    setTimeout(() => {
+        // Verificar si venía de una página específica
+        const paginaDestino = localStorage.getItem('paginaDestino');
+        if (paginaDestino && paginaDestino !== '/') {
+            localStorage.removeItem('paginaDestino');
+            window.location.href = paginaDestino;
+        } else {
+            // Para registro nuevo, siempre empezar desde el principio
+            window.location.href = 'datos_basicos.html';
+        }
+    }, 2000);
+
+                } else {
+                    showAlert(result.error || 'Error al crear la cuenta', 'error');
+                }
+
+            } catch (error) {
+                console.error('Error de registro:', error);
+                showAlert('Error de conexión. Por favor intente nuevamente.', 'error');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Funciones auxiliares
+        function setLoading(loading) {
+            if (loading) {
+                registerBtn.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
+                registerBtnText.textContent = 'Creando cuenta...';
+            } else {
+                registerBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
+                registerBtnText.textContent = 'Crear Cuenta';
+            }
+        }
+
+        function showAlert(message, type) {
+            alertText.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+            
+            // Scroll al top para mostrar la alerta
+            document.querySelector('.register-right').scrollTop = 0;
+        }
+
+        function hideAlert() {
+            alertMessage.style.display = 'none';
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const toggle = field.nextElementSibling;
+            
+            const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+            field.setAttribute('type', type);
+            toggle.textContent = type === 'password' ? '👁️' : '🙈';
+        }
+
+        function showTerms() {
+            showAlert('Los términos y condiciones se abrirán en una nueva ventana', 'info');
+            // Implementar modal o ventana con términos
+        }
+
+        function showPrivacy() {
+            showAlert('La política de privacidad se abrirá en una nueva ventana', 'info');
+            // Implementar modal o ventana con política de privacidad
+        }
+
+        function googleRegister() {
+            showAlert('Función de registro con Google próximamente disponible', 'info');
+            // Implementar autenticación con Google
+        }
+
+        // Verificar si ya hay sesión activa al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            checkActiveSession();
+        });
+
+        async function checkActiveSession() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/status`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.authenticated) {
+                        // Ya hay sesión activa, redirigir
+                        window.location.href = 'datos_basicos.html';
+                    }
+                }
+            } catch (error) {
+                // No hay sesión activa, continuar normalmente
+                console.log('No hay sesión activa');
+            }
+        }
+    </script>
+</body>
+</html>

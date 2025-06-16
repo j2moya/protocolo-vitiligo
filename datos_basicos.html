@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Integral Vitiligo - Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 5px;
+            border-radius: 5px;
+            margin: 0 2px;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .step.completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149,165,166,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-item:hover {
+            background: #e9ecef;
+        }
+
+        .radio-item input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-info {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-info {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .investment-level {
+            border-left: 5px solid;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .level-1 {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .level-2 {
+            border-color: #f39c12;
+            background: #fef9f2;
+        }
+
+        .level-3 {
+            border-color: #27ae60;
+            background: #f2f8f4;
+        }
+
+        .severity-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .low-risk { background: #d5f4e6; color: #27ae60; }
+        .medium-risk { background: #fff3cd; color: #856404; }
+        .high-risk { background: #f8d7da; color: #721c24; }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .step {
+                font-size: 0.8em;
+                padding: 8px 3px;
+            }
+            
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+</head>
+<body>
+        <!-- Agregar después del <head> en cada página del protocolo -->
+            <script>
+                // Script de protección - Agregar a TODAS las páginas del protocolo
+                document.addEventListener('DOMContentLoaded', async function() {
+                    // Verificar sesión antes de cargar contenido
+                    const sesionValida = await verificarSesionActiva();
+                    
+                    if (!sesionValida) {
+                        // Guardar la página que intentaba acceder
+                        localStorage.setItem('paginaDestino', window.location.pathname);
+                        
+                        // Mostrar mensaje y redirigir
+                        alert('🔒 Acceso restringido\n\nDebe iniciar sesión para acceder a la evaluación médica.');
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    
+                    // Si la sesión es válida, continuar cargando la página
+                    inicializarPaginaProtegida();
+                });
+                
+                async function verificarSesionActiva() {
+                    try {
+                        const response = await fetch('/pidasalud/protocolo-vitiligo/api.php/auth/status', {
+                            method: 'GET',
+                            credentials: 'include'
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            return result.authenticated === true;
+                        }
+                        return false;
+                    } catch (error) {
+                        console.error('Error verificando sesión:', error);
+                        return false;
+                    }
+                }
+                
+                function inicializarPaginaProtegida() {
+                    // Aquí va el código de inicialización de cada página
+                    console.log('Página protegida cargada correctamente');
+                    
+                    // Agregar header de navegación con logout
+                    agregarHeaderProtegido();
+                    
+                    // Guardar progreso automáticamente
+                    guardarProgresoAutomatico();
+                }
+                
+                function agregarHeaderProtegido() {
+                    // Crear header con info de usuario y logout
+                    const headerHTML = `
+                        <div style="
+                            background: linear-gradient(135deg, #2c3e50, #3498db);
+                            color: white;
+                            padding: 15px;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            z-index: 1000;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                        ">
+                            <div>
+                                <strong>🏥 Protocolo Vitiligo - Dr. José Moya</strong>
+                                <span style="margin-left: 20px;">👤 <span id="nombreUsuarioHeader">Evaluación en progreso</span></span>
+                            </div>
+                            <div>
+                                <button onclick="guardarProgreso()" style="
+                                    background: rgba(255,255,255,0.2);
+                                    border: 1px solid rgba(255,255,255,0.3);
+                                    color: white;
+                                    padding: 8px 15px;
+                                    border-radius: 5px;
+                                    margin-right: 10px;
+                                    cursor: pointer;
+                                ">💾 Guardar</button>
+                                <button onclick="irALogout()" style="
+                                    background: #e74c3c;
+                                    border: none;
+                                    color: white;
+                                    padding: 8px 15px;
+                                    border-radius: 5px;
+                                    cursor: pointer;
+                                ">🚪 Cerrar Sesión</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Insertar al inicio del body
+                    document.body.insertAdjacentHTML('afterbegin', headerHTML);
+                    
+                    // Ajustar el margen del contenido principal
+                    document.body.style.paddingTop = '70px';
+                    
+                    // Mostrar nombre de usuario si está disponible
+                    const nombreUsuario = localStorage.getItem('usuario_nombre');
+                    if (nombreUsuario) {
+                        document.getElementById('nombreUsuarioHeader').textContent = nombreUsuario;
+                    }
+                }
+                
+                function guardarProgreso() {
+                    const paginaActual = window.location.pathname.split('/').pop();
+                    localStorage.setItem('evaluacionEnProgreso', paginaActual);
+                    localStorage.setItem('ultimoGuardado', new Date().toISOString());
+                    
+                    // Mostrar confirmación visual
+                    mostrarMensajeGuardado();
+                }
+                
+                function guardarProgresoAutomatico() {
+                    // Guardar progreso cada 30 segundos
+                    setInterval(guardarProgreso, 30000);
+                    
+                    // Guardar al cambiar de página
+                    window.addEventListener('beforeunload', guardarProgreso);
+                }
+                
+                function mostrarMensajeGuardado() {
+                    const mensaje = document.createElement('div');
+                    mensaje.innerHTML = '💾 Progreso guardado';
+                    mensaje.style.cssText = `
+                        position: fixed;
+                        top: 80px;
+                        right: 20px;
+                        background: #27ae60;
+                        color: white;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        z-index: 1001;
+                        animation: fadeInOut 3s ease;
+                    `;
+                    
+                    document.body.appendChild(mensaje);
+                    setTimeout(() => mensaje.remove(), 3000);
+                }
+                
+                function irALogout() {
+                    const confirmar = confirm('¿Está seguro que desea cerrar sesión?\n\nSu progreso será guardado automáticamente.');
+                    if (confirmar) {
+                        guardarProgreso();
+                        window.location.href = 'logout.html';
+                    }
+                }
+                
+                // CSS para la animación
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; transform: translateX(100%); }
+                        20% { opacity: 1; transform: translateX(0); }
+                        80% { opacity: 1; transform: translateX(0); }
+                        100% { opacity: 0; transform: translateX(100%); }
+                    }
+                `;
+                document.head.appendChild(style);
+                </script>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Evaluación Integral de Vitiligo</h1>
+            <p>Dr. José Moya - Protocolo de Evaluación Completo a Distancia</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-indicator">
+                <div class="step active" data-step="1">Datos Básicos</div>
+                <div class="step" data-step="2">Fitzpatrick</div>
+                <div class="step" data-step="3">Antecedentes</div>
+                <div class="step" data-step="4">Vitiligo Actual</div>
+                <div class="step" data-step="5">Capacidad Inversión</div>
+                <div class="step" data-step="6">Reporte</div>
+            </div>
+        </div>
+
+        <!-- Step 1: Datos Básicos -->
+        <div class="form-section active" data-step="1">
+            <h2>Información Básica del Paciente</h2>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre Completo *</label>
+                <input type="text" id="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="edad">Edad *</label>
+                <input type="number" id="edad" min="1" max="120" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sexo">Sexo *</label>
+                <select id="sexo" required>
+                    <option value="">Seleccione...</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pais">País de Residencia *</label>
+                <input type="text" id="pais" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email de Contacto *</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono con WhatsApp</label>
+                <input type="tel" id="telefono">
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" disabled>Anterior</button>
+                <button class="btn btn-primary" onclick="validarYRedirigir()">Siguiente</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+
+
+        // Initialize
+        updateProgress();
+
+
+        function validarYRedirigir() {
+  const campos = document.querySelector('[data-step="1"]').querySelectorAll('[required]');
+  let valido = true;
+
+  campos.forEach(campo => {
+    if (!campo.value.trim()) {
+      campo.style.border = '2px solid red';
+      valido = false;
+    } else {
+      campo.style.border = '';
+    }
+  });
+
+  if (!valido) {
+    alert('Por favor complete todos los campos obligatorios antes de continuar.');
+    return;
+  }
+
+  window.location.href = 'fitzpatrick.html';
+}
+
+
+    </script>
+</body>
+</html>

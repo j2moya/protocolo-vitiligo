@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerrando Sesión - Protocolo Vitiligo Dr. José Moya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logout-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logout-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+
+        .logout-title {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .logout-message {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .logout-status {
+            margin: 30px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .status-loading {
+            background: #e8f4f8;
+            color: #2980b9;
+            border: 2px solid #3498db;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #27ae60;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #e74c3c;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .actions {
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52,152,219,0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .btn-secondary:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .footer-info {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .security-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .logout-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .logout-title {
+                font-size: 1.8em;
+            }
+
+            .btn {
+                display: block;
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <div class="logout-icon">👋</div>
+        <h1 class="logout-title">Cerrando Sesión</h1>
+        <p class="logout-message">
+            Gracias por utilizar el Protocolo Vitiligo del Dr. José Moya. 
+            Su sesión está siendo cerrada de forma segura.
+        </p>
+
+        <div id="logoutStatus" class="logout-status status-loading">
+            <div class="loading-spinner"></div>
+            <div>Cerrando sesión de forma segura...</div>
+        </div>
+
+        <div class="security-note" id="securityNote" style="display: none;">
+            <strong>Importante:</strong> Por su seguridad, recomendamos cerrar completamente su navegador 
+            si está usando una computadora compartida.
+        </div>
+
+        <div class="actions" id="actions" style="display: none;">
+            <a href="login.html" class="btn btn-primary">Iniciar Sesión Nuevamente</a>
+            <a href="index.html" class="btn btn-secondary">Volver al Inicio</a>
+        </div>
+
+        <div class="footer-info">
+            <p><strong>Protocolo Vitiligo - Dr. José Moya</strong></p>
+            <p>Sus datos han sido guardados de forma segura</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuración
+        const API_BASE = '/pidasalud/protocolo-vitiligo/api.php';
+
+        // Referencias a elementos
+        const logoutStatus = document.getElementById('logoutStatus');
+        const securityNote = document.getElementById('securityNote');
+        const actions = document.getElementById('actions');
+
+        // Iniciar proceso de logout al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            performLogout();
+        });
+
+        async function performLogout() {
+            try {
+                // Llamar al API para cerrar sesión
+                const response = await fetch(`${API_BASE}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+
+                // Limpiar datos locales
+                clearLocalData();
+
+                // Simular tiempo de carga para mejor UX
+                setTimeout(() => {
+                    showLogoutSuccess();
+                }, 1500);
+
+            } catch (error) {
+                console.error('Error during logout:', error);
+                setTimeout(() => {
+                    showLogoutError();
+                }, 1500);
+            }
+        }
+
+        function clearLocalData() {
+            // Limpiar datos de usuario
+            const keysToRemove = [
+                'usuario_id',
+                'usuario_nombre',
+                'login_time',
+                'rememberedEmail',
+                'evaluacionEnProgreso',
+                'datosBasicos',
+                'historiaClinica',
+                'examenFisico',
+                'antecedentes',
+                'diagnostico',
+                'reporteFinal'
+            ];
+
+            keysToRemove.forEach(key => {
+                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
+            });
+
+            // Limpiar cookies de sesión si las hay
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+        }
+
+        function showLogoutSuccess() {
+            logoutStatus.className = 'logout-status status-success';
+            logoutStatus.innerHTML = `
+                <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+                <div>¡Sesión cerrada exitosamente!</div>
+            `;
+
+            securityNote.style.display = 'block';
+            actions.style.display = 'block';
+
+            // Auto-redirección opcional después de 10 segundos
+            let countdown = 10;
+            const countdownElement = document.createElement('div');
+            countdownElement.style.marginTop = '20px';
+            countdownElement.style.fontSize = '0.9em';
+            countdownElement.style.color = '#666';
+            logoutStatus.appendChild(countdownElement);
+
+            const countdownInterval = setInterval(() => {
+                countdownElement.textContent = `Redirigiendo al inicio en ${countdown} segundos...`;
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+
+            // Permitir cancelar la redirección
+            document.addEventListener('click', () => {
+                clearInterval(countdownInterval);
+                countdownElement.textContent = 'Redirección automática cancelada';
+            });
+        }
+
+        function showLogoutError() {
+            logoutStatus.className = 'logout-status status-error';
+            logoutStatus.innerHTML = `
+                <div style="font-size: 2em; margin-bottom: 10px;">⚠️</div>
+                <div>Hubo un problema al cerrar la sesión del servidor</div>
+                <div style="font-size: 0.9em; margin-top: 10px;">
+                    Sus datos locales han sido eliminados por seguridad
+                </div>
+            `;
+
+            securityNote.style.display = 'block';
+            actions.style.display = 'block';
+        }
+
+        // Prevenir navegación hacia atrás después del logout
+        window.addEventListener('popstate', function(event) {
+            window.location.href = 'login.html';
+        });
+
+        // Limpiar historial para evitar volver a páginas con sesión
+        if (window.history && window.history.pushState) {
+            window.history.replaceState(null, null, 'logout.html');
+        }
+    </script>
+</body>
+</html>
