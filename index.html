@@ -937,6 +937,60 @@
 
         // Initialize
         updateProgress();
+
+        // Guardar los datos al salir de un input/select
+document.querySelectorAll('input, select, textarea').forEach(field => {
+    field.addEventListener('change', () => {
+        localStorage.setItem(field.id, field.value);
+    });
+});
+
+// Restaurar datos al cargar
+window.addEventListener('load', () => {
+    document.querySelectorAll('input, select, textarea').forEach(field => {
+        const saved = localStorage.getItem(field.id);
+        if (saved !== null) {
+            if (field.type === 'radio' || field.type === 'checkbox') {
+                field.checked = field.value === saved;
+            } else {
+                field.value = saved;
+            }
+        }
+    });
+});
+
+// Restaurar selección de radio/checkbox avanzados
+document.addEventListener('DOMContentLoaded', () => {
+    const checkboxes = ['infecciones_recurrentes','ansiedad','hipotiroidismo','diabetes','fam_vitiligo','fam_hipotiroidismo','fam_autoinmune'];
+    checkboxes.forEach(id => {
+        const value = localStorage.getItem(id);
+        if (value === 'true') {
+            const box = document.getElementById(id);
+            if (box) box.checked = true;
+        }
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(box => {
+        box.addEventListener('change', () => {
+            localStorage.setItem(box.id, box.checked);
+        });
+    });
+
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            localStorage.setItem(radio.name, radio.value);
+        });
+    });
+
+    const radios = document.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => {
+        const saved = localStorage.getItem(r.name);
+        if (r.value === saved) {
+            r.checked = true;
+        }
+    });
+});
+
     </script>
 </body>
 </html>
