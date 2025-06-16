@@ -74,7 +74,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #27ae60, #2ecc71);
-            width: 16.66%;
+            width: 33.33%;
             transition: width 0.3s ease;
         }
 
@@ -433,7 +433,7 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52,152,219,0.3);
         }
@@ -456,6 +456,13 @@
         .btn-success:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .navigation {
@@ -485,6 +492,23 @@
             color: #856404;
         }
 
+        .alert-error {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+            color: #721c24;
+            display: none;
+        }
+
+        .alert-error.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .summary-box {
             background: linear-gradient(135deg, #e8f6fd, #ffffff);
             border: 2px solid #3498db;
@@ -499,6 +523,46 @@
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 15px;
+        }
+
+        .validation-message {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .validation-message.show {
+            display: block;
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #155724;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
 
         @media (max-width: 768px) {
@@ -577,6 +641,16 @@
         <div class="fitzpatrick-container">
             <h2 class="section-title">Seleccione el Método de Evaluación</h2>
             
+            <!-- Error Alert -->
+            <div id="error-alert" class="alert alert-error">
+                <strong>Error:</strong> <span id="error-message">Por favor complete la evaluación de fototipo antes de continuar.</span>
+            </div>
+
+            <!-- Success Alert -->
+            <div id="success-alert" class="success-message">
+                <strong>✅ Evaluación completada exitosamente.</strong> Su fototipo ha sido determinado y guardado.
+            </div>
+            
             <div class="alert alert-info">
                 <strong>Importante:</strong> Seleccione el fototipo que mejor describe su reacción natural al sol SIN protección solar. Base su decisión en su experiencia personal de exposición solar.
             </div>
@@ -593,11 +667,16 @@
                 </div>
             </div>
 
+            <!-- Validation Message -->
+            <div id="validation-message" class="validation-message">
+                ⚠️ Debe seleccionar un fototipo o completar el cuestionario antes de continuar
+            </div>
+
             <!-- Visual Method -->
             <div class="evaluation-method active" id="visual-method">
                 <div class="alert alert-warning">
-                    <div style="font-weight: 600; margin-bottom: 5px;">Importante:</div>
-                    Seleccione el fototipo que mejor describe su reacción natural al sol SIN protección solar. Base su decisión en su experiencia personal de exposición solar.
+                    <div style="font-weight: 600; margin-bottom: 5px;">Instrucciones:</div>
+                    Haga clic en el fototipo que mejor describe sus características físicas y su reacción habitual al sol sin protección.
                 </div>
 
                 <div class="fitzpatrick-grid">
@@ -863,9 +942,9 @@
 
             <!-- Navigation -->
             <div class="navigation">
-                <button class="btn btn-secondary" onclick="window.location.href='index.html'">← Datos Básicos</button>
+                <button class="btn btn-secondary" onclick="previousPage()">← Datos Básicos</button>
                 <button class="btn btn-success" onclick="saveProgress()" style="margin-right: 10px;">💾 Guardar</button>
-                <button class="btn btn-primary" onclick="window.location.href='antecedentes.html'" id="nextBtn" disabled>Antecedentes →</button>
+                <button class="btn btn-primary" onclick="nextPage()" id="nextBtn" disabled>Antecedentes →</button>
             </div>
         </div>
 
@@ -905,6 +984,7 @@
         let selectedFitzpatrick = null;
         let questionnaireScore = 0;
         let fitzpatrickData = {};
+        let formData = {};
 
         // Inicializar cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
@@ -912,7 +992,27 @@
             initializeFitzpatrickSelection();
             initializeQuestionnaire();
             loadSavedData();
+            loadPreviousFormData();
         });
+
+        // Cargar datos del paso anterior
+        function loadPreviousFormData() {
+            const savedData = localStorage.getItem('vitiligoFormData');
+            if (savedData) {
+                try {
+                    formData = JSON.parse(savedData);
+                    console.log('Datos básicos cargados:', formData);
+                } catch (e) {
+                    console.error('Error cargando datos básicos:', e);
+                    showError('Error cargando datos del paso anterior. Por favor regrese y complete el formulario.');
+                }
+            } else {
+                console.warn('No se encontraron datos básicos. Redirigiendo al paso anterior.');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+        }
 
         // Función para cambio de métodos
         function initializeMethodSwitching() {
@@ -929,6 +1029,7 @@
 
                     // Reset any previous selection
                     resetSelection();
+                    hideMessages();
                 });
             });
         }
@@ -948,6 +1049,8 @@
                     saveFitzpatrickData(selectedFitzpatrick, 'visual');
                     showResults(selectedFitzpatrick);
                     enableNavigation();
+                    showSuccess();
+                    hideMessages();
                 });
             });
         }
@@ -969,6 +1072,7 @@
                     this.querySelector('input').checked = true;
                     
                     updateQuestionnaireScore();
+                    hideMessages();
                 });
             });
         }
@@ -1018,8 +1122,8 @@
             saveFitzpatrickData(fitzpatrickType, 'questionnaire', questionnaireScore);
             showResults(fitzpatrickType);
             enableNavigation();
-            
-            alert(`Su fototipo calculado es: Tipo ${fitzpatrickType}. Puede continuar al siguiente paso.`);
+            showSuccess();
+            hideMessages();
         }
 
         // Mostrar resultados
@@ -1041,7 +1145,9 @@
             
             // Show results section
             resultsSection.classList.add('show');
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
 
         // Obtener nombre del fototipo
@@ -1229,15 +1335,35 @@
                 name: getFitzpatrickName(type)
             };
             
+            // Combinar con datos anteriores
+            const combinedData = {
+                ...formData,
+                ...fitzpatrickData
+            };
+            
+            localStorage.setItem('vitiligoFormData', JSON.stringify(combinedData));
             localStorage.setItem('fitzpatrickData', JSON.stringify(fitzpatrickData));
+            
+            console.log('Datos Fitzpatrick guardados:', fitzpatrickData);
+        }
+
+        // Validar antes de continuar
+        function validateStep() {
+            if (!selectedFitzpatrick) {
+                showError('Debe seleccionar un fototipo antes de continuar.');
+                showValidationMessage();
+                return false;
+            }
+            return true;
         }
 
         // Guardar progreso
         function saveProgress() {
             if (selectedFitzpatrick) {
-                alert('✅ Su evaluación Fitzpatrick ha sido guardada exitosamente.');
+                showSuccess('Su evaluación Fitzpatrick ha sido guardada exitosamente.');
             } else {
-                alert('⚠️ Por favor complete la evaluación de fototipo antes de guardar.');
+                showError('Por favor complete la evaluación de fototipo antes de guardar.');
+                showValidationMessage();
             }
         }
 
@@ -1248,6 +1374,7 @@
                 try {
                     const data = JSON.parse(savedData);
                     selectedFitzpatrick = data.fitzpatrickType;
+                    fitzpatrickData = data;
                     
                     if (data.evaluationMethod === 'visual') {
                         // Restaurar selección visual
@@ -1256,6 +1383,7 @@
                             card.classList.add('selected');
                             showResults(data.fitzpatrickType);
                             enableNavigation();
+                            showSuccess('Datos Fitzpatrick restaurados exitosamente.');
                         }
                     } else if (data.evaluationMethod === 'questionnaire' && data.questionnaireScore !== null) {
                         // Cambiar a método cuestionario
@@ -1270,11 +1398,13 @@
                         
                         showResults(data.fitzpatrickType);
                         enableNavigation();
+                        showSuccess('Datos Fitzpatrick restaurados exitosamente.');
                     }
                     
                     console.log('Datos Fitzpatrick cargados exitosamente');
                 } catch (e) {
                     console.error('Error cargando datos Fitzpatrick:', e);
+                    showError('Error cargando datos guardados.');
                 }
             }
         }
@@ -1319,6 +1449,54 @@
             document.getElementById('nextBtn').style.opacity = '0.5';
         }
 
+        // Mostrar mensaje de error
+        function showError(message) {
+            const errorAlert = document.getElementById('error-alert');
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorAlert.classList.add('show');
+            
+            // Scroll to top to show error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                errorAlert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Mostrar mensaje de éxito
+        function showSuccess(message = null) {
+            const successAlert = document.getElementById('success-alert');
+            if (message) {
+                successAlert.innerHTML = `<strong>✅ ${message}</strong>`;
+            }
+            successAlert.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                successAlert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Mostrar mensaje de validación
+        function showValidationMessage() {
+            const validationMessage = document.getElementById('validation-message');
+            validationMessage.classList.add('show');
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                validationMessage.classList.remove('show');
+            }, 4000);
+        }
+
+        // Ocultar todos los mensajes
+        function hideMessages() {
+            document.getElementById('error-alert').classList.remove('show');
+            document.getElementById('success-alert').classList.remove('show');
+            document.getElementById('validation-message').classList.remove('show');
+        }
+
         // Función para ir a página anterior
         function previousPage() {
             saveProgress();
@@ -1327,13 +1505,12 @@
 
         // Función para ir a página siguiente
         function nextPage() {
-            if (!selectedFitzpatrick) {
-                alert('Por favor complete la evaluación de fototipo antes de continuar.');
+            if (!validateStep()) {
                 return;
             }
             
             // Guardar datos y continuar
-            saveProgress();
+            saveFitzpatrickData(selectedFitzpatrick, fitzpatrickData.evaluationMethod, fitzpatrickData.questionnaireScore);
             window.location.href = 'antecedentes.html';
         }
     </script>
