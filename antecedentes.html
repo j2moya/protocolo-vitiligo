@@ -345,7 +345,7 @@
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52,152,219,0.3);
         }
@@ -358,6 +358,23 @@
         .btn-secondary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(149,165,166,0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39,174,96,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         .navigation {
@@ -385,6 +402,40 @@
             background: #fff3cd;
             border-color: #ffc107;
             color: #856404;
+        }
+
+        .alert-error {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+            color: #721c24;
+            display: none;
+        }
+
+        .alert-error.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #155724;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .summary-box {
@@ -490,6 +541,16 @@
         <div class="antecedentes-container">
             <h2 class="section-title">Evaluación Integral de Antecedentes</h2>
             
+            <!-- Error Alert -->
+            <div id="error-alert" class="alert alert-error">
+                <strong>Error:</strong> <span id="error-message">Complete al menos algunos antecedentes relevantes antes de continuar.</span>
+            </div>
+
+            <!-- Success Alert -->
+            <div id="success-alert" class="success-message">
+                <strong>✅ Antecedentes guardados exitosamente.</strong>
+            </div>
+            
             <div class="alert alert-info">
                 <strong>Importante:</strong> Esta información nos ayuda a identificar factores de riesgo, posibles complicaciones y optimizar su tratamiento. Toda la información es estrictamente confidencial y está protegida por el secreto médico.
             </div>
@@ -546,35 +607,6 @@
                             <option value="mas_8">Más de 8 episodios</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Tipos más frecuentes:</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="resfrios">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Resfríos comunes</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="sinusitis">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Sinusitis</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="bronquitis">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Bronquitis</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="neumonia">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Neumonía</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Detalles de Infecciones Cutáneas -->
@@ -595,18 +627,6 @@
                                     <div class="checkbox-title">Herpes labial/genital</div>
                                 </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="verrugas">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Verrugas recurrentes</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="impetigo">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Impétigo/foliculitis</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -623,19 +643,6 @@
                             <option value="5-6">5-6 episodios</option>
                             <option value="mas_6">Más de 6 episodios</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label>¿Requiere antibióticos frecuentemente?</label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" name="antibioticos_urinarias" value="si">
-                                <span>Sí</span>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" name="antibioticos_urinarias" value="no">
-                                <span>No</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -694,32 +701,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>¿Afecta otras áreas además de manos?</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="hiperhidrosis_pies">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Pies</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="hiperhidrosis_axilas">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Axilas</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="hiperhidrosis_cara">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Cara/frente</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Sección Psicológica y Neurológica -->
+                <!-- Sección Psicológica -->
                 <div class="form-group" style="margin-top: 30px;">
                     <h4 style="color: #2c3e50; margin-bottom: 15px;">Aspectos Psicológicos y Neurológicos</h4>
                     <div class="checkbox-grid">
@@ -742,13 +726,6 @@
                             <div class="checkbox-content">
                                 <div class="checkbox-title">Estrés Crónico</div>
                                 <div class="checkbox-description">Períodos prolongados de estrés laboral, familiar o personal</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="trastornos_sueno">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Trastornos del Sueño</div>
-                                <div class="checkbox-description">Insomnio, apnea del sueño, sueño no reparador</div>
                             </div>
                         </div>
                     </div>
@@ -774,55 +751,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Síntomas físicos asociados:</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="palpitaciones">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Palpitaciones</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="sudoracion_ansiedad">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Sudoración excesiva</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="temblor">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Temblor</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="dificultad_respirar">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Dificultad para respirar</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>¿Recibe o ha recibido tratamiento?</label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" name="tratamiento_ansiedad" value="si_actual">
-                                <span>Sí, actualmente</span>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" name="tratamiento_ansiedad" value="si_pasado">
-                                <span>Sí, en el pasado</span>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" name="tratamiento_ansiedad" value="no">
-                                <span>No</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- Sección Endocrina y Metabólica -->
+                <!-- Sección Endocrina -->
                 <div class="form-group" style="margin-top: 30px;">
                     <h4 style="color: #2c3e50; margin-bottom: 15px;">Condiciones Endocrinas y Metabólicas</h4>
                     <div class="checkbox-grid">
@@ -847,13 +778,6 @@
                                 <div class="checkbox-description">Tipo 1, Tipo 2 o diabetes gestacional</div>
                             </div>
                         </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="sindrome_metabolico">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Síndrome Metabólico</div>
-                                <div class="checkbox-description">Resistencia a insulina, obesidad abdominal</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -873,21 +797,6 @@
                             <option value="armour">Armour Thyroid</option>
                             <option value="otro">Otro</option>
                             <option value="ninguno">No toma medicamento</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Dosis actual:</label>
-                        <input type="text" id="dosis_tiroides" placeholder="Ej: 100 mcg">
-                    </div>
-                    <div class="form-group">
-                        <label>¿Cuándo fue su último control de TSH?</label>
-                        <select id="ultimo_tsh">
-                            <option value="">Seleccione...</option>
-                            <option value="1-3_meses">1-3 meses</option>
-                            <option value="3-6_meses">3-6 meses</option>
-                            <option value="6-12_meses">6-12 meses</option>
-                            <option value="mas_12_meses">Más de 12 meses</option>
-                            <option value="nunca">Nunca me han hecho</option>
                         </select>
                     </div>
                 </div>
@@ -916,35 +825,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Tratamiento actual:</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="insulina">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Insulina</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="metformina">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Metformina</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="otros_antidiabeticos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Otros antidiabéticos</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="dieta_ejercicio">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Solo dieta y ejercicio</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Sección Alergias -->
@@ -958,7 +838,7 @@
                                 <div class="checkbox-description">Reacciones alérgicas a antibióticos, analgésicos u otros fármacos</div>
                             </div>
                         </div>
-                        <div class="checkbox-item" data-detail="alergias_alimentarias">
+                        <div class="checkbox-item">
                             <input type="checkbox" id="alergias_alimentos">
                             <div class="checkbox-content">
                                 <div class="checkbox-title">Alergias Alimentarias</div>
@@ -970,13 +850,6 @@
                             <div class="checkbox-content">
                                 <div class="checkbox-title">Alergias Ambientales</div>
                                 <div class="checkbox-description">Polen, ácaros, pelos de animales, polvo</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="alergias_contacto">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Dermatitis de Contacto</div>
-                                <div class="checkbox-description">Reacciones a metales, cosméticos, detergentes</div>
                             </div>
                         </div>
                     </div>
@@ -995,110 +868,10 @@
                                 </div>
                             </div>
                             <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_sulfonamidas">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Sulfonamidas</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
                                 <input type="checkbox" id="alergia_aines">
                                 <div class="checkbox-content">
                                     <div class="checkbox-title">AINEs (Ibuprofeno, Aspirina)</div>
                                 </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_otros_antibioticos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Otros antibióticos</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de reacción:</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="reaccion_cutanea">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Rash cutáneo</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="reaccion_respiratoria">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Dificultad respiratoria</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="reaccion_anafilaxia">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Anafilaxia (reacción severa)</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="reaccion_gastrointestinal">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Síntomas gastrointestinales</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Detalles de Alergias Alimentarias -->
-                <div class="detailed-section" id="detail_alergias_alimentarias">
-                    <h5>Detalles de Alergias Alimentarias:</h5>
-                    <div class="form-group">
-                        <label>Alimentos que le causan reacción:</label>
-                        <div class="checkbox-grid">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_frutos_secos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Frutos secos (nueces, almendras, etc.)</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_mariscos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Mariscos</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_lacteos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Lácteos</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_huevos">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Huevos</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_soja">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Soja</div>
-                                </div>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="alergia_gluten">
-                                <div class="checkbox-content">
-                                    <div class="checkbox-title">Gluten/Trigo</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>¿Lleva EpiPen o medicamento de emergencia?</label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" name="epipen" value="si">
-                                <span>Sí</span>
-                            </div>
-                            <div class="radio-item">
-                                <input type="radio" name="epipen" value="no">
-                                <span>No</span>
                             </div>
                         </div>
                     </div>
@@ -1144,10 +917,6 @@
                                 <label for="madre_autoinmune">Enfermedad autoinmune</label>
                             </div>
                         </div>
-                        <div class="form-group" style="margin-top: 10px;">
-                            <label style="font-size: 0.9em;">Edad actual/fallecimiento:</label>
-                            <input type="number" id="edad_madre" style="font-size: 0.9em; padding: 5px;" placeholder="Edad">
-                        </div>
                     </div>
 
                     <!-- Padre -->
@@ -1179,10 +948,6 @@
                                 <input type="checkbox" id="padre_autoinmune">
                                 <label for="padre_autoinmune">Enfermedad autoinmune</label>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin-top: 10px;">
-                            <label style="font-size: 0.9em;">Edad actual/fallecimiento:</label>
-                            <input type="number" id="edad_padre" style="font-size: 0.9em; padding: 5px;" placeholder="Edad">
                         </div>
                     </div>
 
@@ -1216,64 +981,32 @@
                                 <label for="hermanos_autoinmune">Enfermedad autoinmune</label>
                             </div>
                         </div>
-                        <div class="form-group" style="margin-top: 10px;">
-                            <label style="font-size: 0.9em;">Número de hermanos:</label>
-                            <input type="number" id="num_hermanos" style="font-size: 0.9em; padding: 5px;" placeholder="0" min="0">
-                        </div>
                     </div>
 
-                    <!-- Abuelos Maternos -->
+                    <!-- Abuelos -->
                     <div class="family-member">
                         <div class="family-icon">👴👵</div>
-                        <div class="family-title">Abuelos Maternos</div>
+                        <div class="family-title">Abuelos</div>
                         <div class="condition-list">
                             <div class="condition-item">
-                                <input type="checkbox" id="abuelos_m_vitiligo">
-                                <label for="abuelos_m_vitiligo">Vitiligo</label>
+                                <input type="checkbox" id="abuelos_vitiligo">
+                                <label for="abuelos_vitiligo">Vitiligo</label>
                             </div>
                             <div class="condition-item">
-                                <input type="checkbox" id="abuelos_m_hipotiroidismo">
-                                <label for="abuelos_m_hipotiroidismo">Hipotiroidismo</label>
+                                <input type="checkbox" id="abuelos_hipotiroidismo">
+                                <label for="abuelos_hipotiroidismo">Hipotiroidismo</label>
                             </div>
                             <div class="condition-item">
-                                <input type="checkbox" id="abuelos_m_canas">
-                                <label for="abuelos_m_canas">Canas prematuras</label>
+                                <input type="checkbox" id="abuelos_canas">
+                                <label for="abuelos_canas">Canas prematuras</label>
                             </div>
                             <div class="condition-item">
-                                <input type="checkbox" id="abuelos_m_diabetes">
-                                <label for="abuelos_m_diabetes">Diabetes</label>
+                                <input type="checkbox" id="abuelos_diabetes">
+                                <label for="abuelos_diabetes">Diabetes</label>
                             </div>
                             <div class="condition-item">
-                                <input type="checkbox" id="abuelos_m_autoinmune">
-                                <label for="abuelos_m_autoinmune">Enfermedad autoinmune</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Abuelos Paternos -->
-                    <div class="family-member">
-                        <div class="family-icon">👴👵</div>
-                        <div class="family-title">Abuelos Paternos</div>
-                        <div class="condition-list">
-                            <div class="condition-item">
-                                <input type="checkbox" id="abuelos_p_vitiligo">
-                                <label for="abuelos_p_vitiligo">Vitiligo</label>
-                            </div>
-                            <div class="condition-item">
-                                <input type="checkbox" id="abuelos_p_hipotiroidismo">
-                                <label for="abuelos_p_hipotiroidismo">Hipotiroidismo</label>
-                            </div>
-                            <div class="condition-item">
-                                <input type="checkbox" id="abuelos_p_canas">
-                                <label for="abuelos_p_canas">Canas prematuras</label>
-                            </div>
-                            <div class="condition-item">
-                                <input type="checkbox" id="abuelos_p_diabetes">
-                                <label for="abuelos_p_diabetes">Diabetes</label>
-                            </div>
-                            <div class="condition-item">
-                                <input type="checkbox" id="abuelos_p_autoinmune">
-                                <label for="abuelos_p_autoinmune">Enfermedad autoinmune</label>
+                                <input type="checkbox" id="abuelos_autoinmune">
+                                <label for="abuelos_autoinmune">Enfermedad autoinmune</label>
                             </div>
                         </div>
                     </div>
@@ -1306,72 +1039,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Detalles adicionales de antecedentes familiares -->
-                <div class="form-group" style="margin-top: 30px;">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px;">Detalles Específicos de Canas Prematuras</h4>
-                    <div class="alert alert-info">
-                        <strong>Definición:</strong> Canas antes de los 20 años en caucásicos, 25 años en asiáticos, 30 años en afrodescendientes.
-                    </div>
-                    <div class="checkbox-grid">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="canas_antes_20">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Familiares con canas antes de los 20 años</div>
-                                <div class="checkbox-description">Incluya a cualquier familiar directo</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="canas_multiples_familiares">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Múltiples familiares afectados</div>
-                                <div class="checkbox-description">3 o más familiares con canas prematuras</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px;">Enfermedades Autoinmunes Específicas en Familia</h4>
-                    <div class="checkbox-grid">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_lupus">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Lupus Eritematoso Sistémico</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_artritis_reumatoide">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Artritis Reumatoide</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_esclerosis_multiple">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Esclerosis Múltiple</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_psoriasis">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Psoriasis</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_enfermedad_crohn">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Enfermedad de Crohn</div>
-                            </div>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="fam_celiaca">
-                            <div class="checkbox-content">
-                                <div class="checkbox-title">Enfermedad Celíaca</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Summary Box -->
@@ -1382,17 +1049,98 @@
 
             <!-- Navigation -->
             <div class="navigation">
-                <button class="btn btn-secondary" onclick="window.location.href='fitzpatrick.html'">← Anterior</button>
-                <button class="btn btn-primary" onclick="window.location.href='vitiligo_actual.html'">Siguiente →</button>
-                <button class="btn btn-primary" onclick="generateSummary()" style="margin-left: 20px;">Generar Resumen</button>
+                <button class="btn btn-secondary" onclick="previousPage()">← Fitzpatrick</button>
+                <button class="btn btn-success" onclick="saveProgress()" style="margin-right: 10px;">💾 Guardar</button>
+                <button class="btn btn-primary" onclick="generateSummary()" style="margin-right: 10px;">📊 Generar Resumen</button>
+                <button class="btn btn-primary" onclick="nextPage()">Vitiligo Actual →</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Handle checkbox interactions and show/hide detailed sections
+        let formData = {};
+        let antecedentesData = {};
+
+        // Inicializar cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
-            // Add event listeners to checkboxes that have detail sections
+            initializeInteractions();
+            loadPreviousFormData();
+            loadSavedAntecedentes();
+        });
+
+        // Cargar datos de pasos anteriores
+        function loadPreviousFormData() {
+            const savedData = localStorage.getItem('vitiligoFormData');
+            if (savedData) {
+                try {
+                    formData = JSON.parse(savedData);
+                    console.log('Datos anteriores cargados:', formData);
+                } catch (e) {
+                    console.error('Error cargando datos anteriores:', e);
+                    showError('Error cargando datos de pasos anteriores.');
+                }
+            } else {
+                console.warn('No se encontraron datos anteriores. Redirigiendo...');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+        }
+
+        // Cargar antecedentes guardados
+        function loadSavedAntecedentes() {
+            const savedAntecedentes = localStorage.getItem('antecedentesData');
+            if (savedAntecedentes) {
+                try {
+                    antecedentesData = JSON.parse(savedAntecedentes);
+                    restoreFormData(antecedentesData);
+                    showSuccess('Antecedentes restaurados exitosamente.');
+                    console.log('Antecedentes cargados:', antecedentesData);
+                } catch (e) {
+                    console.error('Error cargando antecedentes:', e);
+                }
+            }
+        }
+
+        // Restaurar datos del formulario
+        function restoreFormData(data) {
+            Object.keys(data).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = data[key];
+                        if (element.checked) {
+                            const item = element.closest('.checkbox-item');
+                            if (item) item.classList.add('checked');
+                        }
+                    } else if (element.type === 'radio') {
+                        if (data[key] === element.value) {
+                            element.checked = true;
+                            const item = element.closest('.radio-item');
+                            if (item) item.classList.add('selected');
+                        }
+                    } else {
+                        element.value = data[key];
+                    }
+                }
+            });
+
+            // Mostrar secciones de detalles si corresponde
+            document.querySelectorAll('.checkbox-item[data-detail]').forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                if (checkbox && checkbox.checked) {
+                    const detailId = item.getAttribute('data-detail');
+                    const detailSection = document.getElementById(`detail_${detailId}`);
+                    if (detailSection) {
+                        detailSection.classList.add('show');
+                    }
+                }
+            });
+        }
+
+        // Inicializar interacciones
+        function initializeInteractions() {
+            // Event listeners para checkboxes con secciones de detalle
             const checkboxesWithDetails = document.querySelectorAll('.checkbox-item[data-detail]');
             
             checkboxesWithDetails.forEach(item => {
@@ -1415,7 +1163,7 @@
                 });
             });
 
-            // Add event listeners to all checkboxes for visual feedback
+            // Event listeners para todos los checkboxes
             const allCheckboxItems = document.querySelectorAll('.checkbox-item');
             allCheckboxItems.forEach(item => {
                 const checkbox = item.querySelector('input[type="checkbox"]');
@@ -1430,24 +1178,80 @@
                 }
             });
 
-            // Add event listeners to radio buttons
+            // Event listeners para radio buttons
             const radioItems = document.querySelectorAll('.radio-item');
             radioItems.forEach(item => {
                 const radio = item.querySelector('input[type="radio"]');
                 radio.addEventListener('change', function() {
-                    // Remove selected class from all radio items with same name
+                    // Remover clase selected de todos los radio items con mismo nombre
                     const name = this.name;
                     document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
                         r.closest('.radio-item').classList.remove('selected');
                     });
-                    // Add selected class to current item
+                    // Agregar clase selected al item actual
                     item.classList.add('selected');
                 });
             });
-        });
+        }
 
+        // Recopilar datos del formulario
+        function collectFormData() {
+            const collectedData = {};
+            
+            // Recopilar todos los inputs
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    if (input.checked) {
+                        collectedData[input.id] = true;
+                    }
+                } else if (input.type === 'radio') {
+                    if (input.checked) {
+                        collectedData[input.name] = input.value;
+                    }
+                } else if (input.value.trim()) {
+                    collectedData[input.id] = input.value.trim();
+                }
+            });
+
+            return collectedData;
+        }
+
+        // Guardar antecedentes
+        function saveAntecedentesData() {
+            antecedentesData = collectFormData();
+            
+            // Combinar con datos anteriores
+            const combinedData = {
+                ...formData,
+                ...antecedentesData
+            };
+            
+            localStorage.setItem('vitiligoFormData', JSON.stringify(combinedData));
+            localStorage.setItem('antecedentesData', JSON.stringify(antecedentesData));
+            
+            console.log('Antecedentes guardados:', antecedentesData);
+            return antecedentesData;
+        }
+
+        // Validar datos mínimos
+        function validateMinimumData() {
+            const data = collectFormData();
+            const keys = Object.keys(data);
+            
+            // Al menos debe tener algunas respuestas
+            if (keys.length < 3) {
+                showError('Complete al menos algunos antecedentes relevantes antes de continuar.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Generar resumen
         function generateSummary() {
-            const riskFactors = calculateRiskFactors();
+            const data = collectFormData();
+            const riskFactors = calculateRiskFactors(data);
             const riskLevel = calculateOverallRisk(riskFactors);
             
             let summaryHtml = `
@@ -1490,94 +1294,65 @@
 
             document.getElementById('riskSummary').innerHTML = summaryHtml;
             document.getElementById('summaryBox').scrollIntoView({ behavior: 'smooth' });
+            
+            // Guardar datos automáticamente al generar resumen
+            saveAntecedentesData();
+            showSuccess('Resumen generado y datos guardados.');
         }
 
-        function calculateRiskFactors() {
+        // Calcular factores de riesgo
+        function calculateRiskFactors(data) {
             const personal = [];
             const family = [];
 
-            // Check personal risk factors
-            if (document.getElementById('inf_respiratorias').checked) {
-                personal.push('Infecciones respiratorias recurrentes');
-            }
-            if (document.getElementById('inf_cutaneas').checked) {
-                personal.push('Infecciones cutáneas frecuentes');
-            }
-            if (document.getElementById('manos_sudorosas').checked) {
-                personal.push('Hiperhidrosis palmar');
-            }
-            if (document.getElementById('ansiedad_miedo').checked) {
-                personal.push('Ansiedad/miedo escénico');
-            }
-            if (document.getElementById('hipotiroidismo').checked) {
-                personal.push('Hipotiroidismo');
-            }
-            if (document.getElementById('diabetes').checked) {
-                personal.push('Diabetes');
-            }
-            if (document.getElementById('alergias_medicamentosas').checked) {
-                personal.push('Alergias medicamentosas');
-            }
-            if (document.getElementById('alergias_alimentos').checked) {
-                personal.push('Alergias alimentarias');
-            }
-            if (document.getElementById('alopecia_areata').checked) {
-                personal.push('Alopecia areata');
-            }
-            if (document.getElementById('psoriasis').checked) {
-                personal.push('Psoriasis');
-            }
+            // Factores personales
+            if (data.inf_respiratorias) personal.push('Infecciones respiratorias recurrentes');
+            if (data.inf_cutaneas) personal.push('Infecciones cutáneas frecuentes');
+            if (data.manos_sudorosas) personal.push('Hiperhidrosis palmar');
+            if (data.ansiedad_miedo) personal.push('Ansiedad/miedo escénico');
+            if (data.hipotiroidismo) personal.push('Hipotiroidismo');
+            if (data.diabetes) personal.push('Diabetes');
+            if (data.alergias_medicamentosas) personal.push('Alergias medicamentosas');
+            if (data.alopecia_areata) personal.push('Alopecia areata');
+            if (data.psoriasis) personal.push('Psoriasis');
 
-            // Check family risk factors
-            const familyConditions = [
-                { id: 'madre_vitiligo', text: 'Vitiligo en madre' },
-                { id: 'padre_vitiligo', text: 'Vitiligo en padre' },
-                { id: 'hermanos_vitiligo', text: 'Vitiligo en hermanos' },
-                { id: 'madre_hipotiroidismo', text: 'Hipotiroidismo en madre' },
-                { id: 'padre_hipotiroidismo', text: 'Hipotiroidismo en padre' },
-                { id: 'madre_canas', text: 'Canas prematuras en madre' },
-                { id: 'padre_canas', text: 'Canas prematuras en padre' },
-                { id: 'hermanos_canas', text: 'Canas prematuras en hermanos' },
-                { id: 'madre_autoinmune', text: 'Enfermedades autoinmunes en madre' },
-                { id: 'padre_autoinmune', text: 'Enfermedades autoinmunes en padre' },
-                { id: 'abuelos_m_vitiligo', text: 'Vitiligo en abuelos maternos' },
-                { id: 'abuelos_p_vitiligo', text: 'Vitiligo en abuelos paternos' }
-            ];
-
-            familyConditions.forEach(condition => {
-                const element = document.getElementById(condition.id);
-                if (element && element.checked) {
-                    family.push(condition.text);
-                }
-            });
+            // Factores familiares
+            if (data.madre_vitiligo) family.push('Vitiligo en madre');
+            if (data.padre_vitiligo) family.push('Vitiligo en padre');
+            if (data.hermanos_vitiligo) family.push('Vitiligo en hermanos');
+            if (data.madre_hipotiroidismo) family.push('Hipotiroidismo en madre');
+            if (data.padre_hipotiroidismo) family.push('Hipotiroidismo en padre');
+            if (data.madre_canas) family.push('Canas prematuras en madre');
+            if (data.padre_canas) family.push('Canas prematuras en padre');
+            if (data.hermanos_canas) family.push('Canas prematuras en hermanos');
+            if (data.madre_autoinmune) family.push('Enfermedades autoinmunes en madre');
+            if (data.padre_autoinmune) family.push('Enfermedades autoinmunes en padre');
+            if (data.abuelos_vitiligo) family.push('Vitiligo en abuelos');
 
             return { personal, family };
         }
 
+        // Calcular riesgo general
         function calculateOverallRisk(riskFactors) {
             let riskScore = 0;
 
-            // Weight personal factors
+            // Peso de factores personales
             riskScore += riskFactors.personal.length * 1;
 
-            // Weight family factors more heavily
+            // Peso de factores familiares (más importantes)
             riskScore += riskFactors.family.length * 2;
 
-            // Special high-risk factors
-            if (document.getElementById('madre_vitiligo').checked || 
-                document.getElementById('padre_vitiligo').checked) {
-                riskScore += 3; // Direct parent with vitiligo
+            // Factores de alto riesgo especiales
+            const data = collectFormData();
+            if (data.madre_vitiligo || data.padre_vitiligo) {
+                riskScore += 3; // Padres con vitiligo
             }
 
-            if (document.getElementById('hermanos_vitiligo').checked) {
-                riskScore += 2; // Sibling with vitiligo
+            if (data.hermanos_vitiligo) {
+                riskScore += 2; // Hermanos con vitiligo
             }
 
-            if (document.getElementById('canas_multiples_familiares').checked) {
-                riskScore += 2; // Multiple family members with premature graying
-            }
-
-            // Determine risk level
+            // Determinar nivel de riesgo
             if (riskScore <= 2) {
                 return {
                     class: 'low-risk',
@@ -1599,39 +1374,67 @@
             }
         }
 
+        // Guardar progreso
+        function saveProgress() {
+            const saved = saveAntecedentesData();
+            if (saved) {
+                showSuccess('Antecedentes guardados exitosamente.');
+            } else {
+                showError('Error al guardar antecedentes.');
+            }
+        }
+
+        // Mostrar mensaje de error
+        function showError(message) {
+            const errorAlert = document.getElementById('error-alert');
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.textContent = message;
+            errorAlert.classList.add('show');
+            
+            // Scroll al top para mostrar error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                errorAlert.classList.remove('show');
+            }, 5000);
+        }
+
+        // Mostrar mensaje de éxito
+        function showSuccess(message = null) {
+            const successAlert = document.getElementById('success-alert');
+            if (message) {
+                successAlert.innerHTML = `<strong>✅ ${message}</strong>`;
+            }
+            successAlert.classList.add('show');
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                successAlert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Ocultar mensajes
+        function hideMessages() {
+            document.getElementById('error-alert').classList.remove('show');
+            document.getElementById('success-alert').classList.remove('show');
+        }
+
+        // Función para ir a página anterior
         function previousPage() {
-            // Logic to go to previous page (Fitzpatrick)
-            window.history.back();
+            saveProgress();
+            window.location.href = 'fitzpatrick.html';
         }
 
+        // Función para ir a página siguiente
         function nextPage() {
-            // Logic to go to next page (Current Vitiligo)
-            alert('Datos guardados. Continuando al siguiente paso...');
-            // Here you would typically save data and redirect
-        }
-
-        function saveData() {
-            // Function to collect and save all form data
-            const formData = new FormData();
+            if (!validateMinimumData()) {
+                return;
+            }
             
-            // Collect all form inputs
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    if (input.checked) {
-                        formData.append(input.id || input.name, input.value || 'checked');
-                    }
-                } else {
-                    if (input.value) {
-                        formData.append(input.id || input.name, input.value);
-                    }
-                }
-            });
-
-            // Here you would send data to server or store locally
-            console.log('Form data collected:', Object.fromEntries(formData));
-            
-            return Object.fromEntries(formData);
+            // Guardar datos y continuar
+            saveAntecedentesData();
+            window.location.href = 'vitiligo_actual.html';
         }
     </script>
 </body>
