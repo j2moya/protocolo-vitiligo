@@ -192,6 +192,37 @@
             line-height: 1.5;
         }
 
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-state {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
         .risk-assessment {
             background: linear-gradient(135deg, #e8f6fd, #ffffff);
             border: 2px solid #3498db;
@@ -309,6 +340,33 @@
             opacity: 0.9;
         }
 
+        .fitzpatrick-display {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .fitzpatrick-type {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .fitzpatrick-description {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .fitzpatrick-protocol {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
         .timeline {
             background: linear-gradient(135deg, #74b9ff, #0984e3);
             color: white;
@@ -389,33 +447,6 @@
             font-size: 1.1em;
         }
 
-        .fitzpatrick-display {
-            background: linear-gradient(135deg, #fd79a8, #e84393);
-            color: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .fitzpatrick-type {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .fitzpatrick-description {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-
-        .fitzpatrick-protocol {
-            background: rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
         .contact-section {
             background: #2c3e50;
             color: white;
@@ -466,12 +497,17 @@
             margin: 10px;
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-primary {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52,152,219,0.3);
         }
@@ -481,7 +517,7 @@
             color: white;
         }
 
-        .btn-success:hover {
+        .btn-success:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(39,174,96,0.3);
         }
@@ -491,7 +527,7 @@
             color: white;
         }
 
-        .btn-info:hover {
+        .btn-info:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(23,162,184,0.3);
         }
@@ -519,6 +555,12 @@
             background: #fff3cd;
             border-color: #ffc107;
             color: #856404;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            border-color: #e74c3c;
+            color: #721c24;
         }
 
         .footer {
@@ -643,8 +685,22 @@
             </div>
         </div>
 
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <h3>Generando su reporte personalizado...</h3>
+            <p>Por favor espere mientras procesamos su información</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state" style="display: none;">
+            <h3>❌ Error al cargar el reporte</h3>
+            <p id="errorMessage">Ha ocurrido un error inesperado.</p>
+            <button class="btn btn-primary" onclick="location.reload()">🔄 Reintentar</button>
+        </div>
+
         <!-- Main Report Container -->
-        <div class="reporte-container">
+        <div class="reporte-container" id="reportContainer" style="display: none;">
             <div class="report-header">
                 <div class="report-title">Reporte Médico Personalizado</div>
                 <div class="report-subtitle">Protocolo Integral de Vitiligo</div>
@@ -748,10 +804,11 @@
             <!-- Action Buttons -->
             <div class="actions print-hidden">
                 <h3 style="margin-bottom: 20px; color: #2c3e50;">Acciones Disponibles</h3>
-                <button class="btn btn-success" onclick="scheduleConsultation()">📅 Agendar Consulta</button>
-                <button class="btn btn-primary" onclick="downloadPDF()">📄 Descargar PDF</button>
-                <button class="btn btn-info" onclick="sendByEmail()">📧 Enviar por Email</button>
+                <button class="btn btn-success" onclick="scheduleConsultation()" id="btnSchedule">📅 Agendar Consulta</button>
+                <button class="btn btn-primary" onclick="downloadPDF()" id="btnPDF">📄 Descargar PDF</button>
+                <button class="btn btn-info" onclick="sendByEmail()" id="btnEmail">📧 Enviar por Email</button>
                 <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir Reporte</button>
+                <button class="btn btn-info" onclick="saveToCloud()" id="btnSave">☁️ Guardar en la Nube</button>
             </div>
 
             <!-- Important Alerts -->
@@ -780,36 +837,181 @@
     <script>
         let reportData = {};
         let allPatientData = {};
+        let currentEvaluationId = null;
+        let currentReportId = null;
+
+        // API Base URL
+        const API_BASE = '/pidasalud/protocolo-vitiligo/api.php';
 
         // Inicializar cuando se carga la página
         document.addEventListener('DOMContentLoaded', function() {
-            loadAllData();
-            generateReport();
-            setReportDate();
+            initializeReport();
         });
 
-        // Cargar todos los datos del protocolo
-        function loadAllData() {
+        // Inicializar reporte
+        async function initializeReport() {
             try {
-                // Cargar datos combinados si existen
-                const combinedData = localStorage.getItem('reporteCompleto');
-                if (combinedData) {
-                    allPatientData = JSON.parse(combinedData);
+                showLoadingState();
+                
+                // Verificar si hay datos en localStorage como fallback
+                const localData = getLocalStorageData();
+                
+                if (localData && Object.keys(localData).length > 0) {
+                    // Usar datos locales si están disponibles
+                    allPatientData = localData;
+                    await generateReportFromData();
                 } else {
-                    // Cargar datos individuales como respaldo
-                    allPatientData = {
-                        datosBasicos: JSON.parse(localStorage.getItem('datosBasicos') || '{}'),
-                        fitzpatrick: JSON.parse(localStorage.getItem('fitzpatrickData') || '{}'),
-                        antecedentes: JSON.parse(localStorage.getItem('antecedentesData') || '{}'),
-                        vitiligoActual: JSON.parse(localStorage.getItem('vitiligoActualData') || '{}'),
-                        capacidadInversion: JSON.parse(localStorage.getItem('capacidadInversionData') || '{}')
-                    };
+                    // Intentar cargar desde el servidor
+                    await loadDataFromServer();
                 }
                 
-                console.log('Datos cargados:', allPatientData);
             } catch (error) {
-                console.error('Error cargando datos:', error);
-                showDataError();
+                console.error('Error inicializando reporte:', error);
+                showErrorState('Error al cargar los datos del reporte. ' + error.message);
+            }
+        }
+
+        // Mostrar estado de carga
+        function showLoadingState() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('reportContainer').style.display = 'none';
+        }
+
+        // Mostrar estado de error
+        function showErrorState(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('reportContainer').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Mostrar reporte
+        function showReport() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('reportContainer').style.display = 'block';
+        }
+
+        // Obtener datos de localStorage como fallback
+        function getLocalStorageData() {
+            try {
+                const combinedData = localStorage.getItem('reporteCompleto');
+                if (combinedData) {
+                    return JSON.parse(combinedData);
+                }
+                
+                // Cargar datos individuales como último recurso
+                return {
+                    datosBasicos: JSON.parse(localStorage.getItem('datosBasicos') || '{}'),
+                    fitzpatrick: JSON.parse(localStorage.getItem('fitzpatrickData') || '{}'),
+                    antecedentes: JSON.parse(localStorage.getItem('antecedentesData') || '{}'),
+                    vitiligoActual: JSON.parse(localStorage.getItem('vitiligoActualData') || '{}'),
+                    capacidadInversion: JSON.parse(localStorage.getItem('capacidadInversionData') || '{}')
+                };
+            } catch (error) {
+                console.error('Error cargando datos locales:', error);
+                return {};
+            }
+        }
+
+        // Cargar datos desde el servidor
+        async function loadDataFromServer() {
+            try {
+                const response = await fetch(`${API_BASE}/evaluacion/cargar`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    throw new Error('No se pudieron cargar los datos del servidor');
+                }
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    allPatientData = result.evaluacion;
+                    currentEvaluationId = result.evaluacion.evaluacion.id;
+                    await generateReportFromData();
+                } else {
+                    throw new Error(result.error || 'Error desconocido');
+                }
+                
+            } catch (error) {
+                // Si falla el servidor, intentar con datos locales
+                const localData = getLocalStorageData();
+                if (localData && Object.keys(localData).length > 0) {
+                    allPatientData = localData;
+                    await generateReportFromData();
+                    showAlert('Datos cargados desde cache local. Algunos datos podrían no estar actualizados.', 'warning');
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+        // Generar reporte desde los datos
+        async function generateReportFromData() {
+            try {
+                // Generar reporte en el servidor si es posible
+                await generateServerReport();
+                
+                // Generar contenido del reporte
+                setReportDate();
+                generatePatientSummary();
+                generateFitzpatrickDisplay();
+                generateRiskAssessment();
+                generateCurrentCondition();
+                generateTreatmentPlan();
+                generateInvestmentBreakdown();
+                generateTimeline();
+                generateRecommendations();
+                generateAlerts();
+                
+                showReport();
+                
+            } catch (error) {
+                console.error('Error generando reporte:', error);
+                // Continuar con generación local
+                setReportDate();
+                generatePatientSummary();
+                generateFitzpatrickDisplay();
+                generateRiskAssessment();
+                generateCurrentCondition();
+                generateTreatmentPlan();
+                generateInvestmentBreakdown();
+                generateTimeline();
+                generateRecommendations();
+                generateAlerts();
+                showReport();
+            }
+        }
+
+        // Generar reporte en el servidor
+        async function generateServerReport() {
+            try {
+                const response = await fetch(`${API_BASE}/reporte/generar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        evaluacion_id: currentEvaluationId
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        currentReportId = result.reporte_id;
+                        if (result.datos) {
+                            allPatientData = result.datos;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log('Reporte del servidor no disponible, usando datos locales');
             }
         }
 
@@ -827,24 +1029,11 @@
             document.getElementById('reportDate').textContent = `Generado el: ${dateString}`;
         }
 
-        // Generar reporte completo
-        function generateReport() {
-            generatePatientSummary();
-            generateFitzpatrickDisplay();
-            generateRiskAssessment();
-            generateCurrentCondition();
-            generateTreatmentPlan();
-            generateInvestmentBreakdown();
-            generateTimeline();
-            generateRecommendations();
-            generateAlerts();
-        }
-
         // Generar resumen del paciente
         function generatePatientSummary() {
-            const datos = allPatientData.datosBasicos || {};
-            const capacidad = allPatientData.capacidadInversion || {};
-            const vitiligo = allPatientData.vitiligoActual || {};
+            const datos = allPatientData.datosBasicos || allPatientData.datos_basicos || {};
+            const capacidad = allPatientData.capacidadInversion || allPatientData.capacidad_inversion || {};
+            const vitiligo = allPatientData.vitiligoActual || allPatientData.vitiligo_actual || {};
             
             const summaryHtml = `
                 <div class="summary-card">
@@ -876,9 +1065,12 @@
                     </div>
                 </div>
                 <div class="summary-card">
-                    <div class="card-title">Factores de Riesgo</div>
+                    <div class="card-title">Estado del Tratamiento</div>
                     <div class="card-content">
-                        ${generateRiskFactorsList()}
+                        <strong>Evaluación:</strong> Completada ✅<br>
+                        <strong>Reporte:</strong> Generado ✅<br>
+                        <strong>Siguiente Paso:</strong> Agendar consulta<br>
+                        <strong>Urgencia:</strong> ${getUrgencyLevel(capacidad.prioridad_tratamiento)}
                     </div>
                 </div>
             `;
@@ -888,8 +1080,8 @@
 
         // Generar display de Fitzpatrick
         function generateFitzpatrickDisplay() {
-            const fitzpatrick = allPatientData.fitzpatrick || {};
-            const fitzType = fitzpatrick.fitzpatrick || fitzpatrick.fitzpatrickType || 'No evaluado';
+            const fitzpatrick = allPatientData.fitzpatrick || allPatientData.fitzpatrick_data || {};
+            const fitzType = fitzpatrick.fitzpatrick_type || fitzpatrick.fitzpatrick || 'No evaluado';
             
             const fitzData = getFitzpatrickData(fitzType);
             
@@ -926,7 +1118,7 @@
 
         // Generar condición actual
         function generateCurrentCondition() {
-            const vitiligo = allPatientData.vitiligoActual || {};
+            const vitiligo = allPatientData.vitiligoActual || allPatientData.vitiligo_actual || {};
             
             const html = `
                 <div class="patient-summary">
@@ -1089,7 +1281,194 @@
             }
         }
 
-        // Funciones auxiliares para obtener datos
+        // Funciones de acción mejoradas
+        async function scheduleConsultation() {
+            const btn = document.getElementById('btnSchedule');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Procesando...';
+                
+                const datos = allPatientData.datosBasicos || allPatientData.datos_basicos || {};
+                const message = `Hola Dr. Moya, he completado la evaluación de Vitiligo y me gustaría agendar una consulta.
+
+Mis datos:
+- Nombre: ${datos.nombre || 'No especificado'}
+- Email: ${datos.email || 'No especificado'}
+- País: ${(allPatientData.capacidadInversion || allPatientData.capacidad_inversion || {}).pais_residencia || 'No especificado'}
+- ID de Evaluación: ${currentEvaluationId || 'Local'}
+
+¿Cuándo podríamos programar la primera consulta?`;
+
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/13055550123?text=${encodedMessage}`, '_blank');
+                
+                showAlert('Redirigiendo a WhatsApp...', 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al abrir WhatsApp', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function downloadPDF() {
+            const btn = document.getElementById('btnPDF');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Generando PDF...';
+                
+                if (currentReportId) {
+                    // Intentar generar PDF en el servidor
+                    const response = await fetch(`${API_BASE}/reporte/pdf?reporte_id=${currentReportId}`, {
+                        credentials: 'include'
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.pdf_url) {
+                            window.open(result.pdf_url, '_blank');
+                            showAlert('PDF generado exitosamente', 'success');
+                            return;
+                        }
+                    }
+                }
+                
+                // Fallback: usar impresión del navegador
+                window.print();
+                showAlert('Use Ctrl+P o Cmd+P para guardar como PDF', 'info');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                window.print();
+                showAlert('Fallback: Use la función de impresión', 'warning');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function sendByEmail() {
+            const btn = document.getElementById('btnEmail');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Enviando...';
+                
+                if (currentReportId) {
+                    // Intentar envío desde el servidor
+                    const response = await fetch(`${API_BASE}/reporte/enviar-email`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            reporte_id: currentReportId
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            showAlert('Reporte enviado por email exitosamente', 'success');
+                            return;
+                        }
+                    }
+                }
+                
+                // Fallback: abrir cliente de email
+                const datos = allPatientData.datosBasicos || allPatientData.datos_basicos || {};
+                const subject = `Reporte de Evaluación Vitiligo - ${datos.nombre || 'Paciente'}`;
+                const body = `Adjunto mi reporte completo de evaluación de Vitiligo.
+
+Por favor revise y confirme recepción para proceder con el agendamiento de consulta.
+
+ID de Evaluación: ${currentEvaluationId || 'Local'}
+
+Saludos cordiales.`;
+
+                window.open(`mailto:info@drmoya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+                showAlert('Cliente de email abierto', 'info');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al enviar email', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function saveToCloud() {
+            const btn = document.getElementById('btnSave');
+            const originalText = btn.textContent;
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = '⏳ Guardando...';
+                
+                // Intentar guardar en el servidor
+                const response = await fetch(`${API_BASE}/evaluacion/guardar-paso`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        paso: 'reporte_completo',
+                        datos: allPatientData
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        showAlert('Datos guardados en la nube exitosamente', 'success');
+                        return;
+                    }
+                }
+                
+                // Fallback: guardar en localStorage
+                localStorage.setItem('reporteCompleto', JSON.stringify(allPatientData));
+                localStorage.setItem('reporteFecha', new Date().toISOString());
+                showAlert('Datos guardados localmente como respaldo', 'warning');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                localStorage.setItem('reporteCompleto', JSON.stringify(allPatientData));
+                showAlert('Error del servidor - datos guardados localmente', 'warning');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        // Función auxiliar para mostrar alertas
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.style.maxWidth = '400px';
+            alertDiv.innerHTML = message;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Funciones auxiliares para obtener datos (implementar todas las funciones necesarias)
         function getTimeDescription(time) {
             const descriptions = {
                 'menos_3m': 'Menos de 3 meses',
@@ -1113,17 +1492,17 @@
         }
 
         function getTotalDLQI(vitiligo) {
-            if (vitiligo.dlqiScores) {
-                return Object.values(vitiligo.dlqiScores).reduce((sum, score) => sum + score, 0);
+            if (vitiligo.dlqiScores || vitiligo.dlqi_scores) {
+                const scores = vitiligo.dlqiScores || vitiligo.dlqi_scores;
+                return Object.values(scores).reduce((sum, score) => sum + (parseInt(score) || 0), 0);
             }
             return vitiligo.dlqi_total || '0';
         }
 
         function calculateInvestmentLevel() {
-            const capacidad = allPatientData.capacidadInversion || {};
+            const capacidad = allPatientData.capacidadInversion || allPatientData.capacidad_inversion || {};
             let score = 0;
 
-            // Evaluar factores de inversión
             const monthly = capacidad.monto_mensual_sostenible;
             if (monthly === 'mas_3000' || monthly === '2000_3000') score += 3;
             else if (monthly === '1000_2000' || monthly === '500_1000') score += 2;
@@ -1134,36 +1513,28 @@
             else if (immediate === '2500_5000' || immediate === '1000_2500') score += 2;
             else if (immediate === '500_1000') score += 1;
 
-            if (score >= 5) return 3; // Premium
-            else if (score >= 3) return 2; // Integral
-            else return 1; // Esencial
+            if (score >= 5) return 3;
+            else if (score >= 3) return 2;
+            else return 1;
         }
 
         function calculateOverallRisk() {
             let riskScore = 0;
             const antecedentes = allPatientData.antecedentes || {};
-            const vitiligo = allPatientData.vitiligoActual || {};
-            const datos = allPatientData.datosBasicos || {};
+            const vitiligo = allPatientData.vitiligoActual || allPatientData.vitiligo_actual || {};
+            const datos = allPatientData.datosBasicos || allPatientData.datos_basicos || {};
 
-            // Factor edad
             if (datos.edad < 20) riskScore += 2;
             else if (datos.edad < 30) riskScore += 1;
 
-            // Factor progresión
             const progression = vitiligo.progresion_selected || vitiligo.progresion;
             if (progression === 'rapida') riskScore += 3;
             else if (progression === 'lenta') riskScore += 2;
 
-            // Factor VASI
             const vasi = parseFloat(vitiligo.vasi_total || 0);
             if (vasi > 25) riskScore += 3;
             else if (vasi > 10) riskScore += 2;
             else if (vasi > 5) riskScore += 1;
-
-            // Antecedentes familiares (aproximación)
-            if (Object.keys(antecedentes).some(key => key.includes('fam_'))) {
-                riskScore += 2;
-            }
 
             if (riskScore <= 3) return 'low';
             else if (riskScore <= 7) return 'medium';
@@ -1216,6 +1587,58 @@
                 }
             };
             return data[level];
+        }
+
+        // Implementar todas las demás funciones auxiliares necesarias...
+        function getInvestmentLevelDescription(level) {
+            const descriptions = {
+                1: 'Esencial - Presupuesto Limitado',
+                2: 'Integral - Inversión Moderada',
+                3: 'Premium - Inversión Completa'
+            };
+            return descriptions[level];
+        }
+
+        function getAmountDescription(amount) {
+            const descriptions = {
+                '0_100': '$0 - $100',
+                '100_300': '$100 - $300',
+                '300_500': '$300 - $500',
+                '500_1000': '$500 - $1,000',
+                '1000_2500': '$1,000 - $2,500',
+                '2500_5000': '$2,500 - $5,000',
+                '5000_10000': '$5,000 - $10,000',
+                'mas_10000': 'Más de $10,000',
+                '0_50': '$0 - $50',
+                '50_100': '$50 - $100',
+                '100_200': '$100 - $200',
+                '200_500': '$200 - $500',
+                '500_1000': '$500 - $1,000',
+                '1000_2000': '$1,000 - $2,000',
+                '2000_3000': '$2,000 - $3,000',
+                'mas_3000': 'Más de $3,000'
+            };
+            return descriptions[amount] || 'No especificado';
+        }
+
+        function getPriorityDescription(priority) {
+            const descriptions = {
+                'baja': 'Baja prioridad',
+                'media': 'Prioridad media',
+                'alta': 'Alta prioridad',
+                'urgente': 'Urgente'
+            };
+            return descriptions[priority] || 'No especificado';
+        }
+
+        function getUrgencyLevel(priority) {
+            const levels = {
+                'baja': '🟢 Baja',
+                'media': '🟡 Media',
+                'alta': '🟠 Alta',
+                'urgente': '🔴 Urgente'
+            };
+            return levels[priority] || '⚪ No especificado';
         }
 
         function getTreatmentPlanData(level) {
@@ -1392,8 +1815,8 @@
 
         function getImportantAlerts() {
             const alerts = [];
-            const vitiligo = allPatientData.vitiligoActual || {};
-            const antecedentes = allPatientData.antecedentes || {};
+            const vitiligo = allPatientData.vitiligoActual || allPatientData.vitiligo_actual || {};
+            const capacidad = allPatientData.capacidadInversion || allPatientData.capacidad_inversion || {};
             
             // Alerta por progresión rápida
             if (vitiligo.progresion === 'rapida' || vitiligo.progresion_selected === 'rapida') {
@@ -1424,6 +1847,15 @@
                 });
             }
 
+            // Alerta por prioridad urgente
+            if (capacidad.prioridad_tratamiento === 'urgente') {
+                alerts.push({
+                    type: 'error',
+                    title: '🚨 Tratamiento Urgente',
+                    message: 'Ha indicado que el tratamiento es urgente. Recomendamos agendar consulta inmediatamente.'
+                });
+            }
+
             // Alerta positiva
             alerts.push({
                 type: 'success',
@@ -1432,53 +1864,6 @@
             });
 
             return alerts;
-        }
-
-        // Funciones auxiliares adicionales
-        function getInvestmentLevelDescription(level) {
-            const descriptions = {
-                1: 'Esencial - Presupuesto Limitado',
-                2: 'Integral - Inversión Moderada',
-                3: 'Premium - Inversión Completa'
-            };
-            return descriptions[level];
-        }
-
-        function getAmountDescription(amount) {
-            const descriptions = {
-                '0_100': '$0 - $100',
-                '100_300': '$100 - $300',
-                '300_500': '$300 - $500',
-                '500_1000': '$500 - $1,000',
-                '1000_2500': '$1,000 - $2,500',
-                '2500_5000': '$2,500 - $5,000',
-                '5000_10000': '$5,000 - $10,000',
-                'mas_10000': 'Más de $10,000',
-                '0_50': '$0 - $50',
-                '50_100': '$50 - $100',
-                '100_200': '$100 - $200',
-                '200_500': '$200 - $500',
-                '500_1000': '$500 - $1,000',
-                '1000_2000': '$1,000 - $2,000',
-                '2000_3000': '$2,000 - $3,000',
-                'mas_3000': 'Más de $3,000'
-            };
-            return descriptions[amount] || 'No especificado';
-        }
-
-        function getPriorityDescription(priority) {
-            const descriptions = {
-                'baja': 'Baja prioridad',
-                'media': 'Prioridad media',
-                'alta': 'Alta prioridad',
-                'urgente': 'Urgente'
-            };
-            return descriptions[priority] || 'No especificado';
-        }
-
-        function generateRiskFactorsList() {
-            // Simplificado para el reporte
-            return 'Evaluados según antecedentes familiares, personales y progresión actual';
         }
 
         function generateRiskFactorDetails() {
@@ -1519,46 +1904,217 @@
             return 'Evaluados según cuestionario de síntomas específicos';
         }
 
-        // Funciones de acción
-        function scheduleConsultation() {
-            const datos = allPatientData.datosBasicos || {};
-            const message = `Hola Dr. Moya, he completado la evaluación de Vitiligo y me gustaría agendar una consulta. 
+        // Función para integrar con el backend y enviar datos
+        async function sendDataToBackend() {
+            try {
+                const allData = {
+                    datosBasicos: allPatientData.datosBasicos || allPatientData.datos_basicos,
+                    fitzpatrick: allPatientData.fitzpatrick || allPatientData.fitzpatrick_data,
+                    antecedentes: allPatientData.antecedentes,
+                    vitiligoActual: allPatientData.vitiligoActual || allPatientData.vitiligo_actual,
+                    capacidadInversion: allPatientData.capacidadInversion || allPatientData.capacidad_inversion
+                };
 
-Mis datos:
-- Nombre: ${datos.nombre || 'No especificado'}
-- Email: ${datos.email || 'No especificado'}
-- País: ${allPatientData.capacidadInversion?.pais_residencia || 'No especificado'}
+                // Enviar a guardar_datos.php mejorado
+                const response = await fetch('/pidasalud/protocolo-vitiligo/api.php/evaluacion/guardar-completo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        evaluacion_completa: allData,
+                        reporte_generado: true,
+                        fecha_reporte: new Date().toISOString()
+                    })
+                });
 
-¿Cuándo podríamos programar la primera consulta?`;
-
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/13055550123?text=${encodedMessage}`, '_blank');
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        console.log('✅ Datos enviados al backend exitosamente');
+                        return result;
+                    }
+                }
+                throw new Error('Error en respuesta del servidor');
+                
+            } catch (error) {
+                console.error('❌ Error enviando datos al backend:', error);
+                // Continuar con funcionalidad local como fallback
+                return null;
+            }
         }
 
-        function downloadPDF() {
-            window.print();
+        // Función para verificar estado de usuario
+        async function checkUserSession() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/status`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.authenticated) {
+                        return result.user;
+                    }
+                }
+                return null;
+            } catch (error) {
+                console.log('Usuario no autenticado o error de sesión');
+                return null;
+            }
         }
 
-        function sendByEmail() {
-            const datos = allPatientData.datosBasicos || {};
-            const subject = `Reporte de Evaluación Vitiligo - ${datos.nombre || 'Paciente'}`;
-            const body = `Adjunto mi reporte completo de evaluación de Vitiligo.
-
-Por favor revise y confirme recepción para proceder con el agendamiento de consulta.
-
-Saludos cordiales.`;
-
-            window.open(`mailto:info@drmoya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+        // Función mejorada para inicializar el reporte
+        async function initializeReportAdvanced() {
+            try {
+                showLoadingState();
+                
+                // Verificar sesión del usuario
+                const user = await checkUserSession();
+                
+                if (user) {
+                    console.log(`👤 Usuario autenticado: ${user.name}`);
+                    // Cargar datos desde el servidor
+                    await loadDataFromServer();
+                } else {
+                    console.log('📱 Modo local - usando localStorage');
+                    // Usar datos locales
+                    const localData = getLocalStorageData();
+                    if (localData && Object.keys(localData).length > 0) {
+                        allPatientData = localData;
+                        await generateReportFromData();
+                    } else {
+                        throw new Error('No hay datos disponibles para generar el reporte');
+                    }
+                }
+                
+                // Enviar datos al backend si es posible
+                await sendDataToBackend();
+                
+            } catch (error) {
+                console.error('Error en inicialización avanzada:', error);
+                // Fallback a inicialización básica
+                await initializeReport();
+            }
         }
 
-        function showDataError() {
-            document.getElementById('patientSummary').innerHTML = `
-                <div class="alert alert-warning">
-                    <strong>⚠️ Datos Incompletos</strong><br>
-                    No se pudieron cargar todos los datos de la evaluación. Por favor, complete el protocolo nuevamente o contacte al soporte técnico.
-                </div>
-            `;
+        // Función para exportar datos en diferentes formatos
+        function exportData(format = 'json') {
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            const filename = `vitiligo-report-${timestamp}`;
+            
+            switch (format) {
+                case 'json':
+                    const jsonData = JSON.stringify(allPatientData, null, 2);
+                    downloadFile(jsonData, `${filename}.json`, 'application/json');
+                    break;
+                    
+                case 'csv':
+                    const csvData = convertToCSV(allPatientData);
+                    downloadFile(csvData, `${filename}.csv`, 'text/csv');
+                    break;
+                    
+                default:
+                    console.error('Formato no soportado');
+            }
         }
+
+        function convertToCSV(data) {
+            // Función simplificada para convertir datos a CSV
+            const flatData = flattenObject(data);
+            const headers = Object.keys(flatData);
+            const values = Object.values(flatData);
+            
+            return [headers.join(','), values.map(v => `"${v}"`).join(',')].join('\n');
+        }
+
+        function flattenObject(obj, prefix = '') {
+            const flattened = {};
+            
+            for (const key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    const value = obj[key];
+                    const newKey = prefix ? `${prefix}_${key}` : key;
+                    
+                    if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                        Object.assign(flattened, flattenObject(value, newKey));
+                    } else {
+                        flattened[newKey] = Array.isArray(value) ? value.join('; ') : value;
+                    }
+                }
+            }
+            
+            return flattened;
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Agregar botones adicionales para exportar datos
+        function addExportButtons() {
+            const actionsDiv = document.querySelector('.actions');
+            if (actionsDiv) {
+                const exportButtons = `
+                    <button class="btn btn-info" onclick="exportData('json')">📊 Exportar JSON</button>
+                    <button class="btn btn-info" onclick="exportData('csv')">📈 Exportar CSV</button>
+                `;
+                actionsDiv.innerHTML += exportButtons;
+            }
+        }
+
+        // Función para mostrar estadísticas del reporte
+        function showReportStats() {
+            const stats = {
+                fechaEvaluacion: new Date().toLocaleDateString('es-ES'),
+                tiempoCompletado: 'Variable según el usuario',
+                seccionesCompletadas: Object.keys(allPatientData).length,
+                nivelRiesgo: calculateOverallRisk(),
+                nivelInversion: calculateInvestmentLevel(),
+                recomendacionPrincipal: getMainRecommendation()
+            };
+            
+            console.log('📊 Estadísticas del Reporte:', stats);
+            return stats;
+        }
+
+        function getMainRecommendation() {
+            const investmentLevel = calculateInvestmentLevel();
+            const riskLevel = calculateOverallRisk();
+            
+            if (riskLevel === 'high' && investmentLevel >= 2) {
+                return 'Tratamiento inmediato con protocolo avanzado';
+            } else if (riskLevel === 'medium') {
+                return 'Iniciar tratamiento preventivo con seguimiento regular';
+            } else {
+                return 'Protocolo básico con monitoreo continuo';
+            }
+        }
+
+        // Inicializar funciones adicionales cuando se complete el reporte
+        document.addEventListener('DOMContentLoaded', function() {
+            // Usar inicialización avanzada si está disponible
+            if (typeof initializeReportAdvanced === 'function') {
+                initializeReportAdvanced();
+            } else {
+                initializeReport();
+            }
+            
+            // Agregar funcionalidades adicionales
+            setTimeout(() => {
+                addExportButtons();
+                showReportStats();
+            }, 2000);
+        });
     </script>
 </body>
 </html>
