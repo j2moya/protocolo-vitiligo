@@ -67,7 +67,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #27ae60, #2ecc71);
-            width: 0%;
+            width: 16.67%;
             transition: width 0.3s ease;
         }
 
@@ -105,11 +105,6 @@
             padding: 40px;
             margin-bottom: 20px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
             animation: fadeIn 0.5s ease;
         }
 
@@ -153,6 +148,12 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #3498db;
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #e74c3c;
+            background-color: #fdf2f2;
         }
 
         .navigation {
@@ -200,121 +201,25 @@
             box-shadow: none !important;
         }
 
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .checkbox-item:hover {
-            background: #e9ecef;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .radio-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .radio-item:hover {
-            background: #e9ecef;
-        }
-
-        .radio-item input[type="radio"] {
-            width: auto;
-            margin-right: 8px;
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
         }
 
         .alert {
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
+            border-left: 4px solid;
         }
 
-        .alert-info {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-        }
-
-        .report-section {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .contact-info {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .investment-level {
-            border-left: 5px solid;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .level-1 {
-            border-color: #e74c3c;
+        .alert-error {
             background: #fdf2f2;
+            border-color: #e74c3c;
+            color: #721c24;
         }
-
-        .level-2 {
-            border-color: #f39c12;
-            background: #fef9f2;
-        }
-
-        .level-3 {
-            border-color: #27ae60;
-            background: #f2f8f4;
-        }
-
-        .severity-indicator {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
-        .low-risk { background: #d5f4e6; color: #27ae60; }
-        .medium-risk { background: #fff3cd; color: #856404; }
-        .high-risk { background: #f8d7da; color: #721c24; }
 
         @media (max-width: 768px) {
             .container {
@@ -330,12 +235,8 @@
                 padding: 8px 3px;
             }
             
-            .checkbox-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .radio-group {
-                flex-direction: column;
+            .form-section {
+                padding: 20px;
             }
         }
     </style>
@@ -351,30 +252,36 @@
         <!-- Progress Bar -->
         <div class="progress-bar">
             <div class="progress">
-                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-fill"></div>
             </div>
             <div class="step-indicator">
-                <div class="step active" data-step="1">Datos Básicos</div>
-                <div class="step" data-step="2">Fitzpatrick</div>
-                <div class="step" data-step="3">Antecedentes</div>
-                <div class="step" data-step="4">Vitiligo Actual</div>
-                <div class="step" data-step="5">Capacidad Inversión</div>
-                <div class="step" data-step="6">Reporte</div>
+                <div class="step active">Datos Básicos</div>
+                <div class="step">Fitzpatrick</div>
+                <div class="step">Antecedentes</div>
+                <div class="step">Vitiligo Actual</div>
+                <div class="step">Capacidad Inversión</div>
+                <div class="step">Reporte</div>
             </div>
         </div>
 
         <!-- Step 1: Datos Básicos -->
-        <div class="form-section active" data-step="1">
+        <div class="form-section">
             <h2>Información Básica del Paciente</h2>
+            
+            <div id="error-alert" class="alert alert-error" style="display: none;">
+                <strong>Error:</strong> Por favor complete todos los campos requeridos correctamente.
+            </div>
             
             <div class="form-group">
                 <label for="nombre">Nombre Completo *</label>
                 <input type="text" id="nombre" required>
+                <div class="error-message" id="nombre-error">El nombre es requerido</div>
             </div>
 
             <div class="form-group">
                 <label for="edad">Edad *</label>
                 <input type="number" id="edad" min="1" max="120" required>
+                <div class="error-message" id="edad-error">La edad debe estar entre 1 y 120 años</div>
             </div>
 
             <div class="form-group">
@@ -384,63 +291,167 @@
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
                 </select>
+                <div class="error-message" id="sexo-error">Debe seleccionar el sexo</div>
             </div>
 
             <div class="form-group">
                 <label for="pais">País de Residencia *</label>
                 <input type="text" id="pais" required>
+                <div class="error-message" id="pais-error">El país es requerido</div>
             </div>
 
             <div class="form-group">
                 <label for="email">Email de Contacto *</label>
                 <input type="email" id="email" required>
+                <div class="error-message" id="email-error">Debe ingresar un email válido</div>
             </div>
 
             <div class="form-group">
                 <label for="telefono">Teléfono con WhatsApp</label>
-                <input type="tel" id="telefono">
+                <input type="tel" id="telefono" placeholder="Opcional">
             </div>
 
             <div class="navigation">
                 <button class="btn btn-secondary" disabled>Anterior</button>
-                <button class="btn btn-primary" onclick="validarYRedirigir()">Siguiente</button>
-
+                <button class="btn btn-primary" onclick="validateAndContinue()">Siguiente</button>
             </div>
         </div>
-
-
     </div>
 
     <script>
+        // Validation functions
+        function validateField(fieldId, validationFn, errorMessage) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + '-error');
+            
+            if (validationFn(field.value)) {
+                field.classList.remove('error');
+                errorDiv.style.display = 'none';
+                return true;
+            } else {
+                field.classList.add('error');
+                errorDiv.style.display = 'block';
+                if (errorMessage) {
+                    errorDiv.textContent = errorMessage;
+                }
+                return false;
+            }
+        }
 
+        function validateNombre(value) {
+            return value.trim().length >= 2;
+        }
 
-// Initialize
-// updateProgress();  <-- COMÉNTALA O BÓRRALA si no tienes esta función definida
+        function validateEdad(value) {
+            const edad = parseInt(value);
+            return !isNaN(edad) && edad >= 1 && edad <= 120;
+        }
 
+        function validateSexo(value) {
+            return value !== '';
+        }
 
+        function validatePais(value) {
+            return value.trim().length >= 2;
+        }
 
-        function validarYRedirigir() {
-  const campos = document.querySelector('[data-step="1"]').querySelectorAll('[required]');
-  let valido = true;
+        function validateEmail(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value.trim());
+        }
 
-  campos.forEach(campo => {
-    if (!campo.value.trim()) {
-      campo.style.border = '2px solid red';
-      valido = false;
-    } else {
-      campo.style.border = '';
-    }
-  });
+        function validateAllFields() {
+            let isValid = true;
+            
+            // Validate each required field
+            if (!validateField('nombre', validateNombre, 'El nombre debe tener al menos 2 caracteres')) {
+                isValid = false;
+            }
+            
+            if (!validateField('edad', validateEdad, 'La edad debe estar entre 1 y 120 años')) {
+                isValid = false;
+            }
+            
+            if (!validateField('sexo', validateSexo, 'Debe seleccionar el sexo')) {
+                isValid = false;
+            }
+            
+            if (!validateField('pais', validatePais, 'El país debe tener al menos 2 caracteres')) {
+                isValid = false;
+            }
+            
+            if (!validateField('email', validateEmail, 'Debe ingresar un email válido')) {
+                isValid = false;
+            }
+            
+            return isValid;
+        }
 
-  if (!valido) {
-    alert('Por favor complete todos los campos obligatorios antes de continuar.');
-    return;
-  }
+        function validateAndContinue() {
+            const errorAlert = document.getElementById('error-alert');
+            
+            if (validateAllFields()) {
+                // Hide error alert
+                errorAlert.style.display = 'none';
+                
+                // Store form data in localStorage for next page
+                const formData = {
+                    nombre: document.getElementById('nombre').value,
+                    edad: document.getElementById('edad').value,
+                    sexo: document.getElementById('sexo').value,
+                    pais: document.getElementById('pais').value,
+                    email: document.getElementById('email').value,
+                    telefono: document.getElementById('telefono').value
+                };
+                
+                localStorage.setItem('vitiligoFormData', JSON.stringify(formData));
+                
+                // Navigate to next page
+                window.location.href = 'fitzpatrick.html';
+            } else {
+                // Show error alert
+                errorAlert.style.display = 'block';
+                
+                // Scroll to top to show the alert
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
 
-  window.location.href = 'fitzpatrick.html';
-}
+        // Real-time validation
+        document.getElementById('nombre').addEventListener('blur', function() {
+            validateField('nombre', validateNombre, 'El nombre debe tener al menos 2 caracteres');
+        });
 
+        document.getElementById('edad').addEventListener('blur', function() {
+            validateField('edad', validateEdad, 'La edad debe estar entre 1 y 120 años');
+        });
 
+        document.getElementById('sexo').addEventListener('change', function() {
+            validateField('sexo', validateSexo, 'Debe seleccionar el sexo');
+        });
+
+        document.getElementById('pais').addEventListener('blur', function() {
+            validateField('pais', validatePais, 'El país debe tener al menos 2 caracteres');
+        });
+
+        document.getElementById('email').addEventListener('blur', function() {
+            validateField('email', validateEmail, 'Debe ingresar un email válido');
+        });
+
+        // Load existing data if available
+        window.addEventListener('load', function() {
+            const savedData = localStorage.getItem('vitiligoFormData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                
+                document.getElementById('nombre').value = formData.nombre || '';
+                document.getElementById('edad').value = formData.edad || '';
+                document.getElementById('sexo').value = formData.sexo || '';
+                document.getElementById('pais').value = formData.pais || '';
+                document.getElementById('email').value = formData.email || '';
+                document.getElementById('telefono').value = formData.telefono || '';
+            }
+        });
     </script>
 </body>
 </html>
